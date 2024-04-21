@@ -13,7 +13,7 @@ Permettant aux employé d'avoir un chemin le plus efficaces <br>
 selon les configurations choisis.
 
 # Noms collaborateurs
-Kinator: Julien BEHANI <br>
-AnthoGit62 : Anthony SEYS <br>
-sweps : Hugo ABLERS <br>
-Fydyr : Enzo FOURNIER <br>
+**Kinator: Julien BEHANI** <br>
+**AnthoGit62 : Anthony SEYS** <br>
+**sweps : Hugo ABLERS** <br>
+**Fydyr : Enzo FOURNIER** <br>
