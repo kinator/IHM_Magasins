@@ -1,6 +1,6 @@
 # Compte rendu pour les séances de SAE
 
-## Compte rendu du 07/05/2024
+## Compte rendu du 07/05/2024 de 10h à 11h30
 
 **Behani Julien** : Absent
 
