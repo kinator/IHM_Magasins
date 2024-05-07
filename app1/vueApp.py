@@ -1,18 +1,18 @@
 import sys
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QLabel
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
+class Image(QLabel):
 
-class Image(QPixmap):
- 
     def __init__(self):
         '''Constructeur de la classe'''
 
         # appel au constructeur de la classe mère
         super().__init__() 
         
-        self.image = QPixmap('../models/plan2.png')
+        self.image = QPixmap('./models/plan1.jpg')
+        self.setPixmap(self.image)
 
         self.show()
 
