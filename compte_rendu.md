@@ -8,4 +8,4 @@
 
 **Hugo Ablers** : //
 
-**Seys Anthonny** : Tentative de lancement du programme et début de cr"ation du fichier "vueApp.py"
+**Seys Anthonny** : Tentative de lancement du programme et début de création du fichier "vueApp.py"
