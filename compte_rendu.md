@@ -4,7 +4,7 @@
 
 **Behani Julien** : Absent
 
-**Fournier Enzo** : Schématisation papier de l'application
+**Fournier Enzo** : Schématisation papier de la première application
 
 **Hugo Ablers** : //
 
