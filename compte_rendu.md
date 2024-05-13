@@ -9,7 +9,7 @@
 
 ## Compte rendu du 13/05/2024 de 14h30 à 16h00
 
-**Behani Julien** : 
-**Fournier Enzo** : 
-**Hugo Ablers** : 
-**Seys Anthonny** : 
+**Behani Julien** : Création de la vue de l'app 1 & début de création du contrôleur
+**Fournier Enzo** : Création de la vue de l'app 1
+**Hugo Ablers** : Schématisation via figma de la seconde application
+**Seys Anthonny** : Création de la vue de l'app 2
