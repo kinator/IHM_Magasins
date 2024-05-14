@@ -88,7 +88,7 @@ class VueMain(QMainWindow):
 
     # Fonctions
     def nouv(self) -> None:
-        self.barre_etat.showMessage("Créer un nouveau projet")
+        self.barre_etat.showMessage("Créer un nouveau projet....")
         self.nouveauClicked.emit()
         check = True
         Popup: QWidget = QWidget()
@@ -98,27 +98,27 @@ class VueMain(QMainWindow):
 
 
     def open(self):
-        self.barre_etat.showMessage("Ouverture d'un fichier")
+        self.barre_etat.showMessage("Ouverture d'un fichier....")
         self.openClicked.emit()
 
     def save(self):
-        self.barre_etat.showMessage("Enregistrement effectué")
+        self.barre_etat.showMessage("Enregistrement effectué....")
         self.saveClicked.emit()
 
     def save_under(self):
-        self.barre_etat.showMessage("Enregitrer Sous")
+        self.barre_etat.showMessage("Enregitrer Sous....")
         self.saveUnderClicked.emit()
 
     def delete(self):
-        self.barre_etat.showMessage("Suppression d'un projet")
+        self.barre_etat.showMessage("Suppression d'un projet....")
         self.deleteClicked.emit()
 
     def annuler(self):
-        self.barre_etat.showMessage("Annuler")
+        self.barre_etat.showMessage("Annuler....")
         self.annulerClicked.emit()
 
     def retablir(self):
-        self.barre_etat.showMessage("Rétablissement de la dernière action")
+        self.barre_etat.showMessage("Rétablissement de la dernière action....")
         self.retablitClicked.emit()
 
 
