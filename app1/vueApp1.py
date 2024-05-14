@@ -96,7 +96,6 @@ class VueMain(QMainWindow):
         #while check:
         #    pass
 
-
     def open(self):
         self.barre_etat.showMessage("Ouverture d'un fichier....")
         self.openClicked.emit()
