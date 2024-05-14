@@ -56,8 +56,9 @@ class VueMain(QMainWindow):
         action_retablier.setShortcuts(["CTRL+Y"])
         
         # Actions menu 'Style
+        action_theme_blanc : QAction = QAction('&Thème Blanc', self)
 
-
+        action_theme_sombre : QAction = QAction('&Thème Sombre', self)
 
 
         # Création de la barre de menus

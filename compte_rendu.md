@@ -1,6 +1,6 @@
 # Compte rendu en dehors des séances de SAE
 
-## fait le 14/05 de 7h30/7h45
+## fait le 14/05 de 7h30/8h00
 
 **Fournier Enzo** : Ajout d'un status bar sur l'application pour les action effectué et réglage du bug qui empêcher d'effectuer les racourci pour les actions et ajout des fichiers de Style QSS dans un dossier<br>
 
