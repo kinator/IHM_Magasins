@@ -71,6 +71,7 @@ class VueMain(QMainWindow):
         menu_navigation.addActions([action_annuler, action_retablier])
 
         menu_style = menu_bar.addMenu('&Style')
+        menu_style.addActions([action_theme_blanc, action_theme_sombre])
         
         
         # signaux and slots (signaux à l'intérieur)
