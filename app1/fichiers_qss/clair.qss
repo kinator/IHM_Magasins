@@ -1,0 +1,101 @@
+/* Stylesheet pour un thème clair */
+
+/* Application Window */
+QMainWindow {
+    background-color: #f0f0f0; /* Couleur de fond */
+    color: #333333; /* Couleur du texte */
+}
+
+/* Bouton */
+QPushButton {
+    background-color: #f8f8f8; /* Couleur de fond */
+    border: 1px solid #cccccc; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 5px 10px; /* Espacement interne */
+    color: #333333; /* Couleur du texte */
+}
+
+QPushButton:hover {
+    background-color: #eaeaea; /* Couleur de fond au survol */
+}
+
+QPushButton:pressed {
+    background-color: #d9d9d9; /* Couleur de fond en cliquant */
+}
+
+/* Zone de texte */
+QLineEdit {
+    background-color: #ffffff; /* Couleur de fond */
+    border: 1px solid #cccccc; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 5px; /* Espacement interne */
+    color: #333333; /* Couleur du texte */
+}
+
+QLineEdit:focus {
+    border: 2px solid #4d90fe; /* Bordure au focus */
+}
+
+/* Zone de texte (erreur) */
+QLineEdit:!valid {
+    border: 2px solid #e53935; /* Bordure en cas d'erreur */
+}
+
+/* Zone de texte (validation) */
+QLineEdit:valid {
+    border: 2px solid #66bb6a; /* Bordure en cas de validation */
+}
+
+/* Texte éditable */
+QTextEdit {
+    background-color: #ffffff; /* Couleur de fond */
+    border: 1px solid #cccccc; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    padding: 5px; /* Espacement interne */
+    color: #333333; /* Couleur du texte */
+}
+
+/* Texte éditable (focus) */
+QTextEdit:focus {
+    border: 2px solid #4d90fe; /* Bordure au focus */
+}
+
+/* Texte éditable (erreur) */
+QTextEdit:!valid {
+    border: 2px solid #e53935; /* Bordure en cas d'erreur */
+}
+
+/* Texte éditable (validation) */
+QTextEdit:valid {
+    border: 2px solid #66bb6a; /* Bordure en cas de validation */
+}
+
+/* Barre de défilement */
+QScrollBar:vertical {
+    background: #f0f0f0; /* Couleur de fond */
+    width: 15px; /* Largeur */
+    margin: 15px 0 15px 0; /* Marge */
+}
+
+QScrollBar::handle:vertical {
+    background: #cccccc; /* Couleur de la poignée */
+    min-height: 30px; /* Hauteur minimale de la poignée */
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #b3b3b3; /* Couleur de la poignée au survol */
+}
+
+QScrollBar::add-line:vertical {
+    background: #f0f0f0; /* Couleur de fond du bouton de défilement */
+    height: 15px; /* Hauteur */
+}
+
+QScrollBar::sub-line:vertical {
+    background: #f0f0f0; /* Couleur de fond du bouton de défilement */
+    height: 15px; /* Hauteur */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none; /* Pas de couleur de fond pour la page */
+}

@@ -26,31 +26,34 @@ class VueMain(QMainWindow):
         self.setWindowIcon(QIcon(self.__path + 'icon.JPG'))  
         self.setFixedWidth(800)
         self.setFixedHeight(600)
-                
+
+        # barre d'état
+        self.barre_etat = QStatusBar()
+        self.setStatusBar(self.barre_etat)
+        self.barre_etat.showMessage("L'application est démarrée...", 2000)
         
         # Création des actions des menus de la barre de menus
         # Actions menu 'Fichier'
         action_nouveau_projet: QAction = QAction(QIcon(self.__path + '\\images\\ajouter.png'), '&Nouveau', self)
-        action_nouveau_projet.setShortcuts(["SHIFT + CTRL + N"])
+        action_nouveau_projet.setShortcuts(["SHIFT+CTRL+N"])
 
         action_ouvrir_projet : QAction = QAction('&Ouvrir', self)
-        action_ouvrir_projet.setShortcuts(["SHIFT + CTRL + O"])
+        action_ouvrir_projet.setShortcuts(["SHIFT+CTRL+O"])
         
         action_save_projet : QAction = QAction('&Enregistrer', self)
-        action_save_projet.setShortcuts(["CTRL + S"])
+        action_save_projet.setShortcuts(["CTRL+S"])
 
         action_save_under_projet : QAction = QAction('&Enregistrer sous', self)
-        action_save_under_projet.setShortcuts(["SHIFT + CTRL + S"])
+        action_save_under_projet.setShortcuts(["SHIFT+CTRL+S"])
         
         action_supprimer_projet : QAction = QAction('&Supprimer', self)
-        action_supprimer_projet.setShortcuts(["SHIFT + CTRL + BACKSPACE"])
 
         # Actions menu 'Navigation'
         action_annuler : QAction = QAction(QIcon(self.__path + '\\images\\left.png'),'&Annuler', self)
-        action_annuler.setShortcuts(["CTRL + Z"])
+        action_annuler.setShortcuts(["CTRL+Z"])
         
         action_retablier : QAction = QAction(QIcon(self.__path + '\\images\\right.png'),'&Rétablir', self)
-        action_retablier.setShortcuts(["CTRL + Y"])
+        action_retablier.setShortcuts(["CTRL+Y"])
         
         # Actions menu 'Style
 
@@ -70,46 +73,50 @@ class VueMain(QMainWindow):
         
         
         # signaux and slots (signaux à l'intérieur)
-        action_nouveau_projet.triggered.connect(self.nouveauClicked.emit)
-        action_ouvrir_projet.triggered.connect(self.openClicked.emit)
-        action_supprimer_projet.triggered.connect(self.deleteClicked.emit)
-        action_save_projet.triggered.connect(self.saveClicked.emit)
-        action_save_under_projet.triggered.connect(self.saveUnderClicked.emit)
-        action_annuler.triggered.connect(self.annulerClicked.emit)
-        action_retablier.triggered.connect(self.retablitClicked.emit)
-        
-        
-        
-        
+        action_nouveau_projet.triggered.connect(self.nouv)
+        action_ouvrir_projet.triggered.connect(self.open)
+        action_supprimer_projet.triggered.connect(self.delete)
+        action_save_projet.triggered.connect(self.save)
+        action_save_under_projet.triggered.connect(self.save_under)
+        action_annuler.triggered.connect(self.annuler)
+        action_retablier.triggered.connect(self.retablir)
         
         self.show()
 
 
     # Fonctions
     def nouv(self) -> None:
+        self.barre_etat.showMessage("Créer un nouveau projet")
+        self.nouveauClicked.emit()
         check = True
         Popup: QWidget = QWidget()
         Popup.show()
-        while check:
-            pass
+        #while check:
+        #    pass
 
 
     def open(self):
+        self.barre_etat.showMessage("Ouverture d'un fichier")
         self.openClicked.emit()
 
     def save(self):
+        self.barre_etat.showMessage("Enregistrement effectué")
         self.saveClicked.emit()
 
     def save_under(self):
+        self.barre_etat.showMessage("Enregitrer Sous")
         self.saveUnderClicked.emit()
 
     def delete(self):
+        self.barre_etat.showMessage("Suppression d'un projet")
         self.deleteClicked.emit()
 
     def annuler(self):
+        self.barre_etat.showMessage("Annuler")
         self.annulerClicked.emit()
 
     def retablir(self):
+        self.barre_etat.showMessage("Rétablissement de la dernière action")
         self.retablitClicked.emit()
 
 
