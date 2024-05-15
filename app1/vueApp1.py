@@ -14,6 +14,8 @@ class Image(QLabel):
         
         self.image = QPixmap(chemin)
         self.setPixmap(self.image)
+        
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
 ##############################################################################
 ##############################################################################
@@ -44,7 +46,6 @@ class PopupFichier(QWidget):
         
         layout.addWidget(self.confirm_button)
         layout.addWidget(self.quit_button)
-        self.confirm_button.set
 
         self.quit_button.clicked.connect(self.clickCancel)
         self.confirm_button.clicked.connect(self.ClickConfirm)
@@ -141,11 +142,10 @@ class VueMain(QMainWindow):
         self.addToolBar(barre_outils)
         barre_outils.addActions([action_save_projet, action_save_under_projet, action_annuler, action_retablir])
         
-        
+
         # image du plan
-        self.plan : Image = Image(self.__images + 'icon.png')
+        self.plan : Image = Image(self.__images + 'Crash_pod_forest.png')
         self.plan.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.plan.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setCentralWidget(self.plan)
 
 

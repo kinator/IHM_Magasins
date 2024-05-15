@@ -29,10 +29,10 @@
 
 ## Compte rendu du 15/05/2024 de 14h30 & 17h30
 
-**Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Behani Julien** : finition du cadrillage.py <br>
+**Fournier Enzo** : 'produit.py' finit + test du fichier effectué<br>
 **Hugo Ablers** : <br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Avancement sur la vue de l'app 2
 
 
 *Le travail a été fait en groupe avec l'extention "liveshare" qui permet de travailler sur la même session en même temps et donc la plupart des commit ont été fait par les mêmes personnes*

@@ -22,7 +22,6 @@ class Produit:
     
     def setNom(self, name : str):
         self.nom = name
-        return
     
 if __name__ == '__main__':
     
