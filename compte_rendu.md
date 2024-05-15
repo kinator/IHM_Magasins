@@ -19,3 +19,14 @@
 **Fournier Enzo** : Création de la vue de l'app 1<br>
 **Hugo Ablers** : Schématisation via figma de la seconde application<br>
 **Seys Anthonny** : Création de la vue de l'app 2<br>
+
+## Compte rendu du 15/05/2021 de 8h30 à 11h30
+
+**Behani Julien** : Ajout des styles de l'app 1 et création du 'cadrillage.py' et avancement sur ce fichier<br>
+**Fournier Enzo** : création du fichier 'produit.py' et avancement sur ce fichier<br>
+**Hugo Ablers** : Création des différents logo et icones<br>
+**Seys Anthonny** : avancement sur la création de la vue de l'app 2
+
+
+
+*Le travail a été fait en groupe avec l'extention "liveshare" qui permet de travailler sur la même session en même temps et donc la plupart des commit ont été fait par les mêmes personnes*
