@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QToolBar , QLabel, QMainWindow, QInputDialog
+from PyQt6.QtWidgets import QApplication, QToolBar , QLabel, QMainWindow, QInputDialog, QLineEdit, QPushButton, QVBoxLayout, QWidget, QTextEdit, QDockWidget
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction ,QIcon
             
@@ -19,9 +19,9 @@ class VueOutil(QMainWindow):
         menu_edition = menu_bar.addMenu('&Edition')
         menu_theme = menu_bar.addMenu('&Style')
         
-        # new_outil = QAction(QIcon(sys.path[0] + '/../icones/plus.png'), 'Nouveau', self)
-        # new_outil.triggered.connect(self.ajoutOutil)
-        # menu_fichier.addAction(new_outil)
+        new_outil = QAction(QIcon(sys.path[0] + '/../icones/ajouter.png'), 'Nouveau', self)
+        new_outil.triggered.connect(self.ajoutOutil)
+        menu_fichier.addAction(new_outil)
         
         # outil_suivant = QAction(QIcon(sys.path[0] + '/../icones/right.png'), 'Suivant', self)
         # outil_suivant.triggered.connect(self.outilSuivant)
@@ -34,16 +34,31 @@ class VueOutil(QMainWindow):
         menu_theme.addAction('Theme sombre')
         menu_theme.addAction('Theme clair')
         
-        #barre d'outils 
+        # Onglet gauche 
         
-        # barre_outil = QToolBar('Principaux outils')
-        # self.addToolBar(barre_outil)
-
-        # barre_outil.addAction(new_outil)
-        # barre_outil.addAction(outil_precedent)
-        # barre_outil.addAction(outil_suivant)
-
-        # show
+        # self.layoutPrincipal = QVBoxLayout() ; self.setLayout(self.layoutPrincipal)
+        
+        # self.article = QLabel("Articles : ")
+        # self.nomArticle = QLineEdit("Maquereau") # A remplacer par le nom exacte du produit selectionner
+        # # self.boutonAddArticle = QPushButton((QIcon(sys.path[0] + '/../icones/ajouter.png'), 'Ajouter', self))
+        
+        self.txtarticle = QLabel("Articles : ")
+        self.txtproduits = QLineEdit("Maquereau") # A changer avec les noms en temps réel
+        self.btnAddArticle = QPushButton("Ajouter")
+        
+        
+        
+        self.dock = QDockWidget("Articles : ")
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
+        self.dock.setWidget(self.txtarticle)
+        
+        self.dock.setWidget(self.txtproduits)
+        self.dock.setWidget(self.btnAddArticle)
+        self.dock.setMinimumWidth(200)
+        
+        
+       
+        
         
         self.setWindowTitle('Boîte à outils')
         self.resize(600, 400)
