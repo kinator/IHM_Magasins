@@ -52,15 +52,14 @@ class PopupFichier(QWidget):
         
         self.show()
 
-    fichier : pyqtSignal = pyqtSignal()
 
     def clickCancel(self):
-        #self.fichier.emit(False)
+        self.chosenFile.emit(False)
         print('False')
         self.close()
 
     def ClickConfirm(self):
-        #self.fichier.emit(True)
+        self.chosenFile.emit(True)
         print('True')
         self.close()
 
