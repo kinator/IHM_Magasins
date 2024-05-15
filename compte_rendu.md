@@ -29,8 +29,8 @@
 
 ## Compte rendu du 15/05/2024 de 14h30 & 17h30
 
-**Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Behani Julien** : finition du cadrillage.py <br>
+**Fournier Enzo** : 'produit.py' finit + test du fichier effectué<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
 
