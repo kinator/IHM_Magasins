@@ -1,0 +1,5 @@
+{"cases" : [
+    {"x" : 1, "y": 2, "produits" : [{"id" : 1, "nom": "carotte", "stock" : 10}, {"id" : 1, "nom": "pomme_de_terre", "stock" : 5}]}, 
+    {"x" : 4, "y": 3, "produits" : [{"id" : 3, "nom": "fraise", "stock" : 99}]}
+    ]
+}

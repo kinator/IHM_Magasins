@@ -1,7 +1,7 @@
 import sys, time, json
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QGridLayout, QPushButton, QFileDialog
-from PyQt6.QtGui import QPixmap, QIcon, QAction
+from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
 
 class Image(QLabel):
@@ -44,6 +44,7 @@ class PopupFichier(QWidget):
         
         layout.addWidget(self.confirm_button)
         layout.addWidget(self.quit_button)
+        self.confirm_button.set
 
         self.quit_button.clicked.connect(self.clickCancel)
         self.confirm_button.clicked.connect(self.ClickConfirm)
@@ -61,11 +62,6 @@ class PopupFichier(QWidget):
         #self.fichier.emit(True)
         print('True')
         self.close()
-        
-    def changeStyle(self):
-        with open(self.__styles + self.sender().text() + ".qss", "r") as f:
-            self.currentstyle = f.read()
-            self.setStyleSheet(self.currentstyle)
 
 ##############################################################################
 ##############################################################################
@@ -97,10 +93,12 @@ class VueMain(QMainWindow):
         self.setFixedWidth(800)
         self.setFixedHeight(600)
 
+
         # barre d'état
         self.barre_etat = QStatusBar()
         self.setStatusBar(self.barre_etat)
         self.barre_etat.showMessage("L'application est démarrée...", 2000)
+        
         
         # Création des actions des menus de la barre de menus
         # Actions menu 'Fichier'
@@ -143,9 +141,11 @@ class VueMain(QMainWindow):
         self.addToolBar(barre_outils)
         barre_outils.addActions([action_save_projet, action_save_under_projet, action_annuler, action_retablir])
         
+        
         # image du plan
         self.plan : Image = Image(self.__images + 'icon.png')
         self.plan.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.plan.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setCentralWidget(self.plan)
 
 
@@ -156,6 +156,7 @@ class VueMain(QMainWindow):
                 self.variables[f"action_style + file.removesuffix('.qss')"] = QAction(text=file.removesuffix(".qss"), parent=self)
                 menu_style.addAction(self.variables[f"action_style + file.removesuffix('.qss')"])        
                 self.variables[f"action_style + file.removesuffix('.qss')"].triggered.connect(self.changeStyle)
+        
         
         # slots
         action_nouveau_projet.triggered.connect(self.nouv)

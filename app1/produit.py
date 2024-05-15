@@ -1,15 +1,35 @@
-from cadrillage import Case
+import json
 
 # --------------------------------------------------------------------------
 # --- class Produit
 # --------------------------------------------------------------------------
 class Produit:
 
-    #constructeur
+    #constructeurs
     def __init__(self):
-        self.nom = None
-        self.emplacement = Case((0, 0), True)
+        self.id_prod : int = None
+        self.nom : str = None
 
-    def __init__(self, nom_prod : str, x : int, y : int):
-        self.nom = nom_prod
-        self.emplacement = Case((x, y), True)
+    def __init__(self,id : int, nom_prod : str):
+        self.id_prod : int = id
+        self.nom : str = nom_prod
+
+    def getIdProd(self):
+        return self.id_prod
+    
+    def getNom(self):
+        return self.nom
+    
+    def setNom(self, name : str):
+        self.nom = name
+        return
+    
+if __name__ == '__main__':
+    
+    nouv_prod = Produit(0, 'bouteille_eau')
+
+    print(nouv_prod.getIdProd())
+    print(nouv_prod.getNom())
+
+    nouv_prod.setNom('Mascara')
+    print(nouv_prod.getNom())

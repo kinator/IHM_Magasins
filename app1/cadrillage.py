@@ -9,9 +9,10 @@ class Case(object) :
     detruireMur() : détruit un mur de la case
     getContenu() : renvoie le contenu de la case
     setContenu() : affecte le contenu de la case
-    getposition() : renvoie la position de la case
-    getStockable(self) : renvoie si la case est stockable ou non
+    getPosition() : renvoie la position de la case
+    getStockable() : renvoie si la case est stockable ou non
     getMurs() : renvoie la liste des murs de la case
+    estDansStock() : renvoie si le produit est stocker dans la case
     addContenu() : ajoute un produit au contenu de la case
     removeContenu() : retire un produit au contenu de la case
     delContenu() : supprime le contenu de la case'''
@@ -67,6 +68,9 @@ class Case(object) :
         '''Méthode publique, renvoie la liste des murs.'''
         return self.__murs
     
+    def estDansStock(self, cakechose: Produit) -> any:
+        '''Méthode publique, renvoie le contenu de l'objet.'''
+        return cakechose in self.__contenu
     
     def addContenu(self, cakechose: Produit) -> None:
         '''Méthode publique, affecte le contenu de l'objet.'''
