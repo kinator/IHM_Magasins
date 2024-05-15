@@ -10,7 +10,7 @@ class Case(object) :
     getContenu() : renvoie le contenu de la case
     setContenu() : affecte le contenu de la case
     getposition() : renvoie la position de la case
-    getVide(self) : renvoie si la case est vide ou non
+    getStockable(self) : renvoie si la case est stockable ou non
     getMurs() : renvoie la liste des murs de la case
     addContenu() : ajoute un produit au contenu de la case
     removeContenu() : retire un produit au contenu de la case
@@ -58,9 +58,9 @@ class Case(object) :
         return self.__position
     
     
-    def getVide(self) -> tuple:
-        '''Méthode publique, renvoie si la case est vide ou non.'''
-        return self.__est_vide
+    def getStockable(self) -> tuple:
+        '''Méthode publique, renvoie si la case est stockable ou non.'''
+        return self.__est_stockable
 
 
     def getMurs(self) -> list:
