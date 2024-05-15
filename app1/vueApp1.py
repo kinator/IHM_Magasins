@@ -205,7 +205,7 @@ class VueMain(QMainWindow):
         self.annulerClicked.emit()
 
     def retablir(self):
-        self.barre_etat.showMessage("Rétablissement de la dernière action....")
+        self.barre_etat.showMessage("Retour....")
         self.retablirClicked.emit()
 
     def changeStyle(self):
