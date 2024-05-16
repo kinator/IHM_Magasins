@@ -6,7 +6,7 @@ def parcours(dico_graphe: dict, depart: tuple, arrivee: tuple) -> list:
     
     chemin = []            # chemin actuel
     pile = filepile.Pile()        # pile pour la recherche en profondeur
-    visite = []         # sommets visités
+    visite = []        
 
     pile.empiler(depart)
     
@@ -15,22 +15,35 @@ def parcours(dico_graphe: dict, depart: tuple, arrivee: tuple) -> list:
         chemin.append(sommet)
         
         if sommet == arrivee:
-            return chemin  # chemin trouvé
-        
+            return chemin  
         for voisin in dico_graphe[sommet]:
             if voisin not in visite:
                 visite.append(sommet)
                 pile.empiler(voisin)
     
-    # si on arrive ici, ca veut dire qu'il n'y a pas de chemin entre le depart et l'arrivee
     return "Pas de chemin trouvé"
 
 
-def parcours_opti(graphe: dict, depart: tuple, arrivee: tuple) -> list:
-    for i in range(len(graphe)):
-        parcours(graphe, depart, arrivee)
+def parcours_opti(graphe: dict, depart: tuple, arrivee: tuple, points_interet: list) -> list:
+    '''La fonction cherche le chemin le plus rapide pour prendre un ou plusieurs articles dans le supermarché.'''
+    
+    chemin_complet = []
+    point_courant = depart
 
-# Exemple d'utilisation
+    for point in points_interet:
+        chemin = parcours(graphe, point_courant, point)
+        if chemin == "Pas de chemin trouvé":
+            return "Pas de chemin trouvé"
+        chemin_complet.extend(chemin[:-1])
+        point_courant = point
+
+    chemin = parcours(graphe, point_courant, arrivee)
+    if chemin == "Pas de chemin trouvé":
+        return "Pas de chemin trouvé"
+    chemin_complet.extend(chemin)
+    
+    return chemin_complet
+
 if __name__ == "__main__":
     graphe_exemple = {
         (0, 0): {(0, 1): 1, (1, 0): 1},
