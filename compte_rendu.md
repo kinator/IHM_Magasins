@@ -49,7 +49,7 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : <br>
 
-## Compte rendu du 16/05/2024 de 10h00 & 11h30
+## Compte rendu du 16/05/2024 de 14h30 & 16h00
 
 **Behani Julien** : Création des docks automatique 'quadrillage' et 'produits'.<br>
 **Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
