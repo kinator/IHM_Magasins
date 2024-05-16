@@ -44,14 +44,14 @@
 
 ## Compte rendu du 16/05/2024 de 10h00 & 11h30
 
-**Behani Julien** :  <br>
+**Behani Julien** : Ajout d'un dock pour widget 'quadrillage' et debug.<br>
 **Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : <br>
 
 ## Compte rendu du 16/05/2024 de 10h00 & 11h30
 
-**Behani Julien** :  <br>
+**Behani Julien** : Création des docks automatique 'quadrillage' et 'produits'.<br>
 **Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : <br>
