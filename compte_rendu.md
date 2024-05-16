@@ -34,19 +34,19 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Avancement sur la vue de l'app 2
 
-## Compte rendu du 16/05/2024 de 10h00 & 11h30
-
-**Behani Julien** :  <br>
-**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
-**Hugo Ablers** : <br>
-**Seys Anthonny** : 
-
-## Compte rendu du 16/05/2024 de 10h00 & 11h30
-
-**Behani Julien** :  <br>
-**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
-**Hugo Ablers** : <br>
-**Seys Anthonny** : 
-
-
 *Le travail a été fait en groupe avec l'extention "liveshare" qui permet de travailler sur la même session en même temps et donc la plupart des commit ont été fait par les mêmes personnes*
+
+## Compte rendu du 16/05/2024 de 10h00 & 11h30
+
+**Behani Julien** :  <br>
+**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
+
+## Compte rendu du 16/05/2024 de 10h00 & 11h30
+
+**Behani Julien** :  <br>
+**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
+
