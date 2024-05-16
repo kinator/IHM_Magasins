@@ -89,3 +89,111 @@ class Case(object) :
     def delContenu(self) -> None:
         '''Méthode publique, affecte le contenu de l'objet.'''
         self.__contenu = {}
+
+class Magasin(object) :
+    '''Classe définissant une grille à partir de ses dimensions
+           largeur : nombre de cases en largeur
+           hauteur : nombre de cases en longueur
+
+Un objet, instance de cette classe, possède plusieurs méthodes :
+
+    construireBordure() : construit les murs sur le contour du magasin
+    detruireBordure() : détruit les murs sur le contour du magasin
+    afficheMagasinVide() : affiche le magasin (sans contenu) avec tous les murs
+    affichePlateau() : affiche le plateau (avec contenu et murs éventuels des cases)'''
+    
+    def __init__(self, largeur: int, hauteur: int):
+        self.__largeur: int = largeur
+        self.__hauteur: int = hauteur
+        self.__cases: list = self.__creationMagasin()
+        
+        
+    def __creationMagasin(self) -> list:
+        '''Méthode privée, crée et renvoie la liste des cases'''
+        liste_cases: list = []
+        
+        for y in range(self.__hauteur) :
+            
+            ligne_cases: list = []
+        
+            for x in range(self.__largeur) :
+                nouvelle_case = Case(x, y)
+                ligne_cases.append(nouvelle_case)
+            
+            liste_cases.append(ligne_cases)
+        
+        return liste_cases
+
+
+    def getCases(self) -> list:
+        '''Méthode publique, renvoie la liste des cases.'''
+        return self.__cases
+
+
+    def setContenu(self, position: tuple, cakechose: any) -> None:
+        '''Méthode publique, affecte le contenu de la case à la position prévue.'''
+        self.__cases[position[1]][position[0]].setContenu(cakechose)
+
+
+    def getContenu(self, position: tuple) -> any:
+        '''Méthode publique, renvoie le contenu de la case à la position prévue.'''
+        return self.__cases[position[1]][position[0]].getContenu()
+
+
+    def effaceContenu(self) -> None:
+        '''Méthode publique, efface le contenu de toutes les cases.'''
+        for y in range(self.__hauteur):
+            for x in range(self.__largeur):
+                self.__cases[y][x].setContenu(None)
+
+
+    def construireAvecGraphe(self, graphe: dict) -> None:
+        '''Méthode publique, définit les murs à partir d'un graphe.'''
+        for case, voisines in graphe.items():
+            x1, y1 = case
+
+            for case_voisine in voisines:
+                
+                x2, y2 = case_voisine
+
+                if y1 == y2 :
+                    if x1 < x2 :
+                        self.__cases[y1][x1].detruireMur('E')
+                    else: 
+                        self.__cases[y1][x1].detruireMur('W')
+                else :
+                    if y1 < y2 :
+                        self.__cases[y1][x1].detruireMur('S')
+                    else: 
+                        self.__cases[y1][x1].detruireMur('N')
+
+
+    def construireBordure(self) -> None:
+        '''Méthode publique, définit une bordure extérieure de la grille.'''
+        for colonne in range(self.__largeur) :
+            self.__cases[0][colonne].construireMur('N')
+            self.__cases[self.__hauteur - 1][colonne].construireMur('S')
+        
+        for ligne in range(self.__hauteur) :
+            self.__cases[ligne][0].construireMur('W')
+            self.__cases[ligne][self.__largeur - 1].construireMur('E')
+    
+    
+    def detruireBordure(self) -> None:
+        '''Méthode publique, enlève une bordure extérieure de la grille.'''
+        for colonne in range(self.__largeur) :
+            self.__cases[0][colonne].detruireMur('N')
+            self.__cases[self.__hauteur - 1][colonne].detruireMur('S')
+        
+        for ligne in range(self.__hauteur) :
+            self.__cases[ligne][0].detruireMur('W')
+            self.__cases[ligne][self.__largeur - 1].detruireMur('E')
+    
+    
+    def afficheMagasinVide(self) -> None:
+        '''Méthode publique, affiche la grille vide avec tous les murs.'''                                
+        for ligne in range(self.__hauteur) :
+            print('+---' * self.__largeur + '+')
+            print('|   ' * self.__largeur + '|')
+            
+        print('+---' * self.__largeur + '+\n')
