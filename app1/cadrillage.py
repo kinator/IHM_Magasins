@@ -48,6 +48,14 @@ class Case(object) :
         '''Méthode publique, affecte le contenu de l'objet.'''
         self.__contenu = cakechose
 
+    def setStock(self, cakechose: Produit, stock: int) -> None:
+        '''Méthode publique, affecte le contenu de l'objet.'''
+        if cakechose in self.__contenu:
+            self.__contenu = {cakechose.__str__ : stock} 
+
+    def setStockable(self, info : bool):
+        '''Méthode publique, affecte le contenu de l'objet.'''
+        self.__est_stockable = info
 
     def getContenu(self) -> dict:
         '''Méthode publique, renvoie le contenu de l'objet.'''
@@ -75,13 +83,9 @@ class Case(object) :
     def addContenu(self, cakechose: Produit, stock: int) -> None:
         '''Méthode publique, affecte le contenu de l'objet.'''
         if cakechose not in self.__contenu:
-            self.__contenu = {cakechose.__str__ : stock}        
+            self.__contenu = {cakechose.__str__ : stock}
         
-    def modifStock(self, cakechose: Produit, stock: int) -> None:
-        '''Méthode publique, affecte le contenu de l'objet.'''
-        if cakechose in self.__contenu:
-            self.__contenu = {cakechose.__str__ : stock} 
-        
+
     def removeContenu(self, cakechose: Produit) -> None:
         '''Méthode publique, affecte le contenu de l'objet.'''
         self.__contenu.popitem(cakechose)
@@ -95,7 +99,7 @@ class Magasin(object) :
            largeur : nombre de cases en largeur
            hauteur : nombre de cases en longueur
 
-Un objet, instance de cette classe, possède plusieurs méthodes :
+    Un objet, instance de cette classe, possède plusieurs méthodes :
 
     construireBordure() : construit les murs sur le contour du magasin
     detruireBordure() : détruit les murs sur le contour du magasin
@@ -117,7 +121,7 @@ Un objet, instance de cette classe, possède plusieurs méthodes :
             ligne_cases: list = []
         
             for x in range(self.__largeur) :
-                nouvelle_case = Case(x, y)
+                nouvelle_case = Case(x, y, False)
                 ligne_cases.append(nouvelle_case)
             
             liste_cases.append(ligne_cases)
@@ -259,7 +263,7 @@ if __name__ == '__main__':
     print(laby)
     input("Appuyer sur 'Entrée'")
     
-    print("\nAvec bordure, c'est mieux pour la suite...")
+    print("\nAvec bordure")
     laby.construireBordure()
     print(laby)
     input("Appuyer sur 'Entrée'")
