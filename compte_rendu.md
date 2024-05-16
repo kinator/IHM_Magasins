@@ -47,12 +47,12 @@
 **Behani Julien** : Ajout d'un dock pour widget 'quadrillage' et debug.<br>
 **Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
 **Hugo Ablers** : <br>
-**Seys Anthonny** : <br>
+**Seys Anthonny** : Création de la liste a partir du fichier JSON
 
 ## Compte rendu du 16/05/2024 de 14h30 & 16h00
 
 **Behani Julien** : Création des docks automatique 'quadrillage' et 'produits'.<br>
 **Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
 **Hugo Ablers** : <br>
-**Seys Anthonny** : <br>
+**Seys Anthonny** : Rectification de certains bugs + avance sur le travail de la liste
 
