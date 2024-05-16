@@ -299,3 +299,7 @@ if __name__ == '__main__':
     print("\nConstruction avec un graphe :")
     laby.construireAvecGraphe(graphe)
     print(laby)
+    input('Appuyez sur entrée')
+
+    print("Le magasin sans rien dans les cases")
+    laby.afficheMagasinVide()
