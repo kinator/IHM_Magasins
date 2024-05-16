@@ -5,5 +5,4 @@ class Controleur:
     
     def __init__():
         vue: VueMain = VueMain()
-        
-        
+    

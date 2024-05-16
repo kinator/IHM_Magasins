@@ -1,6 +1,6 @@
 import sys, time, json
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QGridLayout, QPushButton, QFileDialog
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QGridLayout, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor
 from PyQt6.QtCore import Qt, pyqtSignal
 
@@ -123,6 +123,25 @@ class VueMain(QMainWindow):
         action_retablir : QAction = QAction(QIcon(self.__images + 'right.png'), '&Rétablir', self)
         action_retablir.setShortcuts(["CTRL+Y"])
         
+        action_quadrillage : QAction = QAction('&Quadrillage', self)
+        action_quadrillage.setShortcuts(["CTRL+Q"])
+        
+        
+        # Création d'un dock pour widget à gauche.
+        self.dock: QDockWidget = QDockWidget("Options de quadrillage :")
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
+        self.dock.setMaximumWidth(400)
+        self.dock.setVisible(False)
+
+        # Widget dock Quadrillage
+        self.quadWidget: QWidget = QWidget(self)
+        quadLayout: QVBoxLayout = QVBoxLayout()
+        self.quadWidget.setLayout(quadLayout)
+
+        quadSizeLabel: QLabel = QLabel("Taille du quadrillage :")
+        
+        quadLayout.addWidget(quadSizeLabel)
+
 
         # Création de la barre de menus
         menu_bar = self.menuBar()
@@ -131,10 +150,19 @@ class VueMain(QMainWindow):
         menu_fichier.addActions([action_nouveau_projet, action_ouvrir_projet, action_save_projet, action_save_under_projet, action_supprimer_projet])
         
         menu_navigation = menu_bar.addMenu('&Navigation')
-        menu_navigation.addActions([action_annuler, action_retablir])
+        menu_navigation.addActions([action_annuler, action_retablir, action_quadrillage])
 
         menu_style = menu_bar.addMenu('&Style')
         
+        
+        # Changement de style
+        for file in listdir(self.__styles):
+            if file.endswith(".qss"):
+                self.variables = {}
+                self.variables[f"action_style + file.removesuffix('.qss')"] = QAction(text=file.removesuffix(".qss"), parent=self)
+                menu_style.addAction(self.variables[f"action_style + file.removesuffix('.qss')"])        
+                self.variables[f"action_style + file.removesuffix('.qss')"].triggered.connect(self.changeStyle)
+                
         
         # Création de la barre d'outils
         barre_outils = QToolBar("Outils", self)
@@ -142,19 +170,10 @@ class VueMain(QMainWindow):
         barre_outils.addActions([action_save_projet, action_save_under_projet, action_annuler, action_retablir])
         
 
-        # image du plan
+        # Image du plan
         self.plan : Image = Image(self.__images + 'Crash_pod_forest.png')
         self.plan.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.setCentralWidget(self.plan)
-
-
-        # changement de style
-        for file in listdir(self.__styles):
-            if file.endswith(".qss"):
-                self.variables = {}
-                self.variables[f"action_style + file.removesuffix('.qss')"] = QAction(text=file.removesuffix(".qss"), parent=self)
-                menu_style.addAction(self.variables[f"action_style + file.removesuffix('.qss')"])        
-                self.variables[f"action_style + file.removesuffix('.qss')"].triggered.connect(self.changeStyle)
         
         
         # slots
@@ -165,6 +184,7 @@ class VueMain(QMainWindow):
         action_save_under_projet.triggered.connect(self.save_under)
         action_annuler.triggered.connect(self.annuler)
         action_retablir.triggered.connect(self.retablir)
+        action_quadrillage.triggered.connect(self.changeDockGauche)
         
         self.show()
 
@@ -212,6 +232,11 @@ class VueMain(QMainWindow):
         with open(self.__styles + self.sender().text() + ".qss", "r") as f:
             self.currentstyle = f.read()
             self.setStyleSheet(self.currentstyle)
+            
+    def changeDockGauche(self):
+        if self.sender().text() == "&Quadrillage":
+            self.dock.setVisible(True)
+            self.dock.setWidget(self.quadWidget)
 
 
 # --- main --------------------------------------------------------------------
