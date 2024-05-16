@@ -91,7 +91,7 @@ class Case(object) :
         self.__contenu = {}
 
 class Magasin(object) :
-    '''Classe définissant une grille à partir de ses dimensions
+    '''Classe définissant un magasin à partir de ses dimensions
            largeur : nombre de cases en largeur
            hauteur : nombre de cases en longueur
 
@@ -106,8 +106,8 @@ Un objet, instance de cette classe, possède plusieurs méthodes :
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
         self.__cases: list = self.__creationMagasin()
-        
-        
+
+    
     def __creationMagasin(self) -> list:
         '''Méthode privée, crée et renvoie la liste des cases'''
         liste_cases: list = []
@@ -169,7 +169,7 @@ Un objet, instance de cette classe, possède plusieurs méthodes :
 
 
     def construireBordure(self) -> None:
-        '''Méthode publique, définit une bordure extérieure de la grille.'''
+        '''Méthode publique, définit une bordure extérieure du magasin.'''
         for colonne in range(self.__largeur) :
             self.__cases[0][colonne].construireMur('N')
             self.__cases[self.__hauteur - 1][colonne].construireMur('S')
@@ -180,7 +180,7 @@ Un objet, instance de cette classe, possède plusieurs méthodes :
     
     
     def detruireBordure(self) -> None:
-        '''Méthode publique, enlève une bordure extérieure de la grille.'''
+        '''Méthode publique, enlève une bordure extérieure de lau magasin.'''
         for colonne in range(self.__largeur) :
             self.__cases[0][colonne].detruireMur('N')
             self.__cases[self.__hauteur - 1][colonne].detruireMur('S')
@@ -191,9 +191,107 @@ Un objet, instance de cette classe, possède plusieurs méthodes :
     
     
     def afficheMagasinVide(self) -> None:
-        '''Méthode publique, affiche la grille vide avec tous les murs.'''                                
+        '''Méthode publique, affiche le magasin vide avec tous les murs.'''                                
         for ligne in range(self.__hauteur) :
             print('+---' * self.__largeur + '+')
             print('|   ' * self.__largeur + '|')
             
         print('+---' * self.__largeur + '+\n')
+
+    def __str__(self) :
+        '''Méthode dédiée, affiche le magasin avec son contenu et les murs existants.'''
+        affichage: str = ''
+        
+        for ligne in range(self.__hauteur) :
+        
+            affiche_ligne1: str = ''
+            affiche_ligne2: str = ''
+        
+            for colonne in range(self.__largeur) :
+            
+                liste_murs: list = self.__cases[ligne][colonne].getMurs()
+                
+                if 'N' in liste_murs :
+                    affiche_ligne1 = affiche_ligne1 + '+---'
+                else :
+                    affiche_ligne1 = affiche_ligne1 + '+   '
+                
+                contenu: any = self.__cases[ligne][colonne].getContenu()
+                
+                if contenu != None :
+                    contenu = str(contenu)[0]
+                else :
+                    contenu = ' '
+                
+                if 'W' in liste_murs :
+                    affiche_ligne2 = affiche_ligne2 + '| ' + contenu + ' '
+                else :
+                    affiche_ligne2 = affiche_ligne2 + '  ' + contenu + ' '
+
+            if 'E' in liste_murs :
+                affiche_ligne2 = affiche_ligne2 + '|'
+            
+            affichage = affichage + affiche_ligne1 + '+\n' + affiche_ligne2 + '\n'
+            
+        affiche_ligne1 = ''
+            
+        for colonne in range(self.__largeur) :
+            
+            liste_murs = self.__cases[self.__hauteur - 1][colonne].getMurs()
+                
+            if 'S' in liste_murs :
+                affiche_ligne1 = affiche_ligne1 + '+---'
+            else :
+                affiche_ligne1 = affiche_ligne1 + '+   '
+                
+        affichage = affichage + affiche_ligne1 + '+\n'
+        
+        return affichage
+
+if __name__ == '__main__':
+    laby = Magasin(8,8)
+    print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
+    print(laby)
+    input("Appuyer sur 'Entrée'")
+    
+    print('\nSans bordure :')
+    laby.detruireBordure()
+    print(laby)
+    input("Appuyer sur 'Entrée'")
+    
+    print("\nAvec bordure, c'est mieux pour la suite...")
+    laby.construireBordure()
+    print(laby)
+    input("Appuyer sur 'Entrée'")
+
+    graphe: dict = {(0, 0): {(0, 1): 1, (1, 0): 1}, (0, 1): {(0, 0): 1, (1, 1): 1}, (0, 2): {(1, 2): 1}, 
+                    (0, 3): {(0, 4): 1, (1, 3): 1}, (0, 4): {(0, 3): 1, (0, 5): 1},
+                    (0, 5): {(0, 4): 1, (0, 6): 1}, (0, 6): {(0, 5): 1, (0, 7): 1}, (0, 7): {(0, 6): 1}, 
+                    (1, 0): {(0, 0): 1, (2, 0): 1}, (1, 1): {(0, 1): 1, (2, 1): 1},
+                    (1, 2): {(0, 2): 1, (2, 2): 1}, (1, 3): {(0, 3): 1, (1, 4): 1}, (1, 4): {(1, 3): 1, (2, 4): 1}, 
+                    (1, 5): {(1, 6): 1, (2, 5): 1}, (1, 6): {(1, 5): 1, (1, 7): 1}, (1, 7): {(1, 6): 1, (2, 7): 1}, 
+                    (2, 0): {(1, 0): 1, (2, 1): 1, (3, 0): 1}, (2, 1): {(1, 1): 1, (2, 0): 1, (3, 1): 1}, 
+                    (2, 2): {(1, 2): 1, (2, 3): 1}, (2, 3): {(2, 2): 1, (2, 4): 1}, 
+                    (2, 4): {(1, 4): 1, (2, 3): 1, (2, 5): 1}, (2, 5): {(1, 5): 1, (2, 4): 1, (3, 5): 1}, 
+                    (2, 6): {(2, 7): 1, (3, 6): 1}, (2, 7): {(1, 7): 1, (2, 6): 1, (3, 7): 1}, 
+                    (3, 0): {(2, 0): 1, (4, 0): 1}, (3, 1): {(2, 1): 1, (3, 2): 1}, 
+                    (3, 2): {(3, 1): 1, (3, 3): 1, (4, 2): 1}, (3, 3): {(3, 2): 1, (3, 4): 1}, 
+                    (3, 4): {(3, 3): 1, (3, 5): 1}, (3, 5): {(2, 5): 1, (3, 4): 1}, (3, 6): {(2, 6): 1, (4, 6): 1}, 
+                    (3, 7): {(2, 7): 1, (4, 7): 1},
+                    (4, 0): {(3, 0): 1, (5, 0): 1}, (4, 1): {(5, 1): 1}, (4, 2): {(3, 2): 1, (5, 2): 1}, (4, 3): {(4, 4): 1}, 
+                    (4, 4): {(4, 3): 1, (4, 5): 1, (5, 4): 1}, (4, 5): {(4, 4): 1, (4, 6): 1, (5, 5): 1}, 
+                    (4, 6): {(3, 6): 1, (4, 5): 1}, (4, 7): {(3, 7): 1, (5, 7): 1}, 
+                    (5, 0): {(4, 0): 1, (6, 0): 1}, (5, 1): {(4, 1): 1, (6, 1): 1}, (5, 2): {(4, 2): 1, (5, 3): 1, (6, 2): 1},
+                    (5, 3): {(5, 2): 1, (5, 4): 1, (6, 3): 1}, (5, 4): {(4, 4): 1, (5, 3): 1, (6, 4): 1}, 
+                    (5, 5): {(4, 5): 1, (5, 6): 1}, (5, 6): {(5, 5): 1, (5, 7): 1},
+                    (5, 7): {(4, 7): 1, (5, 6): 1, (6, 7): 1}, 
+                    (6, 0): {(5, 0): 1, (6, 1): 1}, (6, 1): {(5, 1): 1, (6, 0): 1, (7, 1): 1}, (6, 2): {(5, 2): 1, (7, 2): 1}, 
+                    (6, 3): {(5, 3): 1, (7, 3): 1}, (6, 4): {(5, 4): 1, (6, 5): 1, (7, 4): 1}, 
+                    (6, 5): {(6, 4): 1, (6, 6): 1}, (6, 6): {(6, 5): 1}, (6, 7): {(5, 7): 1, (7, 7): 1}, 
+                    (7, 0): {(7, 1): 1}, (7, 1): {(6, 1): 1, (7, 0): 1, (7, 2): 1}, (7, 2): {(6, 2): 1, (7, 1): 1}, 
+                    (7, 3): {(6, 3): 1}, (7, 4): {(6, 4): 1, (7, 5): 1}, (7, 5): {(7, 4): 1, (7, 6): 1},
+                    (7, 6): {(7, 5): 1, (7, 7): 1}, (7, 7): {(6, 7): 1, (7, 6): 1}}
+    
+    print("\nConstruction avec un graphe :")
+    laby.construireAvecGraphe(graphe)
+    print(laby)
