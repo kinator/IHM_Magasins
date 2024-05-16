@@ -133,16 +133,13 @@ class Magasin(object) :
         '''Méthode publique, renvoie la liste des cases.'''
         return self.__cases
 
-
-    def setContenu(self, position: tuple, cakechose: any) -> None:
-        '''Méthode publique, affecte le contenu de la case à la position prévue.'''
-        self.__cases[position[1]][position[0]].setContenu(cakechose)
-
-
     def getContenu(self, position: tuple) -> any:
         '''Méthode publique, renvoie le contenu de la case à la position prévue.'''
         return self.__cases[position[1]][position[0]].getContenu()
 
+    def setContenu(self, position: tuple, cakechose: any) -> None:
+        '''Méthode publique, affecte le contenu de la case à la position prévue.'''
+        self.__cases[position[1]][position[0]].setContenu(cakechose)
 
     def effaceContenu(self) -> None:
         '''Méthode publique, efface le contenu de toutes les cases.'''
