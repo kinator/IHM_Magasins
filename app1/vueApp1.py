@@ -90,8 +90,8 @@ class VueMain(QMainWindow):
         
         self.setWindowTitle("Exemple_Main")
         self.setWindowIcon(QIcon(self.__images + 'horse.png'))  
-        self.setFixedWidth(800)
-        self.setFixedHeight(600)
+        self.setFixedWidth(900)
+        self.setFixedHeight(700)
 
 
         # barre d'état
@@ -126,22 +126,43 @@ class VueMain(QMainWindow):
         action_quadrillage : QAction = QAction('&Quadrillage', self)
         action_quadrillage.setShortcuts(["CTRL+Q"])
         
+        action_produit : QAction = QAction('&Produits', self)
+        action_produit.setShortcuts(["CTRL+P"])
+
         
-        # Création d'un dock pour widget à gauche.
-        self.dock: QDockWidget = QDockWidget("Options de quadrillage :")
-        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
-        self.dock.setMaximumWidth(400)
-        self.dock.setVisible(False)
 
         # Widget dock Quadrillage
         self.quadWidget: QWidget = QWidget(self)
         quadLayout: QVBoxLayout = QVBoxLayout()
         self.quadWidget.setLayout(quadLayout)
+        self.quadWidget.setObjectName("dockingquad")
+        self.quadWidget.setStyleSheet("QWidget#dockingquad {border: 1px solid black; background-color:white}")
+        self.quadWidget.setVisible(False)
 
         quadSizeLabel: QLabel = QLabel("Taille du quadrillage :")
+        quadSizeLabel2: QLabel = QLabel("Taille du quadrillage :")
         
         quadLayout.addWidget(quadSizeLabel)
+        quadLayout.addWidget(quadSizeLabel2)
+        
+        # Widget dock produit
+        self.prodWidget: QWidget = QWidget(self)
+        prodLayout: QVBoxLayout = QVBoxLayout()
+        self.prodWidget.setLayout(prodLayout)
+        self.prodWidget.setObjectName("dockingproduit")
+        self.prodWidget.setStyleSheet("QWidget#dockingproduit {border: 1px solid black; background-color:white}")
+        self.prodWidget.setVisible(False)
 
+        prodLabel: QLabel = QLabel("Nom du produit :")
+        prodLabel2: QLabel = QLabel("Ajouter produit :")
+        prodLabel3: QLabel = QLabel("Supprimer produit :")
+        prodLabel4: QLabel = QLabel("Liste produit :")
+        
+        prodLayout.addWidget(prodLabel)
+        prodLayout.addWidget(prodLabel2)
+        prodLayout.addWidget(prodLabel3)
+        prodLayout.addWidget(prodLabel4)
+        
 
         # Création de la barre de menus
         menu_bar = self.menuBar()
@@ -150,7 +171,7 @@ class VueMain(QMainWindow):
         menu_fichier.addActions([action_nouveau_projet, action_ouvrir_projet, action_save_projet, action_save_under_projet, action_supprimer_projet])
         
         menu_navigation = menu_bar.addMenu('&Navigation')
-        menu_navigation.addActions([action_annuler, action_retablir, action_quadrillage])
+        menu_navigation.addActions([action_annuler, action_retablir, action_quadrillage, action_produit])
 
         menu_style = menu_bar.addMenu('&Style')
         
@@ -171,9 +192,7 @@ class VueMain(QMainWindow):
         
 
         # Image du plan
-        self.plan : Image = Image(self.__images + 'Crash_pod_forest.png')
-        self.plan.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.setCentralWidget(self.plan)
+        self.updatePlan(self.__images + "Alteur_Table.JPG")
         
         
         # slots
@@ -185,6 +204,7 @@ class VueMain(QMainWindow):
         action_annuler.triggered.connect(self.annuler)
         action_retablir.triggered.connect(self.retablir)
         action_quadrillage.triggered.connect(self.changeDockGauche)
+        action_produit.triggered.connect(self.changeDockGauche)
         
         self.show()
 
@@ -234,9 +254,26 @@ class VueMain(QMainWindow):
             self.setStyleSheet(self.currentstyle)
             
     def changeDockGauche(self):
-        if self.sender().text() == "&Quadrillage":
-            self.dock.setVisible(True)
+        if self.sender().text() == "&Quadrillage" and self.quadWidget.isVisible() == False:
+            self.dock: QDockWidget = QDockWidget("Options de quadrillage :")
+            self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
+            self.dock.setMaximumWidth(400)
+        
             self.dock.setWidget(self.quadWidget)
+            self.quadWidget.setVisible(True)
+            
+        if self.sender().text() == "&Produits" and self.prodWidget.isVisible() == False:
+            self.dock: QDockWidget = QDockWidget("Options de produits :")
+            self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
+            self.dock.setMaximumWidth(400)
+            
+            self.dock.setWidget(self.prodWidget)
+            self.prodWidget.setVisible(True)
+            
+    def updatePlan(self, path: str):
+        plan : Image = Image(path)
+        plan.setAlignment(Qt.AlignmentFlag.AlignRight)
+        self.setCentralWidget(plan)
 
 
 # --- main --------------------------------------------------------------------
