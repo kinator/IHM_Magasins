@@ -25,7 +25,6 @@ def parcours(dico_graphe: dict, depart: tuple, arrivee: tuple) -> list:
 
 
 def parcours_opti(graphe: dict, depart: tuple, arrivee: tuple, points_interet: list) -> list:
-    '''La fonction cherche le chemin le plus rapide pour prendre un ou plusieurs articles dans le supermarché.'''
     
     chemin_complet = []
     point_courant = depart
@@ -52,7 +51,8 @@ if __name__ == "__main__":
         (1, 1): {(0, 1): 1, (1, 0): 1}
     }
 
+    points_interet : list = [(0, 5)]
     depart = (0, 0)
     arrivee = (1, 1)
-    chemin_plus_court = parcours_opti(graphe_exemple, depart, arrivee)
+    chemin_plus_court = parcours_opti(graphe_exemple, depart, arrivee, points_interet)
     print(f"Chemin le plus court entre {depart} et {arrivee}: {chemin_plus_court}")
