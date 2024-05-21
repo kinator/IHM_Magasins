@@ -48,10 +48,13 @@ if __name__ == "__main__":
         (0, 0): {(0, 1): 1, (1, 0): 1},
         (0, 1): {(0, 0): 1, (1, 1): 1},
         (1, 0): {(0, 0): 1, (1, 1): 1},
-        (1, 1): {(0, 1): 1, (1, 0): 1}
+        (1, 1): {(0, 1): 1, (1, 0): 1},
+        (0, 2): {(0, 1): 1, ()},
+        (1, 2): {},
+        (2, 2): {}
     }
 
-    points_interet : list = [(0, 5)]
+    points_interet : list = [(0, 1)]
     depart = (0, 0)
     arrivee = (1, 1)
     chemin_plus_court = parcours_opti(graphe_exemple, depart, arrivee, points_interet)
