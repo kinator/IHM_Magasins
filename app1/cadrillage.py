@@ -60,6 +60,12 @@ class Case(object) :
     def getContenu(self) -> dict:
         '''Méthode publique, renvoie le contenu de l'objet.'''
         return self.__contenu
+    
+    def est_vide(self) :
+        if not self.__contenu:
+            return False
+        else:
+            return True
 
 
     def getPosition(self) -> tuple:
@@ -106,10 +112,12 @@ class Magasin(object) :
     afficheMagasinVide() : affiche le magasin (sans contenu) avec tous les murs
     affichePlateau() : affiche le plateau (avec contenu et murs éventuels des cases)'''
     
-    def __init__(self, largeur: int, hauteur: int):
+    def __init__(self, largeur: int, hauteur: int, entree_x : int, entree_y : int, sortie_x : int, sortie_y : int):
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
         self.__cases: list = self.__creationMagasin()
+        self.__entree : tuple = (entree_x, entree_y)
+        self.__sortie : tuple = (sortie_x, sortie_y)
 
     
     def __creationMagasin(self) -> list:
@@ -135,7 +143,15 @@ class Magasin(object) :
 
     def getContenu(self, position: tuple) -> any:
         '''Méthode publique, renvoie le contenu de la case à la position prévue.'''
+        
         return self.__cases[position[1]][position[0]].getContenu()
+    
+    def case_est_vide(self, position : tuple):
+        '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
+        if not self.getContenu(position):
+            return False
+        else:
+            return True
 
     def setContenu(self, position: tuple, cakechose: any) -> None:
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
@@ -219,10 +235,10 @@ class Magasin(object) :
                 
                 contenu: any = self.__cases[ligne][colonne].getContenu()
                 
-                if contenu != None :
-                    contenu = str(contenu)[0]
+                if self.case_est_vide == True :
+                    contenu = 'T'
                 else :
-                    contenu = ' '
+                    contenu = 'F'
                 
                 if 'W' in liste_murs :
                     affiche_ligne2 = affiche_ligne2 + '| ' + contenu + ' '
@@ -250,7 +266,7 @@ class Magasin(object) :
         return affichage
 
 if __name__ == '__main__':
-    laby = Magasin(8,8)
+    laby = Magasin(8,8, 7, 0, 7, 0)
     print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
     print(laby)
     input("Appuyer sur 'Entrée'")
