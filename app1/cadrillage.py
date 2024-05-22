@@ -146,6 +146,12 @@ class Magasin(object) :
         
         return self.__cases[position[1]][position[0]].getContenu()
     
+    def getEntree(self):
+        return self.__entree
+    
+    def getSortie(self):
+        return self.__sortie
+    
     def case_est_vide(self, position : tuple):
         '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
         if not self.getContenu(position):
@@ -316,3 +322,6 @@ if __name__ == '__main__':
 
     print("Le magasin sans rien dans les cases")
     laby.afficheMagasinVide()
+
+    print(laby.getSortie())
+    print(laby.getEntree())
