@@ -152,6 +152,12 @@ class Magasin(object) :
     def getSortie(self):
         return self.__sortie
     
+    def setEntree(self, x : int, y : int):
+        self.__entree = (x, y)
+
+    def setSortie(self, x, y):
+        self.__sortie = (x, y)
+    
     def case_est_vide(self, position : tuple):
         '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
         if not self.getContenu(position):
