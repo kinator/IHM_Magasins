@@ -112,12 +112,13 @@ class Magasin(object) :
     afficheMagasinVide() : affiche le magasin (sans contenu) avec tous les murs
     affichePlateau() : affiche le plateau (avec contenu et murs éventuels des cases)'''
     
-    def __init__(self, largeur: int, hauteur: int, entree_x : int, entree_y : int, sortie_x : int, sortie_y : int):
+    def __init__(self, largeur: int, hauteur: int, entree_x : int, entree_y : int, sortie_x : int, sortie_y : int, nom_enseigne : str):
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
         self.__cases: list = self.__creationMagasin()
         self.__entree : tuple = (entree_x, entree_y)
         self.__sortie : tuple = (sortie_x, sortie_y)
+        self.__nom : str = nom_enseigne
 
     
     def __creationMagasin(self) -> list:
@@ -152,11 +153,8 @@ class Magasin(object) :
     def getSortie(self):
         return self.__sortie
     
-    def setEntree(self, x : int, y : int):
-        self.__entree = (x, y)
-
-    def setSortie(self, x, y):
-        self.__sortie = (x, y)
+    def getNomEnseigne(self):
+        return self.__nom
     
     def case_est_vide(self, position : tuple):
         '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
@@ -168,6 +166,15 @@ class Magasin(object) :
     def setContenu(self, position: tuple, cakechose: any) -> None:
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
         self.__cases[position[1]][position[0]].setContenu(cakechose)
+
+    def setEntree(self, x : int, y : int):
+        self.__entree = (x, y)
+
+    def setSortie(self, x, y):
+        self.__sortie = (x, y)
+
+    def setNomEnseigne(self, nom : str):
+        self.__nom = nom
 
     def effaceContenu(self) -> None:
         '''Méthode publique, efface le contenu de toutes les cases.'''
