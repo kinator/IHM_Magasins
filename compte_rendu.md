@@ -56,16 +56,9 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Rectification de certains bugs + avance sur le travail de la liste
 
-## Compte rendu du 16/05/2024 de 16h00 & 17h30
-
-**Behani Julien** : <br>
-**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
-**Hugo Ablers** : <br>
-**Seys Anthonny** : Rectification de certains bugs 
-
 ## Compte rendu du 21/05/2024 de 16h00 & 17h30
 
 **Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Fournier Enzo** : avancement sur le fichier 'cadrillage.py'<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Remaniment de la vue & controleur
