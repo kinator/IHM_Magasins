@@ -21,6 +21,16 @@ class Controleur:
     def nouveauProjet(self, dico):
         print(dico)
         self.vue.updatePlan(dico["fichier_plan"])
+        
+        
+    #Exemple fichier Json
+    #{"cases" :
+    #   [
+    #       {"x" : 1, "y": 2, "produits" : [{"id" : 1, "nom": "carotte", "stock" : 10}, {"id" : 1, "nom": "pomme_de_terre", "stock" : 5}]}, 
+    #       {"x" : 4, "y": 3, "produits" : [{"id" : 3, "nom": "fraise", "stock" : 99}]}
+    #   ],
+    #   "projet" : {"Projet" : "projet magasin", "Auteur" : "tom", "Date" : "(2001, 2 ,5)", "nom_magasin" : "nom_mag", "adresse_magasin" : "adresse", "fichier_plan" : "chemin\\fichier.text"}
+    #}
 
 
 # --- main --------------------------------------------------------------------

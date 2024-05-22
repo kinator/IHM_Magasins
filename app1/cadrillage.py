@@ -21,7 +21,7 @@ class Case(object) :
     def __init__(self):
         self.__position: tuple = (0, 0)
         self.__est_stockable: bool = False
-        self.__contenu: dict = {}
+        self.__contenu: dict = {1 : 7}
         self.__murs: list = ['N', 'S', 'E', 'W']
     
     def __init__(self, x: int, y: int, stock : bool):

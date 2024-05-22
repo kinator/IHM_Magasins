@@ -13,9 +13,7 @@ class Image(QLabel):
         super().__init__() 
         
         image = QPixmap(chemin)
-        if image.height() > image.width():
-            pixmap = image.
-            pixmap = image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
+        pixmap = image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
         self.setPixmap(pixmap)
         
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -106,9 +104,11 @@ class PopupFichier(QWidget):
         
         self.show()
 
+
     def searchFile(self):
         self.dialog: QFileDialog = QFileDialog()
         self.adresseFile.setText(self.dialog.getOpenFileName(filter="*.jpg; *.png; *.jpeg; *.bitmap; *.gif")[0])
+
 
     def ClickConfirm(self):
         if self.nomProjet.text() != "" and self.nomAuteur.text() != "" and self.dateMagasin.date().getDate() != (2000,1,1) and self.nomMagasin.text() != "" and self.adresseMagasin.text() != "" and self.adresseFile.text() != "":
@@ -116,8 +116,8 @@ class PopupFichier(QWidget):
             self.newProject.emit(dico)
             print('True')
             self.close()
-        
-        
+
+
     def clickCancel(self):
         print('False')
         self.close()
