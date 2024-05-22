@@ -20,6 +20,7 @@ class Controleur:
     
     def nouveauProjet(self, dico):
         print(dico)
+        self.vue.updatePlan(dico["fichier_plan"])
 
 
 # --- main --------------------------------------------------------------------

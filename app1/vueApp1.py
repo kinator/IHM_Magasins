@@ -1,4 +1,4 @@
-import sys, time, json
+import sys
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor
@@ -6,16 +6,20 @@ from PyQt6.QtCore import Qt, pyqtSignal, QDate
 
 class Image(QLabel):
 
-    def __init__(self, chemin: str):
+    def __init__(self, chemin: str, height: int, width: int):
         '''Constructeur de la classe'''
 
         # appel au constructeur de la classe mère
         super().__init__() 
         
-        self.image = QPixmap(chemin)
-        self.setPixmap(self.image)
+        image = QPixmap(chemin)
+        if image.height() > image.width():
+            pixmap = image.
+            pixmap = image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
+        self.setPixmap(pixmap)
         
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        
 
 ##############################################################################
 ##############################################################################
@@ -144,9 +148,9 @@ class VueMain(QMainWindow):
         self.currentstyle: str = ""
         
         self.setWindowTitle("Exemple_Main")
+        self.setMinimumWidth(900)
+        self.setMinimumHeight(700)
         self.setWindowIcon(QIcon(self.__images + 'horse.png'))  
-        self.setFixedWidth(900)
-        self.setFixedHeight(700)
 
 
         # barre d'état
@@ -329,7 +333,7 @@ class VueMain(QMainWindow):
             self.prodWidget.setVisible(True)
             
     def updatePlan(self, path: str):
-        plan : Image = Image(path)
+        plan : Image = Image(path, self.height(), self.width())
         plan.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.setCentralWidget(plan)
 
