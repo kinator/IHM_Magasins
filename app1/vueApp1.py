@@ -1,8 +1,8 @@
 import sys, time, json
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QGridLayout, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal, QDate
 
 class Image(QLabel):
 
@@ -21,7 +21,7 @@ class Image(QLabel):
 ##############################################################################
 
 class PopupFichier(QWidget):
-    chosenFile : pyqtSignal = pyqtSignal(bool)
+    newProject : pyqtSignal = pyqtSignal(dict)
 
     def __init__(self, style: str):
         '''Constructeur de la classe'''
@@ -35,32 +35,87 @@ class PopupFichier(QWidget):
         
         self.setWindowTitle("Création d'un nouveau projet")
         self.setWindowIcon(QIcon(self.__images + 'Alteur_Table.JPG'))
-        self.setFixedHeight(400)
-        self.setFixedWidth(500)
         
-        layout = QGridLayout()
-        self.setLayout(layout)
+        vLayout: QVBoxLayout = QVBoxLayout()
+        layoutLabel1: QHBoxLayout = QHBoxLayout()
+        layoutProjetAuteur: QHBoxLayout = QHBoxLayout()
+        layoutLabel2: QHBoxLayout = QHBoxLayout()
+        layoutDateNom: QHBoxLayout = QHBoxLayout()
+        layoutFile: QHBoxLayout = QHBoxLayout()
+        layoutButtons: QHBoxLayout = QHBoxLayout()
+        self.setLayout(vLayout)
 
+
+        labelProjet: QLabel = QLabel("Nom du projet :")
+        labelAuteur: QLabel = QLabel("Nom de l'auteur :")
+        layoutLabel1.addWidget(labelProjet)
+        layoutLabel1.addWidget(labelAuteur)
+        vLayout.addLayout(layoutLabel1)
+
+        self.nomProjet: QLineEdit = QLineEdit()
+        self.nomAuteur: QLineEdit = QLineEdit()
+        layoutProjetAuteur.addWidget(self.nomProjet)
+        layoutProjetAuteur.addWidget(self.nomAuteur)
+        vLayout.addLayout(layoutProjetAuteur)
+
+
+        labelDate: QLabel = QLabel("Date :")
+        labelNom: QLabel = QLabel("Nom de l'établissement :")
+        layoutLabel2.addWidget(labelDate)
+        layoutLabel2.addWidget(labelNom)
+        vLayout.addLayout(layoutLabel2)
+        
+        self.dateMagasin: QDateEdit = QDateEdit()
+        self.nomMagasin: QLineEdit = QLineEdit()
+        layoutDateNom.addWidget(self.dateMagasin)
+        layoutDateNom.addWidget(self.nomMagasin)
+        vLayout.addLayout(layoutDateNom)
+
+        
+        labelAdresse: QLabel = QLabel("Adresse de l'établissement :")
+        vLayout.addWidget(labelAdresse)
+        
+        self.adresseMagasin: QLineEdit = QLineEdit()
+        vLayout.addWidget(self.adresseMagasin)
+        
+        
+        labelFile: QLabel = QLabel("adresse du fichier :")
+        vLayout.addWidget(labelFile)
+        
+        self.adresseFile: QLineEdit = QLineEdit()
+        self.fileDialog: QPushButton = QPushButton("...")
+        layoutFile.addWidget(self.adresseFile)
+        layoutFile.addWidget(self.fileDialog)
+        vLayout.addLayout(layoutFile)
+    
+    
         self.confirm_button : QPushButton = QPushButton('Confirmer', self)        
         self.quit_button: QPushButton = QPushButton("Quitter", self)
-        
-        layout.addWidget(self.confirm_button)
-        layout.addWidget(self.quit_button)
+        layoutButtons.addWidget(self.confirm_button)
+        layoutButtons.addWidget(self.quit_button)
+        vLayout.addLayout(layoutButtons)
+
 
         self.quit_button.clicked.connect(self.clickCancel)
         self.confirm_button.clicked.connect(self.ClickConfirm)
+        self.fileDialog.clicked.connect(self.searchFile)
         
         self.show()
 
-
-    def clickCancel(self):
-        self.chosenFile.emit(False)
-        print('False')
-        self.close()
+    def searchFile(self):
+        self.dialog: QFileDialog = QFileDialog()
+        self.adresseFile.setText(self.dialog.getOpenFileName(filter="*.jpg; *.png; *.jpeg; *.bitmap; *.gif")[0])
 
     def ClickConfirm(self):
-        self.chosenFile.emit(True)
-        print('True')
+        if self.nomProjet.text() != "" and self.nomAuteur.text() != "" and self.dateMagasin.date().getDate() != (2000,1,1) and self.nomMagasin.text() != "" and self.adresseMagasin.text() != "" and self.adresseFile.text() != "":
+            dico: dict = {"Projet" : self.nomProjet.text(), "Auteur" : self.nomAuteur.text(), "Date" : self.dateMagasin.date().getDate(), "nom_magasin" : self.nomMagasin.text(), "adresse_magasin" : self.adresseMagasin.text(), "fichier_plan" : self.adresseFile.text()}
+            self.newProject.emit(dico)
+            print('True')
+            self.close()
+        
+        
+    def clickCancel(self):
+        print('False')
         self.close()
 
 ##############################################################################
@@ -69,7 +124,7 @@ class PopupFichier(QWidget):
 class VueMain(QMainWindow):
 
     # Création des signaux
-    nouveauClicked : pyqtSignal = pyqtSignal()
+    nouveauClicked : pyqtSignal = pyqtSignal(dict)
     saveClicked : pyqtSignal = pyqtSignal()
     saveUnderClicked : pyqtSignal = pyqtSignal(str)
     openClicked : pyqtSignal = pyqtSignal(str)
@@ -212,8 +267,11 @@ class VueMain(QMainWindow):
     # Fonctions
     def nouv(self) -> None:
         self.barre_etat.showMessage("Créer un nouveau projet....")
-        self.nouveauClicked.emit()
         self.Popup: PopupFichier = PopupFichier(self.currentstyle)
+        self.Popup.newProject.connect(self.sendNouv)
+    
+    def sendNouv(self, dico):
+        self.nouveauClicked.emit(dico)
 
     def open(self):
         self.barre_etat.showMessage("Ouverture d'un fichier....")

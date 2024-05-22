@@ -8,11 +8,18 @@ class Controleur:
     def __init__(self):
             
         self.__path: str = sys.path[0]
-        self.__styles: str = self.__path + '\\fichiers_qss\\'
         self.__images: str = self.__path + '\\images\\'
+        self.__plans: str = self.__path[:-5] + '\\models\\'
+        self.__projets: str = self.__path[:-5] + '\\projects\\'
         
         self.vue: VueMain = VueMain()
-        self.vue.updatePlan(self.__images + "icon.png")
+        self.vue.updatePlan(self.__plans + "plan1.jpg")
+        
+        self.vue.nouveauClicked.connect(self.nouveauProjet)
+        
+    
+    def nouveauProjet(self, dico):
+        print(dico)
 
 
 # --- main --------------------------------------------------------------------
