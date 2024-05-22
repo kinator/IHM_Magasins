@@ -63,7 +63,7 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Remaniment de la vue & controleur
 
-## Compte rendu du 21/05/2024 de 16h00 & 17h30
+## Compte rendu du 22/05/2024 de 08h30 & 10h00
 
 **Behani Julien** : <br>
 **Fournier Enzo** : Ajout du get et set pour l'entrée et la sortie de magasin et début de code pour la création de fichier json pour la sauvegarde des emplacement<br>
