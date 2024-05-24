@@ -233,6 +233,10 @@ class Magasin(object) :
             print('|   ' * self.__largeur + '|')
             
         print('+---' * self.__largeur + '+\n')
+        
+    def enregistrement(self, chemin: str) -> None:
+        '''Méthode publique, enregistre le magasin dans un fichier Json.'''
+        pass
 
     def __str__(self) :
         '''Méthode dédiée, affiche le magasin avec son contenu et les murs existants.'''

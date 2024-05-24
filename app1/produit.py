@@ -10,7 +10,7 @@ class Produit:
         self.id_prod : int = None
         self.nom : str = None
 
-    def __init__(self,id : int, nom_prod : str):
+    def __init__(self, id : int, nom_prod : str):
         self.id_prod : int = id
         self.nom : str = nom_prod
 
