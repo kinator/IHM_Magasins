@@ -80,6 +80,13 @@
 ## Compte rendu du 24/05/2024 de 10h00 & 11h30
 
 **Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Fournier Enzo** : commit des différents fichier et avancement sur le file.py<br>
 **Hugo Ablers** : Fin de developement du parcours optimal (avec implémentation de djikstra)<br>
+**Seys Anthonny** : 
+
+## Compte rendu du 24/05/2024 de 16h00 & 17h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : Suppression du fichier file.py car fonction déplacé dans cadrillage.py et avancement sur le fichier<br>
+**Hugo Ablers** : <br>
 **Seys Anthonny** : 
