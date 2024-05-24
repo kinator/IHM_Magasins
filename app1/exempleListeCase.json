@@ -1,0 +1,13 @@
+{"cases" : [
+    {"x" : 1, 
+    "y": 2, 
+    "produits" : {"1" : {"produits" : "bhezvfhgh", 
+                        "stock": 5}, 
+                        "2" : {"produits" : "egjrhtrhtrjg",
+                                "stock" : 1}}}, 
+    {"x" : 4, 
+    "y": 3, 
+    "produits" : {"3" : {"nom": "fraise", 
+    "stock" : 99}}}
+    ]
+}
