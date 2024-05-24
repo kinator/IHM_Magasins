@@ -1,45 +1,49 @@
 import filepile
 
-def parcours(dico_graphe: dict, depart: tuple, arrivee: tuple) -> list:
-    chemin = []
-    pile = filepile.Pile()
-    visite = []
+def dijkstra(graphe: dict, depart: str, bk_liste: list = []) -> dict:
+    file1 = filepile.File(len(graphe.keys()))
+    file1.enfiler(depart)
+    distance = {depart: [0, [depart]]}
 
-    pile.empiler(depart)
-    
-    while not pile.est_vide():
-        sommet = pile.depiler()
-        chemin.append(sommet)
-        
-        if sommet == arrivee:
-            return chemin
-        
-        for voisin in dico_graphe[sommet]:
-            if voisin not in visite:
-                visite.append(voisin)
-                pile.empiler(voisin)
-    
-    return "Pas de chemin trouvé"
+    while not file1.est_vide():
+        sommet = file1.defiler()
+        dist_actuelle, chemin_actuel = distance[sommet]
+        voisins = graphe[sommet]
 
-def parcours_opti(graphe: dict, depart: tuple, arrivee: tuple, points_interet: list) -> list:
-    '''La fonction cherche le chemin le plus rapide pour prendre un ou plusieurs articles dans le supermarché.'''
+        for voisin, poids in voisins.items():
+            if voisin not in bk_liste:
+                nouvelle_distance = dist_actuelle + poids
+                if voisin not in distance or nouvelle_distance < distance[voisin][0]:
+                    distance[voisin] = [nouvelle_distance, chemin_actuel + [voisin]]
+                    file1.enfiler(voisin)
+                    
+    return distance
+
+def parcours(graphe: dict, depart: str, arrivee: str) -> list:
+    distances = dijkstra(graphe, depart)
+    if arrivee not in distances:
+        return "Pas de chemin trouvé"
     
+    chemin = distances[arrivee][1]
+    return chemin
+
+def parcours_opti(graphe: dict, depart: str, arrivee: str, points_interet: list) -> list:
     chemin_complet = []
     point_courant = depart
 
     for point in points_interet:
-        chemin = parcours(graphe, point_courant, point)
-        if chemin == "Pas de chemin trouvé":
+        segment_chemin = parcours(graphe, point_courant, point)
+        if segment_chemin == "Pas de chemin trouvé":
             return "Pas de chemin trouvé"
-        chemin_complet.extend(chemin[:-1])
+        chemin_complet.extend(segment_chemin[:-1]) # -1 permet de ne pas prendre le dernier élément de la liste sinon il serait ajouté en double
         point_courant = point
         print("test "+ str(point))
 
-    chemin = parcours(graphe, point_courant, arrivee)
-    if chemin == "Pas de chemin trouvé":
+    segment_chemin = parcours(graphe, point_courant, arrivee)
+    if segment_chemin == "Pas de chemin trouvé":
         return "Pas de chemin trouvé"
-    chemin_complet.extend(chemin)
-    
+    chemin_complet.extend(segment_chemin)
+
     return chemin_complet
 
 
@@ -84,7 +88,7 @@ if __name__ == "__main__":
     }
     
 
-    points_interet : list = [(0, 5)]
+    points_interet : list = [(0, 5), (3, 2)]
     depart = (0, 0)
     arrivee = (5, 5)
     chemin_plus_court = parcours_opti(graphe_exemple, depart, arrivee, points_interet)
