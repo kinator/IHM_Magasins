@@ -77,9 +77,9 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
 
-## Compte rendu du 22/05/2024 de 10h00 & 11h30
+## Compte rendu du 24/05/2024 de 10h00 & 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : <br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : Fin de developement du parcours optimal (avec implémentation de djikstra)<br>
 **Seys Anthonny** : 
