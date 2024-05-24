@@ -69,3 +69,17 @@
 **Fournier Enzo** : Ajout du get et set pour l'entrée et la sortie de magasin et début de code pour la création de fichier json pour la sauvegarde des emplacement<br>
 **Hugo Ablers** : réglage de bug<br>
 **Seys Anthonny** : 
+
+## Compte rendu du 22/05/2024 de 14h30 & 16h00
+
+**Behani Julien** : abs<br>
+**Fournier Enzo** :abs<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
+
+## Compte rendu du 22/05/2024 de 10h00 & 11h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : <br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
