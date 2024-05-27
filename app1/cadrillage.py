@@ -228,7 +228,7 @@ class Magasin(object) :
     
     
     def afficheMagasinVide(self) -> None:
-        '''Méthode publique, affiche le magasin vide avec tous les murs.'''                                
+        '''Méthode publique, affiche le magasin vide avec tous les murs.'''
         for ligne in range(self.__hauteur) :
             print('+---' * self.__largeur + '+')
             print('|   ' * self.__largeur + '|')
@@ -290,6 +290,7 @@ class Fichier(object):
     def __init__(self, jsonFile : (str|None) = None) -> None:
     
         # attributs
+        self.__cases : list = []
         self.__current : (int|None) = None
         
         # si un fichier est fourni : on charge
@@ -337,10 +338,27 @@ class Fichier(object):
             for p in self.__cases :
                 cases.append(json.loads(p.toJSON()))
             
-            d['annuaire'] = cases
+            d['cases'] = cases
             json.dump(d,file,ensure_ascii=False)
         
         print(f'done!')
+
+    def getProduitByID(self, id : int):
+        pass
+
+    def getProduits(self):
+        pass
+
+    def addProduit(self, p : str, id : int):
+        pass
+
+    def next(self) -> None :
+        if self.__current != None :
+            self.__current = (self.__current +1)% len(self.__cases)
+    
+    def previous(self) -> None :
+        if self.__current != None :
+            self.__current = (self.__current - 1)% len(self.__cases)
 
 if __name__ == '__main__':
     laby = Magasin(8,8, 7, 0, 7, 0)
@@ -396,3 +414,9 @@ if __name__ == '__main__':
 
     print(laby.getSortie())
     print(laby.getEntree())
+
+    # print('Test : class Fichier')
+    # fichier : Fichier = Fichier()
+
+    # print("\ttesting from json:", end= ' ')
+    # annuaireJS : Fichier = Fichier('exempleListeCase.json')
