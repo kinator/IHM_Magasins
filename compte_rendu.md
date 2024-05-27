@@ -90,3 +90,8 @@
 **Fournier Enzo** : Suppression du fichier file.py car fonction déplacé dans cadrillage.py et avancement sur le fichier<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
+
+**Behani Julien** : <br>
+**Fournier Enzo** : Ajout de méthode dans le fichier cadrillage.py pour permettre de travailler avec les fichier json<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
