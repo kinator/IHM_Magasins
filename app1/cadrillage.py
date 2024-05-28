@@ -344,13 +344,27 @@ class Fichier(object):
         print(f'done!')
 
     def getProduitByID(self, id : int):
-        pass
+        '''Méthode publique, renvoie le produit correspondant à l'ID.'''
+        for case in self.__cases:
+            for produit in case['contenu']:
+                if produit['id'] == id:
+                    return produit
+        return None
 
     def getProduits(self):
-        pass
+        '''Méthode publique, renvoie tous les produits.'''
+        produits = []
+        for case in self.__cases:
+            produits.extend(case['contenu'])
+        return produits
 
-    def addProduit(self, p : str, id : int):
-        pass
+    def addProduit(self, p : Produit, id : int):
+        '''Méthode publique, ajoute un produit à la case avec l'ID spécifié.'''
+        for case in self.__cases:
+            if case['id'] == id:
+                case['contenu'].append(p.toJSON())
+                return True
+        return False
 
     def next(self) -> None :
         if self.__current != None :

@@ -14,6 +14,17 @@ class Produit:
         self.id_prod : int = id
         self.nom : str = nom_prod
 
+    @staticmethod
+    def buildFromJSon(data: dict):
+        return Produit(id=data['id'], nom=data['nom'], prix=data['prix'])
+
+    def toJSON(self):
+        return {
+            'id': self.id,
+            'nom': self.nom,
+            'prix': self.prix
+        }
+
     def getIdProd(self):
         return self.id_prod
     
