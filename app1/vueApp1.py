@@ -1,7 +1,7 @@
 import sys
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit
-from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor
+from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QPainter
 from PyQt6.QtCore import Qt, pyqtSignal, QDate
 
 class Image(QLabel):
@@ -10,14 +10,41 @@ class Image(QLabel):
         '''Constructeur de la classe'''
 
         # appel au constructeur de la classe mère
-        super().__init__() 
+        super().__init__()
         
-        image = QPixmap(chemin)
-        pixmap = image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
-        self.setPixmap(pixmap)
+        self.image = QPixmap(chemin)
+        self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
         
-        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.pixmapLabel = QLabel()
+        self.pixmapLabel.setPixmap(self.image)
+        self.pixmapLabel.setAlignment(Qt.AlignmentFlag.AlignRight)
         
+        layout = QVBoxLayout()
+        layout.addWidget(self.pixmapLabel)
+        self.setLayout(layout)        
+        
+        self.heightCadre = self.image.height()
+        self.widthCadre = self.image.width()
+        
+        self.pixmapLabel.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        
+        self.afficherGrille()
+        
+    
+    def updateImage(self, chemin):
+        self.image = QPixmap(chemin)
+        self.image = self.image.scaled(int(self.width()*0.8), int(self.height()*0.7),transformMode= Qt.TransformationMode.FastTransformation)
+        self.pixmapLabel.setPixmap(self.image)
+
+    def afficherGrille(self, nbCaseW: int = 10, nbCaseH: int = 10):
+        cube = QPainter()
+        cube.drawRect(10, 0, 30, 30)
+    
+    def supprimerGrille(self):
+        pass
+    
+    def setCouleurCase(self):
+        pass
 
 ##############################################################################
 ##############################################################################
@@ -114,7 +141,6 @@ class PopupFichier(QWidget):
         if self.nomProjet.text() != "" and self.nomAuteur.text() != "" and self.dateMagasin.date().getDate() != (2000,1,1) and self.nomMagasin.text() != "" and self.adresseMagasin.text() != "" and self.adresseFile.text() != "":
             dico: dict = {"Projet" : self.nomProjet.text(), "Auteur" : self.nomAuteur.text(), "Date" : self.dateMagasin.date().getDate(), "nom_magasin" : self.nomMagasin.text(), "adresse_magasin" : self.adresseMagasin.text(), "fichier_plan" : self.adresseFile.text()}
             self.newProject.emit(dico)
-            print('True')
             self.close()
 
 
@@ -251,7 +277,8 @@ class VueMain(QMainWindow):
         
 
         # Image du plan
-        self.updatePlan(self.__images + "Alteur_Table.JPG")
+        self.plan : Image = Image(self.__images + "Alteur_Table.JPG", self.height(), self.width())
+        self.setCentralWidget(self.plan)
         
         
         # slots
@@ -333,10 +360,7 @@ class VueMain(QMainWindow):
             self.prodWidget.setVisible(True)
             
     def updatePlan(self, path: str):
-        plan : Image = Image(path, self.height(), self.width())
-        plan.setAlignment(Qt.AlignmentFlag.AlignRight)
-        self.setCentralWidget(plan)
-
+        self.plan.updateImage(path)
 
 # --- main --------------------------------------------------------------------
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import sys
-from cadrillage import Case
+from cadrillage import Case, Fichier
 from vueApp1 import VueMain
 from PyQt6.QtWidgets import QApplication
 
