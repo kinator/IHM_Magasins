@@ -98,3 +98,11 @@
 **Fournier Enzo** : Ajout de méthode dans le fichier cadrillage.py pour permettre de travailler avec les fichier json<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
+
+## Compte rendu du 28/05/2024 de 14h30 à 17h30
+
+
+**Behani Julien** : <br>
+**Fournier Enzo** : <br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
