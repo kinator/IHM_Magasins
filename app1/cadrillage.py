@@ -285,45 +285,32 @@ class Magasin(object) :
         
         return affichage
     
-class Fichier(object):
+class Fichier:
+    def __init__(self, jsonFile: str | None = None) -> None:
+        self.__cases = []
+        self.__current = None
 
-    def __init__(self, jsonFile : (str|None) = None) -> None:
-    
-        # attributs
-        self.__cases : list = []
-        self.__current : (int|None) = None
-        
-        # si un fichier est fourni : on charge
         if jsonFile:
             self.open(jsonFile)
 
-
     @property
-    def current(self) -> int | None :
+    def current(self) -> int | None:
         return self.__current
-    
 
     @current.setter
-    def current(self, index :int|None) -> None :
+    def current(self, index: int | None) -> None:
         self.__current = index
 
-    def open(self, jsonFile : str):
+    def open(self, jsonFile: str):
         with open(jsonFile, encoding='utf-8') as file:
-        
             print(f'loading file: {jsonFile}', end='... ')
             js = json.load(file)
-        
+
             if 'cases' in js.keys():
-        
-                cases = js['cases']
-        
-                # for p in cases:
-                #     #pp = cases..buildFromJSon(p)
-                #     self.__cases.append(pp)
-        
+                self.__cases = [Produit.buildFromJSon(prod) for prod in js['cases']]
                 self.__current = 0 if self.__cases else None
 
-    def save(self, jsonFile : str) -> None:
+    def save(self, jsonFile: str) -> None:
         print(f'saving file: {jsonFile}', end='... ')
 
         if not os.path.exists(jsonFile):
@@ -331,48 +318,30 @@ class Fichier(object):
             f.close()
 
         with open(jsonFile, "w", encoding='utf-8') as file:
+            d = {'cases': [prod.toJSON() for prod in self.__cases]}
+            json.dump(d, file, ensure_ascii=False)
 
-            d : dict= {}
-            cases : list= []
-            
-            for p in self.__cases :
-                cases.append(json.loads(p.toJSON()))
-            
-            d['cases'] = cases
-            json.dump(d,file,ensure_ascii=False)
-        
-        print(f'done!')
+        print('done!')
 
-    def getProduitByID(self, id : int):
-        '''Méthode publique, renvoie le produit correspondant à l'ID.'''
-        for case in self.__cases:
-            for produit in case['contenu']:
-                if produit['id'] == id:
-                    return produit
+    def getProduitByID(self, id: int):
+        for produit in self.__cases:
+            if produit.id == id:
+                return produit
         return None
 
     def getProduits(self):
-        '''Méthode publique, renvoie tous les produits.'''
-        produits = []
-        for case in self.__cases:
-            produits.extend(case['contenu'])
-        return produits
+        return self.__cases
 
-    def addProduit(self, p : Produit, id : int):
-        '''Méthode publique, ajoute un produit à la case avec l'ID spécifié.'''
-        for case in self.__cases:
-            if case['id'] == id:
-                case['contenu'].append(p.toJSON())
-                return True
-        return False
+    def addProduit(self, p: Produit) -> None:
+        self.__cases.append(p)
 
-    def next(self) -> None :
-        if self.__current != None :
-            self.__current = (self.__current +1)% len(self.__cases)
-    
-    def previous(self) -> None :
-        if self.__current != None :
-            self.__current = (self.__current - 1)% len(self.__cases)
+    def next(self) -> None:
+        if self.__current is not None:
+            self.__current = (self.__current + 1) % len(self.__cases)
+
+    def previous(self) -> None:
+        if self.__current is not None:
+            self.__current = (self.__current - 1) % len(self.__cases)
 
 if __name__ == '__main__':
     laby = Magasin(8,8, 7, 0, 7, 0)
