@@ -103,6 +103,6 @@
 
 
 **Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Fournier Enzo** : ajout de fichier d'exemple json pour le mvc pour aider à faire la création des fichiers json<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
