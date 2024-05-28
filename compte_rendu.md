@@ -91,6 +91,9 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
 
+## Compte rendu du 27/05/2024 de 16h00 & 17h30
+
+
 **Behani Julien** : <br>
 **Fournier Enzo** : Ajout de méthode dans le fichier cadrillage.py pour permettre de travailler avec les fichier json<br>
 **Hugo Ablers** : <br>
