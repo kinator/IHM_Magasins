@@ -101,8 +101,14 @@
 
 ## Compte rendu du 28/05/2024 de 14h30 à 17h30
 
-
 **Behani Julien** : <br>
 **Fournier Enzo** : ajout de fichier d'exemple json pour le mvc pour aider à faire la création des fichiers json<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
+
+## Compte rendu du 30/05/2024 de 08h30 à 11h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : <br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
