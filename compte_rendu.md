@@ -109,6 +109,6 @@
 ## Compte rendu du 30/05/2024 de 08h30 à 11h30
 
 **Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Fournier Enzo** : réglage de bug qui empêchait d'ouvrir des fichiers json et avancement sur la classe fichier dans cadrillage.py<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
