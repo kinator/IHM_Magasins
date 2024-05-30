@@ -73,14 +73,18 @@ class Vue(QMainWindow):
         self.DockD.setFixedWidth(200)
 
    
-    # def display_data(self, data):
-    #     for value in data.items():
-    #         label = QPushButton(f"{value}")
-    #         self.layoutGDock.addWidget(label)
+    
     
     def display_data(self, data):
-        for items in data.items():
+    
+
+        # Add new widgets based on the data
+        for category, items in data.items():
+            category_label = QLabel(category)
+            self.layoutGDock.addWidget(category_label)
             for item in items:
+                print(f"Adding button for item: {item}")  # Debugging statement
                 button = QPushButton(f"{item}")
                 self.layoutGDock.addWidget(button)
+            self.layoutGDock.addSpacing(20)  # Add space after each category
     
