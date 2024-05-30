@@ -1,8 +1,9 @@
-import sys
+import sys, random
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit
-from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QPainter
-from PyQt6.QtCore import Qt, pyqtSignal, QDate
+from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
+from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect
+
 
 class Image(QLabel):
 
@@ -14,31 +15,37 @@ class Image(QLabel):
         
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
-        
-        self.pixmapLabel = QLabel()
-        self.pixmapLabel.setPixmap(self.image)
-        self.pixmapLabel.setAlignment(Qt.AlignmentFlag.AlignRight)
-        
+                
         layout = QVBoxLayout()
-        layout.addWidget(self.pixmapLabel)
         self.setLayout(layout)        
+        
+        p = self.palette()
+        self.setPalette(p)
         
         self.heightCadre = self.image.height()
         self.widthCadre = self.image.width()
         
-        self.pixmapLabel.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
-        self.afficherGrille()
-        
+
+        self.show()
     
     def updateImage(self, chemin):
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(self.width()*0.8), int(self.height()*0.7),transformMode= Qt.TransformationMode.FastTransformation)
-        self.pixmapLabel.setPixmap(self.image)
+        
+    def paintEvent(self, event):
+        self.qp = QPainter(self)
+        self.qp.setPen(QColor("black"))
+        self.image = QPixmap(self.image)
+        self.image = self.image.scaled(int(self.width()), int(self.height()),transformMode= Qt.TransformationMode.FastTransformation)
+        self.qp.drawPixmap(QRect(0, 0, self.width, self.height), QPoint(0, 0), self.image)
+        self.qp.drawLine(1, 10, 30, 10)
+
+        self.qp.end()
 
     def afficherGrille(self, nbCaseW: int = 10, nbCaseH: int = 10):
-        cube = QPainter()
-        cube.drawRect(10, 0, 30, 30)
+        pass
     
     def supprimerGrille(self):
         pass
