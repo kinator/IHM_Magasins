@@ -1,4 +1,4 @@
-import json, copy, os, sys
+import json
 from produit import Produit
 
 class Case(object) :
@@ -287,53 +287,60 @@ class Magasin(object) :
     
 class Fichier:
     def __init__(self, jsonFile: str | None = None) -> None:
-        self.__cases = []
-        self.__current = None
+        self.data_magasin = {}
+        self.data_cases = {}
+        self.data_produits = {}
 
         if jsonFile:
             self.open(jsonFile)
 
-    @property
-    def current(self) -> int | None:
-        return self.__current
-
-    @current.setter
-    def current(self, index: int | None) -> None:
-        self.__current = index
-
     def open(self, jsonFile: str):
-        with open(jsonFile, encoding='utf-8') as file:
-            print(f'loading file: {jsonFile}', end='... ')
-            js = json.load(file)
+        with open(jsonFile, "r", encoding='utf-8') as file:
+            print(f'loading file: {jsonFile}', end='... \n')
+            self.data_magasin = json.load(file)
+        
+        chemin_fichier_plan = self.data_magasin['fichier_plan']
+        chemin_fichier_produits = self.data_magasin['fichier_produits']
+        
+        with open(chemin_fichier_plan, 'r', encoding='utf-8') as file:
+            print(f'loading file: {chemin_fichier_plan}', end='... \n')
+            self.data_cases = json.load(file)
+        
+        
+        with open(chemin_fichier_produits, 'r', encoding='utf-8') as file:
+            print(f'loading file: {chemin_fichier_produits}', end='... \n')
+            self.data_produits = json.load(file)
 
-            if 'cases' in js.keys():
-                self.__cases = [Produit.buildFromJSon(prod) for prod in js['cases']]
-                self.__current = 0 if self.__cases else None
+    # def save(self, jsonFile: str) -> None:
+    #     print(f'saving file: {jsonFile}', end='... ')
 
-    def save(self, jsonFile: str) -> None:
-        print(f'saving file: {jsonFile}', end='... ')
+    #     if not os.path.exists(jsonFile):
+    #         f = open(jsonFile, "x")
+    #         f.close()
 
-        if not os.path.exists(jsonFile):
-            f = open(jsonFile, "x")
-            f.close()
+    #     with open(jsonFile, "w", encoding='utf-8') as file:
+    #         d = {'cases': [prod.toJSON() for prod in self.__cases]}
+    #         json.dump(d, file, ensure_ascii=False)
 
-        with open(jsonFile, "w", encoding='utf-8') as file:
-            d = {'cases': [prod.toJSON() for prod in self.__cases]}
-            json.dump(d, file, ensure_ascii=False)
-
-        print('done!')
-
-    def getProduitByID(self, id: int):
-        for produit in self.__cases:
-            if produit.id == id:
-                return produit
-        return None
+    #     print('done!')
 
     def getProduits(self):
-        return self.__cases
+        return self.data_produits
 
     def addProduit(self, p: Produit) -> None:
-        self.__cases.append(p)
+        self.data_produits['panier'][Produit.getNom] = Produit
+
+    def setEntree(self, entree : tuple):
+        self.data_cases['entree'] = entree
+
+    def setSortie(self, sortie : tuple):
+        self.data_cases['sortie'] = sortie
+
+    def getEntree(self):
+        return self.data_cases['entree']
+
+    def getSortie(self):
+        return self.data_cases['sortie']
 
     def next(self) -> None:
         if self.__current is not None:
@@ -344,7 +351,7 @@ class Fichier:
             self.__current = (self.__current - 1) % len(self.__cases)
 
 if __name__ == '__main__':
-    laby = Magasin(8,8, 7, 0, 7, 0)
+    laby = Magasin(8,8, 7, 0, 7, 0, 'Test')
     print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
     print(laby)
     input("Appuyer sur 'Entrée'")
@@ -398,8 +405,10 @@ if __name__ == '__main__':
     print(laby.getSortie())
     print(laby.getEntree())
 
-    # print('Test : class Fichier')
-    # fichier : Fichier = Fichier()
+    print('Test : class Fichier')
+    fichier : Fichier = Fichier()
 
-    # print("\ttesting from json:", end= ' ')
-    # annuaireJS : Fichier = Fichier('exempleListeCase.json')
+    print("\ttesting from json:", end= ' ')
+    annuaireJS : Fichier = Fichier("exempleProjet.json")
+
+    # print(annuaireJS.getProduits())
