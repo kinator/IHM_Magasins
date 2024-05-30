@@ -1,15 +1,14 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel, QSizePolicy, QScrollBar, QScrollArea
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction
 
 class Vue(QMainWindow):
     
     
-    def __init__(self, controller):
+    def __init__(self):
         super().__init__()
         
-        self.controller = controller
 
         # Configuration de la fenêtre principale
         self.setWindowTitle("Gestion magasin")
@@ -55,36 +54,48 @@ class Vue(QMainWindow):
         self.WidgetDockGauche = QWidget()
         self.layoutGDock = QVBoxLayout()
         self.WidgetDockGauche.setLayout(self.layoutGDock)
+        
+        
 
         self.DockG = QDockWidget('Articles : ')
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.DockG)
         self.DockG.setWidget(self.WidgetDockGauche)
-        self.DockG.setFixedHeight(600)
+        self.DockG.setFixedHeight(800)
         self.DockG.setFixedWidth(200)
+        
+        
 
+       
+        
         self.WidgetDockCentre = QWidget()
         self.layoutDDock = QVBoxLayout()
         self.WidgetDockCentre.setLayout(self.layoutDDock)
+        
 
-        self.DockD = QDockWidget('Détails : ')
+        self.DockD = QDockWidget('Nouvelle liste : ')
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.DockD)
         self.DockD.setWidget(self.WidgetDockCentre)
-        self.DockD.setFixedHeight(600)
+        self.DockD.setFixedHeight(800)
         self.DockD.setFixedWidth(200)
+        
+        self.show()
 
    
     
     
     def display_data(self, data):
-    
-
-        # Add new widgets based on the data
         for category, items in data.items():
             category_label = QLabel(category)
             self.layoutGDock.addWidget(category_label)
             for item in items:
-                print(f"Adding button for item: {item}")  # Debugging statement
-                button = QPushButton(f"{item}")
-                self.layoutGDock.addWidget(button)
-            self.layoutGDock.addSpacing(20)  # Add space after each category
-    
+                print(f"Item chargé : {item}")  # Debug
+                self.button = QPushButton(f"{item}")
+                self.layoutGDock.addWidget(self.button)
+                self.button.setMinimumSize(300,250)
+                QApplication.processEvents()  # Forcer la mise à jour de l'interface utilisateur
+
+                
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    vue = Vue()
+    sys.exit(app.exec())

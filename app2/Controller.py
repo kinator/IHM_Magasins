@@ -4,9 +4,10 @@ from Model import Model
 from Vue import Vue
 
 class Controller:
-    def __init__(self, model, view):
-        self.model = model
-        self.view = view
+    def __init__(self):
+        self.model = Model()
+        self.view = Vue()
+        self.load_data('data.json')  # Charger les données lors de l'initialisation
 
     def load_data(self, filepath):
         self.model.load_data(filepath)
@@ -14,10 +15,5 @@ class Controller:
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    model = Model()
-    vue = Vue(None)
-    controller = Controller(model, vue)
-    vue.controller = controller
-    controller.load_data('data.json')
-    vue.show()
+    controller = Controller()
     sys.exit(app.exec())
