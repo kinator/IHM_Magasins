@@ -1,6 +1,6 @@
 import sys, random
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSlider
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
 from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect
 
@@ -12,45 +12,58 @@ class Image(QLabel):
 
         # appel au constructeur de la classe mère
         super().__init__()
-        
+
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
-                
+
         layout = QVBoxLayout()
-        self.setLayout(layout)        
-        
+        self.setLayout(layout)
+
         p = self.palette()
         self.setPalette(p)
-        
+
         self.heightCadre = self.image.height()
         self.widthCadre = self.image.width()
-        
+
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        
+
 
         self.show()
     
-    def updateImage(self, chemin):
+    def updateImage(self, chemin) -> None:
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(self.width()*0.8), int(self.height()*0.7),transformMode= Qt.TransformationMode.FastTransformation)
         
-    def paintEvent(self, event):
+    def updateCadrillage(self) -> None:
+        self.limHeight, self.limWidth = 75, 75
+        i, j = 1, 1
+        self.cubeList = []
+        for i in range(self.limHeight):
+            for j in range(self.limWidth):
+                self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
+        self.qp.drawRects(self.cubeList)
+        
+    def paintEvent(self, event, nb_caseW = 75, nb_caseH = 75) -> None:
         self.qp = QPainter(self)
         self.qp.setPen(QColor("black"))
-        self.image = QPixmap(self.image)
-        self.image = self.image.scaled(int(self.width()), int(self.height()),transformMode= Qt.TransformationMode.FastTransformation)
-        self.qp.drawPixmap(QRect(0, 0, self.width, self.height), QPoint(0, 0), self.image)
-        self.qp.drawLine(1, 10, 30, 10)
+        self.rectangle = QRect(0, 0, self.width(), self.height())
+        self.qp.drawPixmap(self.rectangle, self.image)
+        self.afficherGrille(nb_caseW, nb_caseH)
 
         self.qp.end()
 
-    def afficherGrille(self, nbCaseW: int = 10, nbCaseH: int = 10):
+    def afficherGrille(self, nbCaseW: int = 75, nbCaseH: int = 75) -> None:
+        i, j = 1, 1
+        self.cubeList = []
+        for i in range(nbCaseH):
+            for j in range(nbCaseW):
+                self.cubeList.append(QRect(int(self.rectangle.width() / nbCaseW * j), int(self.rectangle.height() / nbCaseH * i), int(self.rectangle.width() / nbCaseW), int(self.rectangle.height() / nbCaseH)))
+        self.qp.drawRects(self.cubeList)
+            
+    def supprimerGrille(self) -> None:
         pass
     
-    def supprimerGrille(self):
-        pass
-    
-    def setCouleurCase(self):
+    def setCouleurCase(self) -> None:
         pass
 
 ##############################################################################
