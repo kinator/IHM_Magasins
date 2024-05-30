@@ -49,6 +49,7 @@ class Vue(QMainWindow):
         self.navigate.addAction(self.restore)
         self.theme.addAction(self.white_theme)
         self.theme.addAction(self.black_theme)
+        
 
         # Création des docks et des layouts
         self.WidgetDockGauche = QWidget()
@@ -60,42 +61,33 @@ class Vue(QMainWindow):
         self.DockG = QDockWidget('Articles : ')
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.DockG)
         self.DockG.setWidget(self.WidgetDockGauche)
-        self.DockG.setFixedHeight(800)
+        self.DockG.setFixedHeight(700)
         self.DockG.setFixedWidth(200)
-        
-        
 
-       
         
-        self.WidgetDockCentre = QWidget()
+        self.WidgetDockDroit = QWidget()
         self.layoutDDock = QVBoxLayout()
-        self.WidgetDockCentre.setLayout(self.layoutDDock)
+        self.WidgetDockDroit.setLayout(self.layoutDDock)
         
 
         self.DockD = QDockWidget('Nouvelle liste : ')
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.DockD)
-        self.DockD.setWidget(self.WidgetDockCentre)
-        self.DockD.setFixedHeight(800)
+        self.DockD.setWidget(self.WidgetDockDroit)
+        self.DockD.setFixedHeight(700)
         self.DockD.setFixedWidth(200)
         
         self.show()
+        
+        # Connecter l'action "Enregistrer-sous" à une fonction pour sauvegarder le dock droit
+        self.save_as.triggered.connect(self.save_right_dock)
+        
+    def save_right_dock(self):
+        self.controller.save_right_dock()
+        
+    def set_controller(self, controller):
+        self.controller = controller
 
    
     
     
-    def display_data(self, data):
-        for category, items in data.items():
-            category_label = QLabel(category)
-            self.layoutGDock.addWidget(category_label)
-            for item in items:
-                print(f"Item chargé : {item}")  # Debug
-                self.button = QPushButton(f"{item}")
-                self.layoutGDock.addWidget(self.button)
-                self.button.setMinimumSize(300,250)
-                QApplication.processEvents()  # Forcer la mise à jour de l'interface utilisateur
-
-                
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    vue = Vue()
-    sys.exit(app.exec())
+    
