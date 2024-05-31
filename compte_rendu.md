@@ -112,3 +112,10 @@
 **Fournier Enzo** : réglage de bug qui empêchait d'ouvrir des fichiers json et avancement sur la classe fichier dans cadrillage.py<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : 
+
+## Compte rendu du 31/05/2024 de 10h00 à 11h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : ajout des différents getter et setter pour la classe fichier<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
