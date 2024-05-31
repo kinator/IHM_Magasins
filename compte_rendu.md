@@ -68,28 +68,28 @@
 **Behani Julien** : <br>
 **Fournier Enzo** : Ajout du get et set pour l'entrée et la sortie de magasin et début de code pour la création de fichier json pour la sauvegarde des emplacement<br>
 **Hugo Ablers** : réglage de bug<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Ajout de la méthode MVC
 
 ## Compte rendu du 22/05/2024 de 14h30 à 16h00
 
 **Behani Julien** : abs<br>
 **Fournier Enzo** :abs<br>
 **Hugo Ablers** : <br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Essaie de la méthode MVC
 
 ## Compte rendu du 24/05/2024 de 10h00 à 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : commit des différents fichier et avancement sur le file.py<br>
 **Hugo Ablers** : Fin de developpement du parcours optimal (avec implémentation de djikstra)<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Résolution de bug 
 
 ## Compte rendu du 24/05/2024 de 16h00 à 17h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : Suppression du fichier file.py car fonction déplacé dans cadrillage.py et avancement sur le fichier<br>
 **Hugo Ablers** : avancé sur le programme de graphe<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Résolution de bug 
 
 ## Compte rendu du 27/05/2024 de 16h00 à 17h30
 
@@ -97,18 +97,18 @@
 **Behani Julien** : <br>
 **Fournier Enzo** : Ajout de méthode dans le fichier cadrillage.py pour permettre de travailler avec les fichier json<br>
 **Hugo Ablers** : debug parcours<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Résolution de bug 
 
 ## Compte rendu du 28/05/2024 de 14h30 à 17h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : ajout de fichier d'exemple json pour le mvc pour aider à faire la création des fichiers json<br>
 **Hugo Ablers** : prise en charge des entrées et sorties dans le Json<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Ajout de l'ouverture d'un JSON
 
 ## Compte rendu du 30/05/2024 de 08h30 à 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : réglage de bug qui empêchait d'ouvrir des fichiers json et avancement sur la classe fichier dans cadrillage.py<br>
 **Hugo Ablers** : Fin de gestion des graphes -> passage à l'affichage<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Tentative de résolution de bug Ouverture JSON
