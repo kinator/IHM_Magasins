@@ -324,11 +324,17 @@ class Fichier:
 
     #     print('done!')
 
+    def getMagasin(self):
+        return self.data_cases['graphe']
+    
+    def setCasesMagasin(self, cases : dict):
+        self.data_cases['graphe'] = cases
+
     def getProduits(self):
         return self.data_produits
 
     def addProduit(self, p: Produit) -> None:
-        self.data_produits['panier'][Produit.getNom] = Produit
+        self.data_produits['produits'][Produit.getNom] = Produit
 
     def setEntree(self, entree : tuple):
         self.data_cases['entree'] = entree
@@ -341,6 +347,42 @@ class Fichier:
 
     def getSortie(self):
         return self.data_cases['sortie']
+    
+    def getNomProjet(self):
+        return self.data_magasin['nom_projet']
+    
+    def getAuteur(self):
+        return self.data_magasin['Auteur']
+    
+    def getDate(self):
+        return self.data_magasin['date']
+    
+    def getNomMagasin(self):
+        return self.data_magasin['nom_magasin']
+    
+    def getAdresse(self):
+        return self.data_magasin['adresse_magasin']
+    
+    def setNomProjet(self, nom : str):
+        self.data_magasin['nom_projet'] = nom
+
+    def setAuteur(self, author : str):
+        self.data_magasin['Auteur'] = author
+
+    def setDate(self, date):
+        self.data_magasin['Date'] = date
+
+    def setNomMagasin(self, name : str):
+        self.data_magasin['nom_magasin'] = name
+
+    def setAdresse(self, adresse : str):
+        self.data_magasin['adresse_magasin'] = adresse
+
+    def setFichierPlan(self, file : str):
+        self.data_magasin['fichier_plan'] = file
+
+    def setFichierProduits(self, file : str):
+        self.data_magasin['fichier_produits'] = file
 
     def next(self) -> None:
         if self.__current is not None:
