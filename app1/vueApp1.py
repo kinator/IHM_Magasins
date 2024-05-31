@@ -12,8 +12,14 @@ class Image(QLabel):
 
         # appel au constructeur de la classe mère
         super().__init__()
+        
+        self.limHeight, self.limWidth = 0, 0
+        self.toggleGrillage = False
+        
+        self.__chemin = chemin
+        self.cubeList = []
 
-        self.image = QPixmap(chemin)
+        self.image = QPixmap(self.__chemin)
         self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
 
         layout = QVBoxLayout()
@@ -30,41 +36,57 @@ class Image(QLabel):
 
         self.show()
     
+    def getToggle(self) -> bool:
+        return self.toggleGrillage
+    
     def updateImage(self, chemin) -> None:
+        self.__chemin = chemin
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(self.width()*0.8), int(self.height()*0.7),transformMode= Qt.TransformationMode.FastTransformation)
         
-    def updateCadrillage(self) -> None:
-        self.limHeight, self.limWidth = 75, 75
+    def updateCadrillage(self, nbCaseW: int = 75, nbCaseH: int = 75) -> None:
         i, j = 1, 1
         self.cubeList = []
         for i in range(self.limHeight):
             for j in range(self.limWidth):
                 self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
         self.qp.drawRects(self.cubeList)
+        self.afficherGrille(nbCaseW, nbCaseH, self.toggleGrillage)
         
     def paintEvent(self, event, nb_caseW = 75, nb_caseH = 75) -> None:
         self.qp = QPainter(self)
         self.qp.setPen(QColor("black"))
         self.rectangle = QRect(0, 0, self.width(), self.height())
         self.qp.drawPixmap(self.rectangle, self.image)
-        self.afficherGrille(nb_caseW, nb_caseH)
+        self.updateCadrillage(nb_caseW, nb_caseH)
 
         self.qp.end()
 
-    def afficherGrille(self, nbCaseW: int = 75, nbCaseH: int = 75) -> None:
-        i, j = 1, 1
-        self.cubeList = []
-        for i in range(nbCaseH):
-            for j in range(nbCaseW):
-                self.cubeList.append(QRect(int(self.rectangle.width() / nbCaseW * j), int(self.rectangle.height() / nbCaseH * i), int(self.rectangle.width() / nbCaseW), int(self.rectangle.height() / nbCaseH)))
-        self.qp.drawRects(self.cubeList)
-            
+    def afficherGrille(self, nbCaseW: int = 75, nbCaseH: int = 75, toggle: bool = False) -> None:
+        if toggle:
+            if self.cubeList != []:
+                self.supprimerGrille()
+                
+            i, j = 1, 1
+            for i in range(nbCaseH):
+                for j in range(nbCaseW):
+                    self.cubeList.append(QRect(int(self.rectangle.width() / nbCaseW * j), int(self.rectangle.height() / nbCaseH * i), int(self.rectangle.width() / nbCaseW), int(self.rectangle.height() / nbCaseH)))
+        else: self.updateImage(self.__chemin)
+
     def supprimerGrille(self) -> None:
-        pass
+        self.cubeList = []
     
     def setCouleurCase(self) -> None:
         pass
+    
+    def setCaseWidth(self, num: int = 75) -> None:
+        self.limWidth = num
+
+    def setCaseHeight(self, num: int = 75) -> None:
+        self.limHeight = num
+        
+    def setToggle(self, b: bool) -> None:
+        self.toggleGrillage = b
 
 ##############################################################################
 ##############################################################################
@@ -192,6 +214,7 @@ class VueMain(QMainWindow):
         self.__styles: str = self.__path + '\\fichiers_qss\\'
         self.__images: str = self.__path + '\\images\\'
         self.currentstyle: str = ""
+        self.currentImage: str = ""
         
         self.setWindowTitle("Exemple_Main")
         self.setMinimumWidth(900)
@@ -233,6 +256,9 @@ class VueMain(QMainWindow):
         
         action_produit : QAction = QAction('&Produits', self)
         action_produit.setShortcuts(["CTRL+P"])
+
+        action_afficher_grillage : QAction = QAction('&Afficher cadrillage', self)
+        action_afficher_grillage.setShortcuts(["CTRL+C"])
 
         
 
@@ -276,7 +302,7 @@ class VueMain(QMainWindow):
         menu_fichier.addActions([action_nouveau_projet, action_ouvrir_projet, action_save_projet, action_save_under_projet, action_supprimer_projet])
         
         menu_navigation = menu_bar.addMenu('&Navigation')
-        menu_navigation.addActions([action_annuler, action_retablir, action_quadrillage, action_produit])
+        menu_navigation.addActions([action_annuler, action_retablir, action_quadrillage, action_produit, action_afficher_grillage])
 
         menu_style = menu_bar.addMenu('&Style')
         
@@ -293,7 +319,7 @@ class VueMain(QMainWindow):
         # Création de la barre d'outils
         barre_outils = QToolBar("Outils", self)
         self.addToolBar(barre_outils)
-        barre_outils.addActions([action_save_projet, action_save_under_projet, action_annuler, action_retablir])
+        barre_outils.addActions([action_save_projet, action_save_under_projet, action_annuler, action_retablir, action_afficher_grillage])
         
 
         # Image du plan
@@ -311,7 +337,7 @@ class VueMain(QMainWindow):
         action_retablir.triggered.connect(self.retablir)
         action_quadrillage.triggered.connect(self.changeDockGauche)
         action_produit.triggered.connect(self.changeDockGauche)
-        
+        action_afficher_grillage.triggered.connect(self.toggleGrillage)
         self.show()
 
 
@@ -322,6 +348,7 @@ class VueMain(QMainWindow):
         self.Popup.newProject.connect(self.sendNouv)
     
     def sendNouv(self, dico):
+        self.currentImage = dico["fichier_plan"]
         self.nouveauClicked.emit(dico)
 
     def open(self):
@@ -378,6 +405,12 @@ class VueMain(QMainWindow):
             
             self.dock.setWidget(self.prodWidget)
             self.prodWidget.setVisible(True)
+            
+    def toggleGrillage(self, event):
+        if self.plan.getToggle() == False:
+            self.plan.setToggle(True)
+        else: self.plan.setToggle(False)
+        self.plan.paintEvent()
             
     def updatePlan(self, path: str):
         self.plan.updateImage(path)
