@@ -81,14 +81,14 @@
 
 **Behani Julien** : <br>
 **Fournier Enzo** : commit des différents fichier et avancement sur le file.py<br>
-**Hugo Ablers** : Fin de developement du parcours optimal (avec implémentation de djikstra)<br>
+**Hugo Ablers** : Fin de developpement du parcours optimal (avec implémentation de djikstra)<br>
 **Seys Anthonny** : 
 
 ## Compte rendu du 24/05/2024 de 16h00 à 17h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : Suppression du fichier file.py car fonction déplacé dans cadrillage.py et avancement sur le fichier<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : avancé sur le programme de graphe<br>
 **Seys Anthonny** : 
 
 ## Compte rendu du 27/05/2024 de 16h00 à 17h30
@@ -96,26 +96,19 @@
 
 **Behani Julien** : <br>
 **Fournier Enzo** : Ajout de méthode dans le fichier cadrillage.py pour permettre de travailler avec les fichier json<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : debug parcours<br>
 **Seys Anthonny** : 
 
 ## Compte rendu du 28/05/2024 de 14h30 à 17h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : ajout de fichier d'exemple json pour le mvc pour aider à faire la création des fichiers json<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : prise en charge des entrées et sorties dans le Json<br>
 **Seys Anthonny** : 
 
 ## Compte rendu du 30/05/2024 de 08h30 à 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : réglage de bug qui empêchait d'ouvrir des fichiers json et avancement sur la classe fichier dans cadrillage.py<br>
-**Hugo Ablers** : <br>
-**Seys Anthonny** : 
-
-## Compte rendu du 31/05/2024 de 10h00 à 11h30
-
-**Behani Julien** : <br>
-**Fournier Enzo** : ajout des différents getter et setter pour la classe fichier<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : Fin de gestion des graphes -> passage à l'affichage<br>
 **Seys Anthonny** : 
