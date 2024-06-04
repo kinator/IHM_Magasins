@@ -1,6 +1,6 @@
 import sys, random
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSlider
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSpinBox
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
 from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect, QEvent
 
@@ -48,11 +48,12 @@ class Image(QLabel):
         if self.toggleGrillage  == True:
             i, j = 1, 1
             self.cubeList = []
+            
             for i in range(self.limHeight):
                 for j in range(self.limWidth):
                     self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
         
-    def paintEvent(self, event, nb_caseW = 75, nb_caseH = 75) -> None:
+    def paintEvent(self, event) -> None:
         self.qp = QPainter(self)
         self.qp.setPen(QColor("black"))
         self.rectangle = QRect(0, 0, self.width(), self.height())
@@ -74,12 +75,18 @@ class Image(QLabel):
     
     def setCaseWidth(self, num: int = 75) -> None:
         self.limWidth = num
+        self.update()
 
     def setCaseHeight(self, num: int = 75) -> None:
         self.limHeight = num
-        
+        self.update()
+
     def setToggle(self, b: bool) -> None:
         self.toggleGrillage = b
+        self.update()
+        
+    def updateAll(self, path):
+        self.updateImage(path)
         self.update()
 
 ##############################################################################
@@ -264,15 +271,29 @@ class VueMain(QMainWindow):
         self.quadWidget.setStyleSheet("QWidget#dockingquad {border: 1px solid black; background-color:white}")
         self.quadWidget.setVisible(False)
 
-        quadSizeLabel: QLabel = QLabel("Taille du quadrillage :")
-        self.LineX: QLineEdit = QLineEdit()
-        self.LineY: QLineEdit = QLineEdit()
-        quadSizeLabel2: QLabel = QLabel("Taille du quadrillage :")
-        
+        quadSizeLabel: QLabel = QLabel("Hauteur du quadrillage :")
+        self.lineY = QSpinBox()
+        self.lineY.setRange(1, 100)
+        self.lineY.setValue(75)
+        self.lineY.setSingleStep(1)
         quadLayout.addWidget(quadSizeLabel)
-        quadLayout.addWidget(self.LineX)
-        quadLayout.addWidget(self.LineY)
+        quadLayout.addWidget(self.lineY)
+        quadLayout.addSpacing(12)
+        
+        quadSizeLabel: QLabel = QLabel("Largeur du quadrillage :")
+        self.lineX = QSpinBox()
+        self.lineX.setRange(1, 100)
+        self.lineX.setValue(75)
+        self.lineX.setSingleStep(1)
+        quadLayout.addWidget(quadSizeLabel)
+        quadLayout.addWidget(self.lineX)
+        quadLayout.addSpacing(12)
+
+        quadSizeLabel2: QLabel = QLabel("Taille du quadrillage :")
         quadLayout.addWidget(quadSizeLabel2)
+        
+        quadLayout.insertStretch(-1, 1)
+
         
         # Widget dock produit
         self.prodWidget: QWidget = QWidget(self)
@@ -335,7 +356,9 @@ class VueMain(QMainWindow):
         action_retablir.triggered.connect(self.retablir)
         action_quadrillage.triggered.connect(self.changeDockGauche)
         action_produit.triggered.connect(self.changeDockGauche)
-        action_afficher_grillage.triggered.connect(self.toggleGrillage)
+        self.lineX.valueChanged.connect(self.changerTailleGrille)
+        self.lineY.valueChanged.connect(self.changerTailleGrille)
+
         self.show()
 
 
@@ -392,6 +415,7 @@ class VueMain(QMainWindow):
             self.dock: QDockWidget = QDockWidget("Options de quadrillage :")
             self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
             self.dock.setMaximumWidth(400)
+            self.dock.setMinimumWidth(180)
         
             self.dock.setWidget(self.quadWidget)
             self.quadWidget.setVisible(True)
@@ -400,7 +424,8 @@ class VueMain(QMainWindow):
             self.dock: QDockWidget = QDockWidget("Options de produits :")
             self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
             self.dock.setMaximumWidth(400)
-            
+            self.dock.setMinimumWidth(180)
+
             self.dock.setWidget(self.prodWidget)
             self.prodWidget.setVisible(True)
             
@@ -412,9 +437,13 @@ class VueMain(QMainWindow):
                 self.plan.setToggle(False)
                 print("It's false")
 
+    def changerTailleGrille(self):
+        self.plan.setCaseHeight(self.lineY.value())
+        self.plan.setCaseWidth(self.lineX.value())
             
     def updatePlan(self, path: str):
-        self.plan.updateImage(path)
+        self.plan.updateAll(path)
+        
 
 # --- main --------------------------------------------------------------------
 if __name__ == "__main__":
