@@ -4,6 +4,10 @@
 
 **Fournier Enzo** : Ajout d'un status bar sur l'application pour les action effectué et réglage du bug qui empêcher d'effectuer les racourci pour les actions et ajout des fichiers de Style QSS dans un dossier<br>
 
+## fait le 04/06 de 7h30/8h00
+
+**Fournier Enzo** : suppression de méthode inutile, modification du produit.py et début de création de la méthode de sauvegarde de fichier json<br>
+
 # Compte rendu pour les séances de SAE
 
 ## Compte rendu du 07/05/2024 de 10h00 à 11h30
