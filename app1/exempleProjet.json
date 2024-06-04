@@ -1,0 +1,9 @@
+{
+    "nom_projet" : "projet magasin", 
+    "auteur" : "tom", 
+    "date" : "(2001, 2 ,5)", 
+    "nom_magasin" : "nom_mag", 
+    "adresse_magasin" : "adresse", 
+    "fichier_plan" : "supermarche.json",
+    "fichier_produits" : "ListeCase.json"
+}

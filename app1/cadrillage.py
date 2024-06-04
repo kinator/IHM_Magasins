@@ -1,4 +1,4 @@
-import json, copy, os, sys
+import json, os
 from produit import Produit
 
 class Case(object) :
@@ -228,7 +228,7 @@ class Magasin(object) :
     
     
     def afficheMagasinVide(self) -> None:
-        '''Méthode publique, affiche le magasin vide avec tous les murs.'''                                
+        '''Méthode publique, affiche le magasin vide avec tous les murs.'''
         for ligne in range(self.__hauteur) :
             print('+---' * self.__largeur + '+')
             print('|   ' * self.__largeur + '|')
@@ -289,78 +289,145 @@ class Magasin(object) :
         
         return affichage
     
-class Fichier(object):
+class Fichier:
+    def __init__(self, jsonFile: str | None = None) -> None:
+        self.data_magasin = {}
+        self.data_cases = {}
+        self.data_produits = {}
 
-    def __init__(self, jsonFile : (str|None) = None) -> None:
-    
-        # attributs
-        self.__current : (int|None) = None
-        
-        # si un fichier est fourni : on charge
         if jsonFile:
             self.open(jsonFile)
 
+    def open(self, jsonFile: str):
+        with open(jsonFile, "r", encoding='utf-8') as file:
+            print(f'loading file: {jsonFile}', end='... \n')
+            self.data_magasin = json.load(file)
+        
+        chemin_fichier_plan = self.data_magasin['fichier_plan']
+        chemin_fichier_produits = self.data_magasin['fichier_produits']
+        
+        with open(chemin_fichier_plan, 'r', encoding='utf-8') as file:
+            print(f'loading file: {chemin_fichier_plan}', end='... \n')
+            self.data_cases = json.load(file)
+        
+        
+        with open(chemin_fichier_produits, 'r', encoding='utf-8') as file:
+            print(f'loading file: {chemin_fichier_produits}', end='... \n')
+            self.data_produits = json.load(file)
 
-    @property
-    def current(self) -> int | None :
-        return self.__current
-    
-
-    @current.setter
-    def current(self, index :int|None) -> None :
-        self.__current = index
-
-    def open(self, jsonFile : str):
-        with open(jsonFile, encoding='utf-8') as file:
-        
-            print(f'loading file: {jsonFile}', end='... ')
-            js = json.load(file)
-        
-            if 'cases' in js.keys():
-        
-                cases = js['cases']
-        
-                # for p in cases:
-                #     #pp = cases..buildFromJSon(p)
-                #     self.__cases.append(pp)
-        
-                self.__current = 0 if self.__cases else None
-
-    def save(self, jsonFile : str) -> None:
-        print(f'saving file: {jsonFile}', end='... ')
+    def save(self, jsonFile: str) -> None:
+        print(f'saving files: {jsonFile}, {self.getFichierPlan()} and {self.getFichierProduits()}', end='... ')
 
         if not os.path.exists(jsonFile):
-            f = open(jsonFile, "x")
-            f.close()
+            f = open(jsonFile, "x") ; f.close()
 
         with open(jsonFile, "w", encoding='utf-8') as file:
+            json.dump(self.data_magasin,file,ensure_ascii=False)
 
-            d : dict= {}
-            cases : list= []
-            
-            for p in self.__cases :
-                cases.append(json.loads(p.toJSON()))
-            
-            d['annuaire'] = cases
-            json.dump(d,file,ensure_ascii=False)
-        
+        with open(self.getFichierPlan(), "w", encoding='utf-8') as file:
+            json.dump(self.data_cases, file, ensure_ascii=False)
+
+        with open(self.getFichierProduits(), "w", encoding='utf-8') as file:
+            json.dump(self.data_produits, file, ensure_ascii=False)            
+
         print(f'done!')
 
+    def delete(self, jsonFile : str):
+        print(f'delete files: {jsonFile}, {self.getFichierPlan()} and {self.getFichierProduits()}', end='... ')
+
+        if not os.path.exists(jsonFile):
+            return "Error, file does not exist"
+        
+        os.remove(self.getFichierPlan())
+        os.remove(self.getFichierProduits())
+        os.remove(jsonFile)
+
+
+    
+    def addProduit(self,emplacement : tuple, p: Produit) -> None:
+        self.data_produits[emplacement] = Produit
+    
+
+    # les différents setter permmetant de mettre à jour les fichier
+    def getMagasin(self):
+        return self.data_cases['graphe']
+
+    def getProduits(self):
+        return self.data_produits
+
+    def getEntree(self):
+        return self.data_cases['entree']
+
+    def getSortie(self):
+        return self.data_cases['sortie']
+    
+    def getNomProjet(self):
+        return self.data_magasin['nom_projet']
+    
+    def getAuteur(self):
+        return self.data_magasin['auteur']
+    
+    def getDate(self):
+        return self.data_magasin['date']
+    
+    def getNomMagasin(self):
+        return self.data_magasin['nom_magasin']
+    
+    def getAdresse(self):
+        return self.data_magasin['adresse_magasin']
+    
+    def getFichierPlan(self):
+        return self.data_magasin['fichier_plan']
+
+    def getFichierProduits(self):
+        return self.data_magasin['fichier_produits']
+    
+    # les différents getter pour récupérer les différents info des json
+    def setEntree(self, entree : tuple):
+        self.data_cases['entree'] = entree
+
+    def setSortie(self, sortie : tuple):
+        self.data_cases['sortie'] = sortie
+    
+    def setCasesMagasin(self, cases : dict):
+        self.data_cases['graphe'] = cases
+    
+    def setNomProjet(self, nom : str):
+        self.data_magasin['nom_projet'] = nom
+
+    def setAuteur(self, author : str):
+        self.data_magasin['auteur'] = author
+
+    def setDate(self, date):
+        self.data_magasin['date'] = date
+
+    def setNomMagasin(self, name : str):
+        self.data_magasin['nom_magasin'] = name
+
+    def setAdresse(self, adresse : str):
+        self.data_magasin['adresse_magasin'] = adresse
+
+    def setFichierPlan(self, file : str):
+        self.data_magasin['fichier_plan'] = file
+
+    def setFichierProduits(self, file : str):
+        self.data_magasin['fichier_produits'] = file
+
 if __name__ == '__main__':
-    laby = Magasin(8,8, 7, 0, 7, 0)
+    laby = Magasin(8,8, 7, 0, 7, 0, 'Test')
     print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
     print(laby)
-    input("Appuyer sur 'Entrée'")
+    # input("Appuyer sur 'Entrée'")
     
     print('\nSans bordure :')
     laby.detruireBordure()
     print(laby)
-    input("Appuyer sur 'Entrée'")
+    # input("Appuyer sur 'Entrée'")
     
     print("\nAvec bordure")
     laby.construireBordure()
     print(laby)
-    input("Appuyer sur 'Entrée'")
+    # input("Appuyer sur 'Entrée'")
 
     graphe: dict = {(0, 0): {(0, 1): 1, (1, 0): 1}, (0, 1): {(0, 0): 1, (1, 1): 1}, (0, 2): {(1, 2): 1}, 
                     (0, 3): {(0, 4): 1, (1, 3): 1}, (0, 4): {(0, 3): 1, (0, 5): 1},
@@ -393,10 +460,41 @@ if __name__ == '__main__':
     print("\nConstruction avec un graphe :")
     laby.construireAvecGraphe(graphe)
     print(laby)
-    input('Appuyez sur entrée')
+    # input('Appuyez sur entrée')
 
     print("Le magasin sans rien dans les cases")
     laby.afficheMagasinVide()
 
     print(laby.getSortie())
     print(laby.getEntree())
+
+    print('Test : class Fichier')
+    fichier : Fichier = Fichier()
+
+    print("\ttesting from json:", end= ' ')
+    annuaireJS : Fichier = Fichier("exempleProjet.json")
+
+    print(annuaireJS.getProduits())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getMagasin())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getAdresse())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getAuteur())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getDate())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getEntree())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getNomMagasin())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getNomProjet())
+    # input('Appuyez sur entrée')
+    print(annuaireJS.getSortie())
+
+    annuaireJS.setFichierPlan('aaa.json')
+    annuaireJS.setFichierProduits('bbb.json')
+
+    annuaireJS.save("test.json")
+
+    annuaireJS.delete('test.json')
