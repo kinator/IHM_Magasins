@@ -1,4 +1,4 @@
-import json
+import json, os
 from produit import Produit
 
 class Case(object) :
@@ -311,36 +311,30 @@ class Fichier:
             print(f'loading file: {chemin_fichier_produits}', end='... \n')
             self.data_produits = json.load(file)
 
-    # def save(self, jsonFile: str) -> None:
-    #     print(f'saving file: {jsonFile}', end='... ')
+    def save(self, jsonFile: str) -> None:
+        print(f'saving file: {jsonFile}', end='... ')
 
-    #     if not os.path.exists(jsonFile):
-    #         f = open(jsonFile, "x")
-    #         f.close()
+        if not os.path.exists(jsonFile):
+            f = open(jsonFile, "x")
+            f.close()
 
-    #     with open(jsonFile, "w", encoding='utf-8') as file:
-    #         d = {'cases': [prod.toJSON() for prod in self.__cases]}
-    #         json.dump(d, file, ensure_ascii=False)
+        with open(jsonFile, "w", encoding='utf-8') as file:
+            d = {'cases': [prod.toJSON() for prod in self.__cases]}
+            json.dump(d, file, ensure_ascii=False)
 
-    #     print('done!')
+        print('done!')
 
+    
+    def addProduit(self,emplacement : tuple, p: Produit) -> None:
+        self.data_produits[emplacement] = Produit
+    
+
+    # les différents setter permmetant de mettre à jour les fichier json
     def getMagasin(self):
         return self.data_cases['graphe']
-    
-    def setCasesMagasin(self, cases : dict):
-        self.data_cases['graphe'] = cases
 
     def getProduits(self):
         return self.data_produits
-
-    def addProduit(self, p: Produit) -> None:
-        self.data_produits['produits'][Produit.getNom] = Produit
-
-    def setEntree(self, entree : tuple):
-        self.data_cases['entree'] = entree
-
-    def setSortie(self, sortie : tuple):
-        self.data_cases['sortie'] = sortie
 
     def getEntree(self):
         return self.data_cases['entree']
@@ -352,7 +346,7 @@ class Fichier:
         return self.data_magasin['nom_projet']
     
     def getAuteur(self):
-        return self.data_magasin['Auteur']
+        return self.data_magasin['auteur']
     
     def getDate(self):
         return self.data_magasin['date']
@@ -363,14 +357,24 @@ class Fichier:
     def getAdresse(self):
         return self.data_magasin['adresse_magasin']
     
+    # les différents getter pour récupérer les différents info des json
+    def setEntree(self, entree : tuple):
+        self.data_cases['entree'] = entree
+
+    def setSortie(self, sortie : tuple):
+        self.data_cases['sortie'] = sortie
+    
+    def setCasesMagasin(self, cases : dict):
+        self.data_cases['graphe'] = cases
+    
     def setNomProjet(self, nom : str):
         self.data_magasin['nom_projet'] = nom
 
     def setAuteur(self, author : str):
-        self.data_magasin['Auteur'] = author
+        self.data_magasin['auteur'] = author
 
     def setDate(self, date):
-        self.data_magasin['Date'] = date
+        self.data_magasin['date'] = date
 
     def setNomMagasin(self, name : str):
         self.data_magasin['nom_magasin'] = name
@@ -383,14 +387,6 @@ class Fichier:
 
     def setFichierProduits(self, file : str):
         self.data_magasin['fichier_produits'] = file
-
-    def next(self) -> None:
-        if self.__current is not None:
-            self.__current = (self.__current + 1) % len(self.__cases)
-
-    def previous(self) -> None:
-        if self.__current is not None:
-            self.__current = (self.__current - 1) % len(self.__cases)
 
 if __name__ == '__main__':
     laby = Magasin(8,8, 7, 0, 7, 0, 'Test')
@@ -453,4 +449,20 @@ if __name__ == '__main__':
     print("\ttesting from json:", end= ' ')
     annuaireJS : Fichier = Fichier("exempleProjet.json")
 
-    # print(annuaireJS.getProduits())
+    print(annuaireJS.getProduits())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getMagasin())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getAdresse())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getAuteur())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getDate())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getEntree())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getNomMagasin())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getNomProjet())
+    input('Appuyez sur entrée')
+    print(annuaireJS.getSortie())

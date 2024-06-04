@@ -7,39 +7,35 @@ class Produit:
 
     #constructeurs
     def __init__(self):
-        self.id_prod : int = None
         self.nom : str = None
+        self.prix : float = None
 
-    def __init__(self,id : int, nom_prod : str):
-        self.id_prod : int = id
+    def __init__(self,nom_prod : str, price : float):
         self.nom : str = nom_prod
+        self.prix : float = price
 
     @staticmethod
     def buildFromJSon(data: dict):
-        return Produit(id=data['id'], nom=data['nom'], prix=data['prix'])
-
-    def toJSON(self):
-        return {
-            'id': self.id,
-            'nom': self.nom,
-            'prix': self.prix
-        }
-
-    def getIdProd(self):
-        return self.id_prod
+        return Produit(nom=data['nom'], prix=data['prix'])
     
     def getNom(self):
         return self.nom
     
     def setNom(self, name : str):
         self.nom = name
+
+    def getPrix(self):
+        return self.prix
+    
+    def setPRix(self, price : float):
+        self.prix = price
     
 if __name__ == '__main__':
     
-    nouv_prod = Produit(0, 'bouteille_eau')
+    nouv_prod = Produit('bouteille_eau', 4)
 
-    print(nouv_prod.getIdProd())
     print(nouv_prod.getNom())
+    print(nouv_prod.getPrix())
 
     nouv_prod.setNom('Mascara')
     print(nouv_prod.getNom())

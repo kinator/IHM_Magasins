@@ -1,7 +1,7 @@
 {
     "nom_projet" : "projet magasin", 
-    "Auteur" : "tom", 
-    "Date" : "(2001, 2 ,5)", 
+    "auteur" : "tom", 
+    "date" : "(2001, 2 ,5)", 
     "nom_magasin" : "nom_mag", 
     "adresse_magasin" : "adresse", 
     "fichier_plan" : "supermarche.json",
