@@ -2,7 +2,7 @@ import sys, random
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSlider
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
-from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect
+from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect, QEvent
 
 
 class Image(QLabel):
@@ -13,8 +13,8 @@ class Image(QLabel):
         # appel au constructeur de la classe mère
         super().__init__()
         
-        self.limHeight, self.limWidth = 0, 0
-        self.toggleGrillage = False
+        self.limHeight, self.limWidth = 75, 75
+        self.toggleGrillage = True
         
         self.__chemin = chemin
         self.cubeList = []
@@ -44,34 +44,27 @@ class Image(QLabel):
         self.image = QPixmap(chemin)
         self.image = self.image.scaled(int(self.width()*0.8), int(self.height()*0.7),transformMode= Qt.TransformationMode.FastTransformation)
         
-    def updateCadrillage(self, nbCaseW: int = 75, nbCaseH: int = 75) -> None:
-        i, j = 1, 1
-        self.cubeList = []
-        for i in range(self.limHeight):
-            for j in range(self.limWidth):
-                self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
-        self.qp.drawRects(self.cubeList)
-        self.afficherGrille(nbCaseW, nbCaseH, self.toggleGrillage)
+    def updateCadrillage(self) -> None:
+        if self.toggleGrillage  == True:
+            i, j = 1, 1
+            self.cubeList = []
+            for i in range(self.limHeight):
+                for j in range(self.limWidth):
+                    self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
         
     def paintEvent(self, event, nb_caseW = 75, nb_caseH = 75) -> None:
         self.qp = QPainter(self)
         self.qp.setPen(QColor("black"))
         self.rectangle = QRect(0, 0, self.width(), self.height())
         self.qp.drawPixmap(self.rectangle, self.image)
-        self.updateCadrillage(nb_caseW, nb_caseH)
+        self.updateCadrillage()
+        self.afficherGrille()
 
         self.qp.end()
 
-    def afficherGrille(self, nbCaseW: int = 75, nbCaseH: int = 75, toggle: bool = False) -> None:
-        if toggle:
-            if self.cubeList != []:
-                self.supprimerGrille()
-                
-            i, j = 1, 1
-            for i in range(nbCaseH):
-                for j in range(nbCaseW):
-                    self.cubeList.append(QRect(int(self.rectangle.width() / nbCaseW * j), int(self.rectangle.height() / nbCaseH * i), int(self.rectangle.width() / nbCaseW), int(self.rectangle.height() / nbCaseH)))
-        else: self.updateImage(self.__chemin)
+    def afficherGrille(self) -> None:
+        if self.toggleGrillage == True:
+            self.qp.drawRects(self.cubeList)
 
     def supprimerGrille(self) -> None:
         self.cubeList = []
@@ -87,6 +80,7 @@ class Image(QLabel):
         
     def setToggle(self, b: bool) -> None:
         self.toggleGrillage = b
+        self.update()
 
 ##############################################################################
 ##############################################################################
@@ -271,9 +265,13 @@ class VueMain(QMainWindow):
         self.quadWidget.setVisible(False)
 
         quadSizeLabel: QLabel = QLabel("Taille du quadrillage :")
+        self.LineX: QLineEdit = QLineEdit()
+        self.LineY: QLineEdit = QLineEdit()
         quadSizeLabel2: QLabel = QLabel("Taille du quadrillage :")
         
         quadLayout.addWidget(quadSizeLabel)
+        quadLayout.addWidget(self.LineX)
+        quadLayout.addWidget(self.LineY)
         quadLayout.addWidget(quadSizeLabel2)
         
         # Widget dock produit
@@ -406,11 +404,14 @@ class VueMain(QMainWindow):
             self.dock.setWidget(self.prodWidget)
             self.prodWidget.setVisible(True)
             
-    def toggleGrillage(self, event):
+    def toggleGrillage(self):
         if self.plan.getToggle() == False:
             self.plan.setToggle(True)
-        else: self.plan.setToggle(False)
-        self.plan.paintEvent()
+            print("It's true")
+        elif self.plan.getToggle() == True:
+                self.plan.setToggle(False)
+                print("It's false")
+
             
     def updatePlan(self, path: str):
         self.plan.updateImage(path)
