@@ -1,5 +1,5 @@
 import sys
-from cadrillage import Case, Fichier
+from cadrillage import Case, Fichier, Magasin
 from vueApp1 import VueMain
 from PyQt6.QtWidgets import QApplication
 
@@ -13,6 +13,8 @@ class Controleur:
         self.__projets: str = self.__path[:-5] + '\\projects\\'
         
         self.vue: VueMain = VueMain()
+        self.modele: Magasin = Magasin()
+        self.fichier: Fichier = Fichier()
         self.vue.updatePlan(self.__plans + "plan1.jpg")
         
         self.vue.nouveauClicked.connect(self.nouveauProjet)
@@ -20,8 +22,19 @@ class Controleur:
     
     def nouveauProjet(self, dico):
         print(dico)
+        self.modele = Magasin(self.vue.getX(), self.vue.getY(), 0, 0, 0, 0, dico["nom_magasin"])
+        
+        self.fichier.setAdresse(dico["adresse_magasin"])
+        self.fichier.setAuteur(dico["Auteur"])
+        self.fichier.setDate(dico["Date"])
+        self.fichier.setFichierPlan(dico["fichier_plan"])
+        self.fichier.setNomMagasin(dico["nom_magasin"])
+        self.fichier.setNomProjet(dico["Projet"])
+        
         self.vue.updatePlan(dico["fichier_plan"])
         
+    def ouvrirFichier(self):
+        pass
         
     #Exemple fichier Json
     #{"cases" :

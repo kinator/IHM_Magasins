@@ -436,6 +436,12 @@ class VueMain(QMainWindow):
         elif self.plan.getToggle() == True:
                 self.plan.setToggle(False)
                 print("It's false")
+                
+    def getX(self):
+        return self.lineX.value()
+    
+    def getY(self):
+        return self.lineY.value()
 
     def changerTailleGrille(self):
         self.plan.setCaseHeight(self.lineY.value())
