@@ -122,4 +122,11 @@
 **Behani Julien** : <br>
 **Fournier Enzo** : Finition du fichier de cadrillage et création des méthode de créatiojn et suppression de fichier json + demande de merge de la branche à julien<br>
 **Hugo Ablers** : <br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Résolution de quelques bugs
+
+## Compte rendu du 05/06/2024 de 8h30 à 10h00
+
+**Behani Julien** : <br>
+**Fournier Enzo** : <br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : Avancement sur le reaload du JSON
