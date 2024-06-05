@@ -81,11 +81,21 @@ class Vue(QMainWindow):
         # Connecter l'action "Enregistrer-sous" à une fonction pour sauvegarder le dock droit
         self.save_as.triggered.connect(self.save_right_dock)
         
-    def save_right_dock(self):
-        self.controller.save_right_dock()
-        
     def set_controller(self, controller):
         self.controller = controller
+
+    def reload_json(self):
+        if hasattr(self, 'controller'):
+            self.controller.reload_json()
+
+    def save_right_dock(self):
+        if hasattr(self, 'controller'):
+            self.controller.save_right_dock()
+
+    def update_docks(self):
+        # Mettre à jour les contenus des docks sans recréer les docks eux-mêmes
+        self.DockG.widget().update()
+        self.DockD.widget().update()
 
    
     

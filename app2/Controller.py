@@ -18,6 +18,9 @@ class Controller:
 
     def save_right_dock(self):
         self.model.save_right_dock_to_json('panier.json')
+        
+    def reload_json(self):
+        self.model.reload_json()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
