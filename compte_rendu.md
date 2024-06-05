@@ -116,3 +116,10 @@
 **Fournier Enzo** : réglage de bug qui empêchait d'ouvrir des fichiers json et avancement sur la classe fichier dans cadrillage.py<br>
 **Hugo Ablers** : Fin de gestion des graphes -> passage à l'affichage<br>
 **Seys Anthonny** : Tentative de résolution de bug Ouverture JSON
+
+## Compte rendu du 04/06/2024 de 16h00 à 17h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : Finition du fichier de cadrillage et création des méthode de créatiojn et suppression de fichier json + demande de merge de la branche à julien<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
