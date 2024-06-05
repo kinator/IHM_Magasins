@@ -112,8 +112,16 @@ class Magasin(object) :
     detruireBordure() : détruit les murs sur le contour du magasin
     afficheMagasinVide() : affiche le magasin (sans contenu) avec tous les murs
     affichePlateau() : affiche le plateau (avec contenu et murs éventuels des cases)'''
+
+    def __init__(self):
+        self.__largeur: int = 75
+        self.__hauteur: int = 75
+        self.__cases: list = self.__creationMagasin()
+        self.__entree : tuple = (0, 0)
+        self.__sortie : tuple = (0, 0)
+        self.__nom : str = ''
     
-    def __init__(self, largeur: int, hauteur: int, entree_x : int, entree_y : int, sortie_x : int, sortie_y : int, nom_enseigne : str):
+    def __init__(self, nom_enseigne : str, largeur: int, hauteur: int, entree_x : int = 0, entree_y : int = 0, sortie_x : int = 0, sortie_y : int = 0):
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
         self.__cases: list = self.__creationMagasin()
@@ -234,10 +242,6 @@ class Magasin(object) :
             print('|   ' * self.__largeur + '|')
             
         print('+---' * self.__largeur + '+\n')
-        
-    def enregistrement(self, chemin: str) -> None:
-        '''Méthode publique, enregistre le magasin dans un fichier Json.'''
-        pass
 
     def __str__(self) :
         '''Méthode dédiée, affiche le magasin avec son contenu et les murs existants.'''
@@ -299,11 +303,15 @@ class Fichier:
             self.open(jsonFile)
 
     def open(self, jsonFile: str):
+
+        if not os.path.exists(jsonFile):
+            return "Error, file does not exist"
+        
         with open(jsonFile, "r", encoding='utf-8') as file:
             print(f'loading file: {jsonFile}', end='... \n')
             self.data_magasin = json.load(file)
         
-        chemin_fichier_plan = self.data_magasin['fichier_plan']
+        chemin_fichier_plan = self.data_magasin['fichier_graphe']
         chemin_fichier_produits = self.data_magasin['fichier_produits']
         
         with open(chemin_fichier_plan, 'r', encoding='utf-8') as file:
@@ -316,7 +324,7 @@ class Fichier:
             self.data_produits = json.load(file)
 
     def save(self, jsonFile: str) -> None:
-        print(f'saving files: {jsonFile}, {self.getFichierPlan()} and {self.getFichierProduits()}', end='... ')
+        print(f'saving files: {jsonFile}, {self.getFichierGraphe()} and {self.getFichierProduits()}', end='... ')
 
         if not os.path.exists(jsonFile):
             f = open(jsonFile, "x") ; f.close()
@@ -324,21 +332,21 @@ class Fichier:
         with open(jsonFile, "w", encoding='utf-8') as file:
             json.dump(self.data_magasin,file,ensure_ascii=False)
 
-        with open(self.getFichierPlan(), "w", encoding='utf-8') as file:
+        with open(self.getFichierGraphe(), "w", encoding='utf-8') as file:
             json.dump(self.data_cases, file, ensure_ascii=False)
 
         with open(self.getFichierProduits(), "w", encoding='utf-8') as file:
-            json.dump(self.data_produits, file, ensure_ascii=False)            
+            json.dump(self.data_produits, file, ensure_ascii=False)
 
         print(f'done!')
 
     def delete(self, jsonFile : str):
-        print(f'delete files: {jsonFile}, {self.getFichierPlan()} and {self.getFichierProduits()}', end='... ')
+        print(f'delete files: {jsonFile}, {self.getFichierGraphe()} and {self.getFichierProduits()}', end='... ')
 
         if not os.path.exists(jsonFile):
             return "Error, file does not exist"
         
-        os.remove(self.getFichierPlan())
+        os.remove(self.getFichierGraphe())
         os.remove(self.getFichierProduits())
         os.remove(jsonFile)
 
@@ -376,11 +384,14 @@ class Fichier:
     def getAdresse(self):
         return self.data_magasin['adresse_magasin']
     
-    def getFichierPlan(self):
-        return self.data_magasin['fichier_plan']
+    def getFichierGraphe(self):
+        return self.data_magasin['fichier_graphe']
 
     def getFichierProduits(self):
         return self.data_magasin['fichier_produits']
+    
+    def getImagePlan(self):
+        return self.data_magasin['image_plan']
     
     # les différents getter pour récupérer les différents info des json
     def setEntree(self, entree : tuple):
@@ -407,11 +418,14 @@ class Fichier:
     def setAdresse(self, adresse : str):
         self.data_magasin['adresse_magasin'] = adresse
 
-    def setFichierPlan(self, file : str):
-        self.data_magasin['fichier_plan'] = file
+    def setFichierGraphe(self, file : str):
+        self.data_magasin['fichier_graphe'] = file
 
     def setFichierProduits(self, file : str):
         self.data_magasin['fichier_produits'] = file
+
+    def setImagePlan(self, file : str):
+        self.data_magasin['image_plan'] = file
 
 if __name__ == '__main__':
     laby = Magasin(8,8, 7, 0, 7, 0, 'Test')
