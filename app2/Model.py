@@ -51,13 +51,33 @@ class Model:
         for category, items in self.data.items():  # Utilisez self.data.items() pour itérer sur les éléments du fichier JSON
             for item in items:  # Utilisez item pour référencer chaque élément dans les sous-listes
                 button = QPushButton(f"{item}")
-                button.setMinimumSize(150, 30)
+                button.setMinimumSize(130, 30)
                 button.clicked.connect(lambda _, btn=button: self.toggle_button_location(btn))
                 self.left_layouts.addWidget(button)
                 QApplication.processEvents()  # Forcer la mise à jour de l'interface utilisateur
 
         self.vue.layoutGDock.addWidget(scroll_area_left)
         self.vue.layoutDDock.addWidget(scroll_area_right)
+        
+        # Recharger les données du panier
+        self.load_panier()
+        
+    def load_panier(self):
+        # Charger les données du fichier panier.json s'il existe
+        try:
+            with open('panier.json', 'r') as file:
+                panier_data = json.load(file)
+            self.clear_right_dock()
+            for item_name in panier_data.get("panier", {}).keys():
+                button = QPushButton(f"{item_name}")
+                button.setMinimumSize(150, 30)
+                button.clicked.connect(lambda _, btn=button: self.toggle_button_location(btn))
+                self.right_layouts.addWidget(button)
+                QApplication.processEvents()
+        except FileNotFoundError:
+            print("Fichier panier.json introuvable.")
+        except json.JSONDecodeError:
+            print("Erreur de décodage JSON dans le fichier panier.json.")
 
 
     def toggle_button_location(self, button):
@@ -81,29 +101,8 @@ class Model:
         # Ajouter le bouton au layout dans le dock gauche
         self.left_layouts.addWidget(button)
 
-    def save_right_dock_to_json(self, filename=None):
-        dialog = QFileDialog()
-        dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
-        dialog.setFileMode(QFileDialog.FileMode.AnyFile)
-        dialog.setNameFilter("JSON (*.json)")
-        dialog.setViewMode(QFileDialog.ViewMode.Detail)
-        if filename:
-            dialog.selectFile(filename)
-
-        if dialog.exec():
-            filenames = dialog.selectedFiles()
-            if filenames:
-                filename = filenames[0]
-            else:
-                return  # L'utilisateur a annulé
-
-        if not filename:
-            return  # Si le nom de fichier est toujours vide, ne rien faire
-
-        # Ajouter l'extension .json si elle n'est pas fournie
-        if not filename.endswith(".json"):
-            filename += ".json"
-
+    def save_right_dock_to_json(self, filename='panier.json'):
+        # Sauvegarder les données du dock droit dans un fichier JSON
         panier = {}
         for i in range(self.right_layouts.count()):
             widget = self.right_layouts.itemAt(i).widget()
@@ -115,9 +114,7 @@ class Model:
 
         with open(filename, 'w', encoding='utf-8') as file:
             json.dump(data_to_save, file, ensure_ascii=False, indent=4)
-        self.clear_right_dock()
-        self.reload_data("data.json")
-        
+
     def clear_left_dock(self):
         # Supprime tous les widgets du layout du dock gauche
         while self.left_layouts.count():
@@ -133,10 +130,3 @@ class Model:
             widget = item.widget()
             if widget is not None:
                 widget.setParent(None)
-                
-    def reload_json(self):
-        self.reload_data('data.json')
-        
-    def reload_data(self, filepath):
-        self.load_data(filepath)
-        self.display_data()

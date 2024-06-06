@@ -9,8 +9,8 @@ class Controller:
         self.view = Vue()
         self.model.set_vue(self.view)
         self.model.set_controller(self)
-        self.view.set_controller(self)  # Passer une référence du contrôleur à la vue
-        self.load_data('data.json')  # Charger les données lors de l'initialisation
+        self.view.set_controller(self)  
+        self.load_data('data.json')  
 
     def load_data(self, filepath):
         self.model.load_data(filepath)
@@ -19,8 +19,7 @@ class Controller:
     def save_right_dock(self):
         self.model.save_right_dock_to_json('panier.json')
         
-    def reload_json(self):
-        self.model.reload_json()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
