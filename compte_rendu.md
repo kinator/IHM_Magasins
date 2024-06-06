@@ -130,3 +130,10 @@
 **Fournier Enzo** : réglage de différent bug qui étaient présent dans le fichier de cadrillage pour la création de cadrillage et la sauvegarde de json<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Avancement sur le reaload du JSON
+
+## Compte rendu du 06/06/2024 de 13h00 à 14h30
+
+**Behani Julien** : <br>
+**Fournier Enzo** : correction de bug dans la classe de création de magasin<br>
+**Hugo Ablers** : <br>
+**Seys Anthonny** : 
