@@ -57,7 +57,7 @@ def mapping(fgraphe, farticle):
                   {tuple(map(int, k.strip("()").split(','))): v for k, v in value.items()}
                   for key, value in data["graphe"].items()}
         
-        entree = tuple(map(int, data["entree"].strip("()").split(',')))
+        entree = tuple(map(int, data["entree"].strip("()").split(','))) # tuple() permet de définir un tuple, map() permet de remplacer la boucle en appliquant int() à chaque élément, strip() enlève les parenthèses, split() divise la chaîne par les virgules
         sortie = tuple(map(int, data["sortie"].strip("()").split(',')))
     
     supermarche = Supermarche(graphe, entree, sortie)
