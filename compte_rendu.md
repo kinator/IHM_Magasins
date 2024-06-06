@@ -127,6 +127,6 @@
 ## Compte rendu du 06/06/2024 de 8h30 à 11h30
 
 **Behani Julien** : <br>
-**Fournier Enzo** : <br>
+**Fournier Enzo** : réglage de différent bug qui étaient présent dans le fichier de cadrillage pour la création de cadrillage et la sauvegarde de json<br>
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Avancement sur le reaload du JSON
