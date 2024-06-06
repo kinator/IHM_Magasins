@@ -1,4 +1,5 @@
 import sys
+from os import listdir
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel, QSizePolicy, QScrollBar, QScrollArea
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction
@@ -38,7 +39,7 @@ class Vue(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.DockG)
         self.DockG.setWidget(self.WidgetDockGauche)
         self.DockG.setFixedHeight(700)
-        self.DockG.setFixedWidth(200)
+        self.DockG.setFixedWidth(230)
 
         self.WidgetDockDroit = QWidget()
         self.layoutDDock = QVBoxLayout()
@@ -51,7 +52,7 @@ class Vue(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.DockD)
         self.DockD.setWidget(self.WidgetDockDroit)
         self.DockD.setFixedHeight(700)
-        self.DockD.setFixedWidth(200)
+        self.DockD.setFixedWidth(230)
         
         # Création du widget central
         self.centralWidget = QWidget()
@@ -60,11 +61,11 @@ class Vue(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         
         # Changement de style
-        for file in listdir(self.__styles):
+        for file in listdir("./fichiers_qss/"):
             if file.endswith(".qss"):
                 self.variables = {}
                 self.variables[f"action_style + file.removesuffix('.qss')"] = QAction(text=file.removesuffix(".qss"), parent=self)
-                menu_style.addAction(self.variables[f"action_style + file.removesuffix('.qss')"])        
+                self.theme.addAction(self.variables[f"action_style + file.removesuffix('.qss')"])        
                 self.variables[f"action_style + file.removesuffix('.qss')"].triggered.connect(self.changeStyle)
         
         self.show()
@@ -73,7 +74,7 @@ class Vue(QMainWindow):
         self.VerifBtn.clicked.connect(self.save_right_dock)
         
     def changeStyle(self):
-        with open(self.__styles + self.sender().text() + ".qss", "r") as f:
+        with open("./fichiers_qss/" + self.sender().text() + ".qss", "r") as f:
             self.currentstyle = f.read()
             self.setStyleSheet(self.currentstyle)
         
