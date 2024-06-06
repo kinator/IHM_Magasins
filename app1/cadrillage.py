@@ -96,9 +96,6 @@ class Case(object) :
         '''Méthode publique, affecte le contenu de l'objet.'''
         self.__contenu = {}
 
-    def __repr__(self):
-        return f"{self.__position}): {self.__voisins}"
-
 class Magasin(object) :
     '''Classe définissant un magasin à partir de ses dimensions
            largeur : nombre de cases en largeur
