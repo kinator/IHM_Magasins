@@ -4,7 +4,7 @@ import parcours
 if __name__ == "__main__":
     supermarche = map.mapping("supermarche.json", "articles.json")
 
-    points_interet = [(0, 5), (3, 2)]
+    points_interet = [(3, 2), (4,1), (1,2), (0, 5)]
     depart = supermarche.get_depart()
     arrivee = supermarche.get_arrivee()
 
