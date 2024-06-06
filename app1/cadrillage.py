@@ -17,20 +17,20 @@ class Case(object) :
     addContenu() : ajoute un produit au contenu de la case
     removeContenu() : retire un produit au contenu de la case
     delContenu() : supprime le contenu de la case'''
-    
-    def __init__(self, x=0, y=0, stock=False):
-        self.__position = (x, y)
-        self.__est_stockable = stock
-        self.__contenu = {}
-        self.__murs = ['N', 'S', 'E', 'W']
 
-    def __init__(self, pos : tuple, stock : bool):
+    def __init__(self, pos : tuple, stock : bool = False):
         '''Méthode dédiée, constructeur de la classe'''
         self.__position: tuple = pos
         self.__est_stockable: bool = stock
         self.__contenu: dict = {}
         self.__murs: list = ['N', 'S', 'E', 'W']
+        self.__voisins = {}
 
+    def ajouter_voisin(self, voisin, cost):
+        self.__voisins[voisin] = cost
+
+    def get_voisins(self):
+        return self.__voisins
 
     def construireMur(self, mur: str) -> None:
         '''Méthode publique, construit un mur de l'objet.'''
@@ -56,11 +56,10 @@ class Case(object) :
         '''Méthode publique, renvoie le contenu de l'objet.'''
         return self.__contenu
     
-    def est_vide(self) :
-        if not self.__contenu:
-            return False
-        else:
-            return True
+    def est_vide(self) -> bool:
+        '''Méthode publique, renvoie True si la case est vide, False sinon.'''
+        return not bool(self.__contenu)
+
 
 
     def getPosition(self) -> tuple:
@@ -79,18 +78,26 @@ class Case(object) :
         '''Méthode publique, renvoie le contenu de l'objet.'''
         return cakechose in self.__contenu
     
-    def addContenu(self, cakechose: Produit, stock: int) -> None:
-        '''Méthode publique, affecte le contenu de l'objet.'''
-        if cakechose not in self.__contenu:
-            self.__contenu = {cakechose.__str__ : stock}
+    def addContenu(self, produit: Produit, quantite: int) -> None:
+        '''Méthode publique, ajoute un produit au contenu de l'objet.'''
+        if produit in self.__contenu:
+            self.__contenu[produit] += quantite
+        else:
+            self.__contenu[produit] = quantite
 
-    def removeContenu(self, cakechose: Produit) -> None:
-        '''Méthode publique, affecte le contenu de l'objet.'''
-        self.__contenu.popitem(cakechose)
+
+    def removeContenu(self, produit: Produit) -> None:
+        '''Méthode publique, retire un produit du contenu de l'objet.'''
+        if produit in self.__contenu:
+            del self.__contenu[produit]
+
     
     def delContenu(self) -> None:
         '''Méthode publique, affecte le contenu de l'objet.'''
         self.__contenu = {}
+
+    def __repr__(self):
+        return f"{self.__position}): {self.__voisins}"
 
 class Magasin(object) :
     '''Classe définissant un magasin à partir de ses dimensions
@@ -104,23 +111,7 @@ class Magasin(object) :
     afficheMagasinVide() : affiche le magasin (sans contenu) avec tous les murs
     affichePlateau() : affiche le plateau (avec contenu et murs éventuels des cases)'''
 
-    def __init__(self):
-        self.__largeur: int = 75
-        self.__hauteur: int = 75
-        self.__cases: list = self.__creationMagasin()
-        self.__entree : tuple = (0, 0)
-        self.__sortie : tuple = (0, 0)
-        self.__nom : str = ''
-    
-    def __init__(self, nom_enseigne : str, largeur: int, hauteur: int, entree_x : int = 0, entree_y : int = 0, sortie_x : int = 0, sortie_y : int = 0):
-        self.__largeur: int = largeur
-        self.__hauteur: int = hauteur
-        self.__cases: dict = self.__creationMagasin(largeur, hauteur)
-        self.__entree : tuple = (entree_x, entree_y)
-        self.__sortie : tuple = (sortie_x, sortie_y)
-        self.__nom : str = nom_enseigne
-
-    def __init__(self, nom_enseigne : str, largeur: int, hauteur: int, entree : tuple = (0, 0), sortie : tuple = (0, 0)):
+    def __init__(self, nom_enseigne : str = '', largeur: int = 75, hauteur: int = 75, entree : tuple = (0, 0), sortie : tuple = (0, 0)):
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
         self.__cases: dict = self.__creationMagasin()
@@ -134,9 +125,19 @@ class Magasin(object) :
         cases = {}
         for y in range(self.__hauteur):
             for x in range(self.__largeur):
-                nouvelle_case = Case((x, y), False)
-                cases[(x, y)] = nouvelle_case
+                case = Case((x, y), False)
+                cases[(x, y)] = case
+                voisins = self.__get_voisins((x, y))
+                for voisin in voisins:
+                    case.ajouter_voisin(voisin, 1)
         return cases
+    
+    def __get_voisins(self, position: tuple) -> list:
+        '''Méthode privée, renvoie la liste des positions des voisins d'une case.'''
+        x, y = position
+        voisins = [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]
+        return [(nx, ny) for nx, ny in voisins if 0 <= nx < self.__largeur and 0 <= ny < self.__hauteur]
+
 
     def getCases(self):
         '''Méthode publique, renvoie la liste des cases.'''
@@ -156,19 +157,15 @@ class Magasin(object) :
     def getNomEnseigne(self):
         return self.__nom
     
-    def getMagasin(self):
-        return self.__cases
-    
-    def case_est_vide(self, position : tuple):
-        '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
-        if not self.getContenu(position):
-            return False
-        else:
-            return True
+    def case_est_vide(self, position: tuple) -> bool:
+        '''Méthode publique, renvoie True si la case est vide, False sinon.'''
+        return self.__cases[position].est_vide()
 
-    def setContenu(self, position: tuple, cakechose: any) -> None:
+
+    def setContenu(self, position: tuple, contenu: dict) -> None:
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
-        self.__cases[str((position[1], position[0]))].setContenu(cakechose)
+        self.__cases[position].setContenu(contenu)
+
 
     def setEntree(self, x : int, y : int):
         self.__entree = (x, y)
@@ -187,9 +184,9 @@ class Magasin(object) :
 
     def effaceContenu(self) -> None:
         '''Méthode publique, efface le contenu de toutes les cases.'''
-        for y in range(self.__hauteur):
-            for x in range(self.__largeur):
-                self.__cases[str((y, x))].setContenu(None)
+        for case in self.__cases.values():
+            case.delContenu()
+
 
 
     def construireAvecGraphe(self, graphe: dict) -> None:
@@ -198,42 +195,40 @@ class Magasin(object) :
             x1, y1 = case
 
             for case_voisine in voisines:
-                
                 x2, y2 = case_voisine
 
-                if y1 == y2 :
-                    if x1 < x2 :
-                        self.__cases[(y1, x1)].detruireMur('E')
-                    else: 
-                        self.__cases[(y1, x1)].detruireMur('W')
-                else :
-                    if y1 < y2 :
-                        self.__cases[(y1, x1)].detruireMur('S')
-                    else: 
-                        self.__cases[(y1, x1)].detruireMur('N')
+                if y1 == y2:
+                    if x1 < x2:
+                        self.__cases[(x1, y1)].detruireMur('E')
+                    else:
+                        self.__cases[(x1, y1)].detruireMur('W')
+                else:
+                    if y1 < y2:
+                        self.__cases[(x1, y1)].detruireMur('S')
+                    else:
+                        self.__cases[(x1, y1)].detruireMur('N')
+
 
 
     def construireBordure(self) -> None:
         '''Méthode publique, définit une bordure extérieure du magasin.'''
-        for colonne in range(self.__largeur) :
-            self.__cases[(0, colonne)].construireMur('N')
-            self.__cases[(self.__hauteur - 1, colonne)].construireMur('S')
-        
-        for ligne in range(self.__hauteur) :
-            self.__cases[(ligne, 0)].construireMur('W')
-            self.__cases[(ligne, self.__largeur - 1)].construireMur('E')
-    
+        for colonne in range(self.__largeur):
+            self.__cases[(colonne, 0)].construireMur('N')
+            self.__cases[(colonne, self.__hauteur - 1)].construireMur('S')
+
+        for ligne in range(self.__hauteur):
+            self.__cases[(0, ligne)].construireMur('W')
+            self.__cases[(self.__largeur - 1, ligne)].construireMur('E')
     
     def detruireBordure(self) -> None:
-        '''Méthode publique, enlève une bordure extérieure de lau magasin.'''
-        for colonne in range(self.__largeur) :
-            self.__cases[(0, colonne)].detruireMur('N')
-            self.__cases[(self.__hauteur - 1, colonne)].detruireMur('S')
-        
-        for ligne in range(self.__hauteur) :
-            self.__cases[(ligne, 0)].detruireMur('W')
-            self.__cases[(ligne, self.__largeur - 1)].detruireMur('E')
-    
+        '''Méthode publique, enlève une bordure extérieure du magasin.'''
+        for colonne in range(self.__largeur):
+            self.__cases[(colonne, 0)].detruireMur('N')
+            self.__cases[(colonne, self.__hauteur - 1)].detruireMur('S')
+
+        for ligne in range(self.__hauteur):
+            self.__cases[(0, ligne)].detruireMur('W')
+            self.__cases[(self.__largeur - 1, ligne)].detruireMur('E')
     
     def afficheMagasinVide(self) -> None:
         '''Méthode publique, affiche le magasin vide avec tous les murs.'''
@@ -396,17 +391,17 @@ if __name__ == '__main__':
     laby = Magasin('test', 8, 8, (0, 0), (0, 0))
     print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
     print(laby)
-    # input("Appuyer sur 'Entrée'")
+    input("Appuyer sur 'Entrée'")
     
     print('\nSans bordure :')
     laby.detruireBordure()
     print(laby)
-    # input("Appuyer sur 'Entrée'")
+    input("Appuyer sur 'Entrée'")
     
     print("\nAvec bordure")
     laby.construireBordure()
     print(laby)
-    # input("Appuyer sur 'Entrée'")
+    input("Appuyer sur 'Entrée'")
 
     graphe: dict = {(0, 0): {(0, 1): 1, (1, 0): 1}, (0, 1): {(0, 0): 1, (1, 1): 1}, (0, 2): {(1, 2): 1}, 
                     (0, 3): {(0, 4): 1, (1, 3): 1}, (0, 4): {(0, 3): 1, (0, 5): 1},
@@ -439,13 +434,16 @@ if __name__ == '__main__':
     print("\nConstruction avec un graphe :")
     laby.construireAvecGraphe(graphe)
     print(laby)
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
 
     print("Le magasin sans rien dans les cases")
     laby.afficheMagasinVide()
 
     print(laby.getSortie())
     print(laby.getEntree())
+    print(laby.getCases())
+    print(laby.getNomEnseigne())
+    input('Appuyez sur entrée')
 
     print('Test : class Fichier')
     fichier : Fichier = Fichier()
@@ -454,21 +452,21 @@ if __name__ == '__main__':
     annuaireJS : Fichier = Fichier("exempleProjet.json")
 
     print(annuaireJS.getProduits())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getMagasin())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getAdresse())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getAuteur())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getDate())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getEntree())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getNomMagasin())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getNomProjet())
-    # input('Appuyez sur entrée')
+    input('Appuyez sur entrée')
     print(annuaireJS.getSortie())
 
     annuaireJS.setFichierGraphe('aaa.json')
