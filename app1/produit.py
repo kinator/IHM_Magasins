@@ -7,15 +7,15 @@ class Produit:
 
     #constructeurs
     def __init__(self):
-        self.id_prod : int = None
         self.nom : str = None
 
-    def __init__(self,id : int, nom_prod : str):
-        self.id_prod : int = id
+    def __init__(self,nom_prod : str, price : float):
         self.nom : str = nom_prod
+        self.prix : float = price
 
-    def getIdProd(self):
-        return self.id_prod
+    @staticmethod
+    def buildFromJSon(data: dict):
+        return Produit(nom=data['nom'], prix=data['prix'])
     
     def getNom(self):
         return self.nom
@@ -25,9 +25,8 @@ class Produit:
     
 if __name__ == '__main__':
     
-    nouv_prod = Produit(0, 'bouteille_eau')
+    nouv_prod = Produit('bouteille_eau', 4)
 
-    print(nouv_prod.getIdProd())
     print(nouv_prod.getNom())
 
     nouv_prod.setNom('Mascara')
