@@ -100,22 +100,22 @@ class Image(QLabel):
     def clickCase(self, event):
         if self.toggleGrillage:
             pos = event.pos()
-            print(pos)
             i = 0
             j = 0
 
-            while i + j < self.limWidth + (self.limHeight-1) and not self.cubeList[f"({i},{j})"]["poly"].containsPoint(pos, Qt.FillRule.OddEvenFill):
-                j += 1
-                if j % self.limWidth == 0:
-                    j = 0
-                    i += 1
+            while i + j < self.limWidth + (self.limHeight-1) and not self.cubeList[f"({j},{i})"]["poly"].containsPoint(pos, Qt.FillRule.OddEvenFill):
+                i += 1
+                if i % self.limWidth == 0:
+                    i = 0
+                    j += 1
                 
-            self.caseClicked.emit(f"({i},{j})")
+            self.caseClicked.emit((j,i))
+        else: self.focusCase = None
             
     def setFocus(self, case) -> None:
-        pass
+        self.focusCase = case
         
-                
+        
 ##############################################################################
 ##############################################################################
 

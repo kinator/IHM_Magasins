@@ -97,7 +97,7 @@ class Case(object) :
         self.__contenu = {}
 
     def __repr__(self):
-        return f"{self.__position}): {self.__voisins}"
+        return f"{self.__position}: {self.__voisins}"
 
 class Magasin(object) :
     '''Classe définissant un magasin à partir de ses dimensions
@@ -142,11 +142,15 @@ class Magasin(object) :
     def getCases(self):
         '''Méthode publique, renvoie la liste des cases.'''
         return self.__cases
+    
+    def getCase(self, position: tuple) -> Case:
+        '''Méthode publique, renvoie une case.'''
+        return self.__cases[position]
 
     def getContenu(self, position: tuple) -> any:
         '''Méthode publique, renvoie le contenu de la case à la position prévue.'''
         
-        return self.__cases[str(position)].getContenu()
+        return self.__cases[position].getContenu()
     
     def getEntree(self):
         return self.__entree

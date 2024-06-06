@@ -19,9 +19,11 @@ class Controleur:
         self.fichier: Fichier = Fichier()
                 
         self.vue.nouveauClicked.connect(self.nouveauProjet)
+        self.vue.openClicked.connect(self.ouvrirFichier)
+        self.vue.caseCliquee.connect(self.setFocusPlan)
+
     
-    
-    def nouveauProjet(self, dico):
+    def nouveauProjet(self, dico) -> None:
         self.__check_projet = True
         print(dico)
         self.modele = Magasin(dico["nom_magasin"], self.vue.getX(), self.vue.getY(), (0,0), (0,0) )
@@ -39,7 +41,7 @@ class Controleur:
         
         self.updateVue()
                 
-    def ouvrirFichier(self, chemin: str):
+    def ouvrirFichier(self, chemin: str) -> None:
         self.fichier.open(chemin)
         self.__projet_path = chemin
         self.modele.construireAvecGraphe(self.fichier.getMagasin())
@@ -48,19 +50,23 @@ class Controleur:
         
         self.updateVue()
     
-    def enregistrerFichier(self):
+    def enregistrerFichier(self) -> None:
         if self.__check_projet:
             self.fichier.setCasesMagasin(self.modele.getCases())
             self.fichier.save(self.__projet_path)
             
-    def delete(self):
+    def delete(self) -> None:
         self.fichier.delete(self.__projet_path)
         self.__check_projet = False
 
-    def updateVue(self):
+    def updateVue(self) -> None:
         self.vue.updatePlan(self.fichier.getImagePlan())
-
-
+        
+    def setFocusPlan(self, t: tuple) -> None:
+        self.vue.plan.setFocus(self.modele.getCase(t))
+        
+        
+        
 # --- main --------------------------------------------------------------------
 if __name__ == "__main__":
 
