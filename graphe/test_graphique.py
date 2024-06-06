@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
 def main():
     app = QApplication(sys.argv)
 
-    supermarche = map.mapping("supermarche.json", "articles.json")
+    supermarche = map.mapping("supermarche.json", "articles.json", "produits.json")
 
     points_interet = [(0, 5), (3, 2)]
     depart = supermarche.get_depart()

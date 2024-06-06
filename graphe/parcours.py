@@ -19,7 +19,7 @@ def dijkstra(graphe: dict, depart: str, bk_liste: list = []) -> dict:
                     
     return distance
 
-def parcours(graphe: dict, depart: str, arrivee: str) -> list:
+def parcours(graphe, depart, arrivee):
     distances = dijkstra(graphe, depart)
     if arrivee not in distances:
         return "Pas de chemin trouvé"
@@ -27,7 +27,7 @@ def parcours(graphe: dict, depart: str, arrivee: str) -> list:
     chemin = distances[arrivee][1]
     return chemin
 
-def parcours_opti(graphe: dict, depart: str, arrivee: str, points_interet: list) -> list:
+def parcours_opti(graphe, depart, arrivee, points_interet):
     chemin_complet = []
     point_courant = depart
 

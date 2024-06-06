@@ -2,27 +2,42 @@ import json
 
 class Case:
     def __init__(self):
-        self.articles = {}
+        self.articles = []
 
     def ajouter_article(self, article, quantite=1):
-        if article in self.articles:
-            self.articles[article] += quantite
-        else:
-            self.articles[article] = quantite
+        self.articles.append((article, quantite))
 
-    def __str__(self):
-        return str(self.articles)
+    def __repr__(self):
+        return f"Articles: {self.articles}"
 
 class Supermarche:
-    def __init__(self, graphe, depart, arrivee):
+    def __init__(self, graphe, depart, arrivee, fpanier, fproduits):
         self.graphe = graphe
         self.depart = depart
         self.arrivee = arrivee
         self.cellules = {sommet: Case() for sommet in graphe}
+        self.points_interet = []
+
+        # Charger les articles du panier
+        with open(fpanier, 'r', encoding='utf-8') as f:
+            panier_data = json.load(f)
+            for article in panier_data.values():
+                self.points_interet.extend(article)
+
+        # Charger les produits sur chaque case
+        self.charger_produits(fproduits)
 
     def ajouter_article(self, sommet, article, quantite=1):
         if sommet in self.cellules:
             self.cellules[sommet].ajouter_article(article, quantite)
+
+    def charger_produits(self, fproduits):
+        with open(fproduits, 'r', encoding='utf-8') as f:
+            produits_data = json.load(f)
+            for sommet_str, articles in produits_data.items():
+                sommet = tuple(map(int, sommet_str.strip("()").split(",")))
+                for article in articles:
+                    self.ajouter_article(sommet, article)
 
     def afficher_supermarche(self):
         for sommet, cellule in self.cellules.items():
@@ -40,27 +55,16 @@ class Supermarche:
     def get_arrivee(self):
         return self.arrivee
 
-def ajout_article(supermarche, fichier_json):
-    with open(fichier_json, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-        for sommet, articles in data.items():
-            if sommet.startswith("(") and sommet.endswith(")"):
-                coordonnees = tuple(map(int, sommet.strip("()").split(',')))
-                for article, quantite in articles.items():
-                    supermarche.ajouter_article(coordonnees, article, quantite)
+    def get_panier(self):
+        return self.points_interet
 
-def mapping(fgraphe, farticle):
+def mapping(fgraphe, fproduits, fpanier):
     with open(fgraphe, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-        
-        graphe = {tuple(map(int, key.strip("()").split(','))): 
-                  {tuple(map(int, k.strip("()").split(','))): v for k, v in value.items()}
-                  for key, value in data["graphe"].items()}
-        
-        entree = tuple(map(int, data["entree"].strip("()").split(','))) # tuple() permet de définir un tuple, map() permet de remplacer la boucle en appliquant int() à chaque élément, strip() enlève les parenthèses, split() divise la chaîne par les virgules
-        sortie = tuple(map(int, data["sortie"].strip("()").split(',')))
-    
-    supermarche = Supermarche(graphe, entree, sortie)
-    ajout_article(supermarche, farticle)
+        graphe_data = json.load(f)
+        graphe = graphe_data["graphe"]
+        depart = tuple(map(int, graphe_data["entree"].strip("()").split(",")))
+        arrivee = tuple(map(int, graphe_data["sortie"].strip("()").split(",")))
+
+    supermarche = Supermarche(graphe, depart, arrivee, fpanier, fproduits)
 
     return supermarche
