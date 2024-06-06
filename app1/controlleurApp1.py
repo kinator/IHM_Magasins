@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from cadrillage import Case, Fichier, Magasin
 from vueApp1 import VueMain
 from PyQt6.QtWidgets import QApplication
@@ -10,8 +11,9 @@ class Controleur:
         self.__path: str = sys.path[0]
         self.__images: str = self.__path + '\\images\\'
         self.__plans: str = self.__path[:-5] + '\\models\\'
-        self.__projets: str = self.__path[:-5] + '\\projects\\'
+        
         self.__current_projet: str = ""
+        self.__projet_path: str = ""
         self.__check_projet: bool = False
         
         self.vue: VueMain = VueMain()
@@ -23,6 +25,7 @@ class Controleur:
     
     
     def nouveauProjet(self, dico):
+        self.__check_projet = True
         print(dico)
         self.modele = Magasin(self.vue.getX(), self.vue.getY(), 0, 0, 0, 0, dico["nom_magasin"])
         
@@ -34,13 +37,24 @@ class Controleur:
         self.fichier.setImagePlan(dico["fichier_plan"])
         self.fichier.setNomMagasin(dico["nom_magasin"])
         self.fichier.setNomProjet(dico["Projet"])
+        self.fichier.setFichierGraphe(dico["Projet"] + "_graphe")
+        self.fichier.setFichierProduits(dico["Projet"] + "_produits")
         
         self.vue.updatePlan(dico["fichier_plan"])
         
-    def ouvrirFichier(self):
-        pass
+    def ouvrirFichier(self, chemin: str):
+        self.fichier.open(chemin)
+        self.__current_projet = Path(chemin).parts[-1]
+        self.__projet_path = chemin
     
     def enregistrerFichier(self):
+        if self.__check_projet:
+            self.fichier.setCasesMagasin(self.modele.getCases())
+            self.fichier.save(self.__projet_path)
+            
+    def delete(self):
+        self.fichier.delete(self.__current_projet)
+        self.__check_projet = False
 
 
 # --- main --------------------------------------------------------------------
