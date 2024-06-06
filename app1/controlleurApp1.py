@@ -24,7 +24,7 @@ class Controleur:
     def nouveauProjet(self, dico):
         self.__check_projet = True
         print(dico)
-        self.modele = Magasin(self.vue.getX(), self.vue.getY(), 0, 0, 0, 0, dico["nom_magasin"])
+        self.modele = Magasin(dico["nom_magasin"], self.vue.getX(), self.vue.getY(), (0,0), (0,0) )
         
         self.__current_projet = dico["Projet"]
         

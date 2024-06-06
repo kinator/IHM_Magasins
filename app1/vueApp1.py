@@ -1,11 +1,13 @@
 import sys, random, json
 from os import listdir
 from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSpinBox, QScrollArea
-from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
+from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter, QPolygon
 from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect, QEvent
 
 
 class Image(QLabel):
+    
+    caseClicked: pyqtSignal = pyqtSignal(tuple)
 
     def __init__(self, chemin: str, height: int, width: int):
         '''Constructeur de la classe'''
@@ -17,7 +19,8 @@ class Image(QLabel):
         self.toggleGrillage = False
         
         self.__chemin = chemin
-        self.cubeList = []
+        self.cubeList = {}
+        self.focusCase = ()
 
         self.image = QPixmap(self.__chemin)
         self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
@@ -33,6 +36,7 @@ class Image(QLabel):
 
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
+        self.mousePressEvent = self.clickCase
 
         self.show()
     
@@ -47,11 +51,13 @@ class Image(QLabel):
     def updateCadrillage(self) -> None:
         if self.toggleGrillage  == True:
             i, j = 1, 1
-            self.cubeList = []
+            self.cubeList = {}
             
             for i in range(self.limHeight):
                 for j in range(self.limWidth):
-                    self.cubeList.append(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
+                    self.cubeList[f"({i},{j})"] = {}
+                    self.cubeList[f"({i},{j})"]["rect"] = QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight))
+                    self.cubeList[f"({i},{j})"]["poly"] = QPolygon(QRect(int(self.rectangle.width() / self.limWidth * j), int(self.rectangle.height() / self.limHeight * i), int(self.rectangle.width() / self.limWidth), int(self.rectangle.height() / self.limHeight)))
         
     def paintEvent(self, event) -> None:
         self.qp = QPainter(self)
@@ -65,7 +71,9 @@ class Image(QLabel):
 
     def afficherGrille(self) -> None:
         if self.toggleGrillage == True:
-            self.qp.drawRects(self.cubeList)
+            for i in range(self.limHeight):
+                for j in range(self.limWidth):
+                    self.qp.drawRect(self.cubeList[f"({i},{j})"]["rect"])
 
     def supprimerGrille(self) -> None:
         self.cubeList = []
@@ -89,9 +97,25 @@ class Image(QLabel):
         self.updateImage(path)
         self.update()
         
-    def clickCasePlan(self):
-        pass
+    def clickCase(self, event):
+        if self.toggleGrillage:
+            pos = event.pos()
+            print(pos)
+            i = 0
+            j = 0
 
+            while i + j < self.limWidth + (self.limHeight-1) and not self.cubeList[f"({i},{j})"]["poly"].containsPoint(pos, Qt.FillRule.OddEvenFill):
+                j += 1
+                if j % self.limWidth == 0:
+                    j = 0
+                    i += 1
+                
+            self.caseClicked.emit(f"({i},{j})")
+            
+    def setFocus(self, case) -> None:
+        pass
+        
+                
 ##############################################################################
 ##############################################################################
 
@@ -208,6 +232,7 @@ class VueMain(QMainWindow):
     annulerClicked : pyqtSignal = pyqtSignal()
     retablirClicked : pyqtSignal = pyqtSignal()
     ajoutProduit : pyqtSignal = pyqtSignal(QPushButton)
+    caseCliquee : pyqtSignal = pyqtSignal(tuple)
 
     def __init__(self):
         '''Constructeur de la classe'''
@@ -382,6 +407,7 @@ class VueMain(QMainWindow):
         action_afficher_grillage.triggered.connect(self.toggleGrillage)
         self.lineX.valueChanged.connect(self.changerTailleGrille)
         self.lineY.valueChanged.connect(self.changerTailleGrille)
+        self.plan.caseClicked.connect(self.caseClick)
 
         self.show()
 
@@ -392,11 +418,11 @@ class VueMain(QMainWindow):
         self.Popup: PopupFichier = PopupFichier(self.currentstyle)
         self.Popup.newProject.connect(self.sendNouv)
     
-    def sendNouv(self, dico):
+    def sendNouv(self, dico) -> None:
         self.currentImage = dico["fichier_plan"]
         self.nouveauClicked.emit(dico)
 
-    def open(self):
+    def open(self) -> None:
         self.barre_etat.showMessage("Ouverture d'un fichier....")
         self.boite = QFileDialog()
         chemin, validation = self.boite.getOpenFileName(directory = sys.path[0], filter = '*.json')
@@ -404,41 +430,41 @@ class VueMain(QMainWindow):
             print(chemin)
             self.openClicked.emit(chemin)
 
-    def save(self):
+    def save(self) -> None:
         self.barre_etat.showMessage("Enregistrement effectué....")
         self.saveClicked.emit()
 
-    def save_under(self):
+    def save_under(self) -> None:
         self.barre_etat.showMessage("Enregitrer Sous....")
         self.boite = QFileDialog()
         chemin, validation = self.boite.getSaveFileName(directory = sys.path[0], filter = '*.json')
         if validation == '*.json':
             self.saveUnderClicked.emit(chemin)
 
-    def delete(self):
+    def delete(self) -> None:
         self.barre_etat.showMessage("Suppression d'un projet....")
         self.boite = QFileDialog()
         chemin, validation = self.boite.getOpenFileName(directory = sys.path[0], filter = '*.json')
         if validation == '*.json':
             self.deleteClicked.emit(chemin)
 
-    def annuler(self):
+    def annuler(self) -> None:
         self.barre_etat.showMessage("Annuler....")
         self.annulerClicked.emit()
 
-    def retablir(self):
+    def retablir(self) -> None:
         self.barre_etat.showMessage("Retour....")
         self.retablirClicked.emit()
         
-    def ajouterProduit(self, button):
+    def ajouterProduit(self, button) -> None:
         self.ajoutProduit.emit(button)
 
-    def changeStyle(self):
+    def changeStyle(self) -> None:
         with open(self.__styles + self.sender().text() + ".qss", "r") as f:
             self.currentstyle = f.read()
             self.setStyleSheet(self.currentstyle)
             
-    def changeDockGauche(self):
+    def changeDockGauche(self) -> None:
         if self.sender().text() == "&Quadrillage" and self.quadWidget.isVisible() == False:
             self.dock: QDockWidget = QDockWidget("Options de quadrillage :")
             self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.dock)
@@ -457,7 +483,7 @@ class VueMain(QMainWindow):
             self.dock.setWidget(self.prodWidget)
             self.prodWidget.setVisible(True)
             
-    def toggleGrillage(self):
+    def toggleGrillage(self) -> None:
         if self.plan.getToggle() == False:
             self.plan.setToggle(True)
             print("It's true")
@@ -465,17 +491,20 @@ class VueMain(QMainWindow):
                 self.plan.setToggle(False)
                 print("It's false")
                 
-    def getX(self):
+    def getX(self) -> int:
         return self.lineX.value()
     
-    def getY(self):
+    def getY(self) -> int:
         return self.lineY.value()
+    
+    def caseClick(self, t: tuple) -> None:
+        self.caseCliquee.emit(t)
 
-    def changerTailleGrille(self):
+    def changerTailleGrille(self) -> None:
         self.plan.setCaseHeight(self.lineY.value())
         self.plan.setCaseWidth(self.lineX.value())
             
-    def updatePlan(self, path: str):
+    def updatePlan(self, path: str) -> None:
         self.plan.updateAll(path)
         
 
