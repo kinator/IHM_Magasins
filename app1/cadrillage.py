@@ -187,8 +187,6 @@ class Magasin(object) :
         for case in self.__cases.values():
             case.delContenu()
 
-
-
     def construireAvecGraphe(self, graphe: dict) -> None:
         '''Méthode publique, définit les murs à partir d'un graphe.'''
         for case, voisines in graphe.items():
@@ -207,51 +205,15 @@ class Magasin(object) :
                         self.__cases[(x1, y1)].detruireMur('S')
                     else:
                         self.__cases[(x1, y1)].detruireMur('N')
-
-
-
-    def construireBordure(self) -> None:
-        '''Méthode publique, définit une bordure extérieure du magasin.'''
-        for colonne in range(self.__largeur):
-            self.__cases[(colonne, 0)].construireMur('N')
-            self.__cases[(colonne, self.__hauteur - 1)].construireMur('S')
-
-        for ligne in range(self.__hauteur):
-            self.__cases[(0, ligne)].construireMur('W')
-            self.__cases[(self.__largeur - 1, ligne)].construireMur('E')
     
-    def detruireBordure(self) -> None:
-        '''Méthode publique, enlève une bordure extérieure du magasin.'''
-        for colonne in range(self.__largeur):
-            self.__cases[(colonne, 0)].detruireMur('N')
-            self.__cases[(colonne, self.__hauteur - 1)].detruireMur('S')
+    def __repr__(self):
+        case_repr = {}
+        for position, case in self.__cases.items():
+            voisins_repr = {voisin: cost for voisin, cost in case.get_voisins().items()}
+            case_repr[position] = voisins_repr
+        
+        return str(case_repr)
 
-        for ligne in range(self.__hauteur):
-            self.__cases[(0, ligne)].detruireMur('W')
-            self.__cases[(self.__largeur - 1, ligne)].detruireMur('E')
-    
-    def afficheMagasinVide(self) -> None:
-        '''Méthode publique, affiche le magasin vide avec tous les murs.'''
-        for ligne in range(self.__hauteur) :
-            print('+---' * self.__largeur + '+')
-            print('|   ' * self.__largeur + '|')
-            
-        print('+---' * self.__largeur + '+\n')
-
-    def __str__(self) :
-        '''Méthode dédiée, affiche le magasin avec son contenu et les murs existants.'''
-        affichage = ''
-        for y in range(self.__hauteur):
-            ligne1, ligne2 = '', ''
-            for x in range(self.__largeur):
-                case = self.__cases[(x, y)]
-                murs = case.getMurs()
-                contenu = ' ' if case.est_vide() else 'P'
-                ligne1 += '+---' if 'N' in murs else '+   '
-                ligne2 += '| ' + contenu + ' ' if 'W' in murs else '  ' + contenu + ' '
-            affichage += ligne1 + '+\n' + ligne2 + '|\n'
-        affichage += '+---' * self.__largeur + '+\n'
-        return affichage
     
 class Fichier:
     def __init__(self, jsonFile: str | None = None) -> None:
@@ -391,17 +353,6 @@ if __name__ == '__main__':
     laby = Magasin('test', 8, 8, (0, 0), (0, 0))
     print('Grille de dimensions 8 x 8 avec bordure (par défaut) :')
     print(laby)
-    input("Appuyer sur 'Entrée'")
-    
-    print('\nSans bordure :')
-    laby.detruireBordure()
-    print(laby)
-    input("Appuyer sur 'Entrée'")
-    
-    print("\nAvec bordure")
-    laby.construireBordure()
-    print(laby)
-    input("Appuyer sur 'Entrée'")
 
     graphe: dict = {(0, 0): {(0, 1): 1, (1, 0): 1}, (0, 1): {(0, 0): 1, (1, 1): 1}, (0, 2): {(1, 2): 1}, 
                     (0, 3): {(0, 4): 1, (1, 3): 1}, (0, 4): {(0, 3): 1, (0, 5): 1},
@@ -435,9 +386,6 @@ if __name__ == '__main__':
     laby.construireAvecGraphe(graphe)
     print(laby)
     input('Appuyez sur entrée')
-
-    print("Le magasin sans rien dans les cases")
-    laby.afficheMagasinVide()
 
     print(laby.getSortie())
     print(laby.getEntree())
