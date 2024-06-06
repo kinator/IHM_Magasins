@@ -165,6 +165,9 @@ class Magasin(object) :
     def getNomEnseigne(self):
         return self.__nom
     
+    def getMagasin(self):
+        return self.__cases
+    
     def case_est_vide(self, position : tuple):
         '''Méthode publique, renvoie False si le contenue du dictionnaire contenant la case est vide, True sinon.'''
         if not self.getContenu(position):
@@ -409,8 +412,8 @@ class Fichier:
     def setAuteur(self, author : str):
         self.data_magasin['auteur'] = author
 
-    def setDate(self, date):
-        self.data_magasin['date'] = date
+    def setDate(self, date : tuple):
+        self.data_magasin['date'] = str(date)
 
     def setNomMagasin(self, name : str):
         self.data_magasin['nom_magasin'] = name
