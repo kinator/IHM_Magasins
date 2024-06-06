@@ -356,6 +356,7 @@ class VueMain(QMainWindow):
         action_retablir.triggered.connect(self.retablir)
         action_quadrillage.triggered.connect(self.changeDockGauche)
         action_produit.triggered.connect(self.changeDockGauche)
+        action_afficher_grillage.triggered.connect(self.toggleGrillage)
         self.lineX.valueChanged.connect(self.changerTailleGrille)
         self.lineY.valueChanged.connect(self.changerTailleGrille)
 
