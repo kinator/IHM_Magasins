@@ -124,7 +124,7 @@
 **Hugo Ablers** : <br>
 **Seys Anthonny** : Résolution de quelques bugs
 
-## Compte rendu du 05/06/2024 de 8h30 à 10h00
+## Compte rendu du 06/06/2024 de 8h30 à 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : <br>
