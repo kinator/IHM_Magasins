@@ -1,6 +1,6 @@
-import sys, random
+import sys, random, json
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSpinBox
+from PyQt6.QtWidgets import QApplication, QLabel, QMainWindow, QToolBar, QStatusBar, QWidget, QPushButton, QFileDialog, QDockWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QDateEdit, QSpinBox, QScrollArea
 from PyQt6.QtGui import QPixmap, QIcon, QAction, QCursor, QColor, QPen, QPainter
 from PyQt6.QtCore import Qt, pyqtSignal, QDate, QPoint, QRect, QEvent
 
@@ -14,7 +14,7 @@ class Image(QLabel):
         super().__init__()
         
         self.limHeight, self.limWidth = 75, 75
-        self.toggleGrillage = True
+        self.toggleGrillage = False
         
         self.__chemin = chemin
         self.cubeList = []
@@ -88,6 +88,9 @@ class Image(QLabel):
     def updateAll(self, path):
         self.updateImage(path)
         self.update()
+        
+    def clickCasePlan(self):
+        pass
 
 ##############################################################################
 ##############################################################################
@@ -204,6 +207,7 @@ class VueMain(QMainWindow):
     deleteClicked : pyqtSignal = pyqtSignal()
     annulerClicked : pyqtSignal = pyqtSignal()
     retablirClicked : pyqtSignal = pyqtSignal()
+    ajoutProduit : pyqtSignal = pyqtSignal(QPushButton)
 
     def __init__(self):
         '''Constructeur de la classe'''
@@ -302,16 +306,35 @@ class VueMain(QMainWindow):
         self.prodWidget.setObjectName("dockingproduit")
         self.prodWidget.setStyleSheet("QWidget#dockingproduit {border: 1px solid black; background-color:white}")
         self.prodWidget.setVisible(False)
-
-        prodLabel: QLabel = QLabel("Nom du produit :")
-        prodLabel2: QLabel = QLabel("Ajouter produit :")
-        prodLabel3: QLabel = QLabel("Supprimer produit :")
-        prodLabel4: QLabel = QLabel("Liste produit :")
         
-        prodLayout.addWidget(prodLabel)
-        prodLayout.addWidget(prodLabel2)
-        prodLayout.addWidget(prodLabel3)
-        prodLayout.addWidget(prodLabel4)
+        scroll_area_left = QScrollArea()
+        
+        tempWidget: QWidget = QWidget()
+        tempLayout: QVBoxLayout = QVBoxLayout()
+        scroll_area_left.setWidget(tempWidget)
+        tempWidget.setLayout(tempLayout)
+        scroll_area_left.setWidgetResizable(True)
+
+        filepath = self.__path + "\\data.json"
+        data = {}
+        try:
+            with open(filepath, 'r') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            print(f"Fichier {filepath} introuvable.")
+            
+            # Ajout des éléments du fichier data.JSON au dock gauche
+        for category, items in data.items():  # Utilisez self.data.items() pour itérer sur les éléments du fichier JSON
+            tempLayout.addWidget(QLabel(f"{category} :"))
+            for item in items:  # Utilisez item pour référencer chaque élément dans les sous-listes
+                print(item)
+                button = QPushButton(f"{item}")
+                button.setMinimumSize(130, 30)
+                button.clicked.connect(lambda _, btn=button: self.ajouterProduit(btn))
+                tempLayout.addWidget(button)
+            tempLayout.addSpacing(15)
+
+        prodLayout.addWidget(scroll_area_left)
         
 
         # Création de la barre de menus
@@ -342,7 +365,7 @@ class VueMain(QMainWindow):
         
 
         # Image du plan
-        self.plan : Image = Image(self.__images + "Alteur_Table.JPG", self.height(), self.width())
+        self.plan : Image = Image(self.__images + "squaretransp.png", self.height(), self.width())
         self.setCentralWidget(self.plan)
         
         
@@ -406,6 +429,9 @@ class VueMain(QMainWindow):
     def retablir(self):
         self.barre_etat.showMessage("Retour....")
         self.retablirClicked.emit()
+        
+    def ajouterProduit(self, button):
+        self.ajoutProduit.emit(button)
 
     def changeStyle(self):
         with open(self.__styles + self.sender().text() + ".qss", "r") as f:
