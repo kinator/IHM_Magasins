@@ -378,6 +378,7 @@ class VueMain(QMainWindow):
         self.boite = QFileDialog()
         chemin, validation = self.boite.getOpenFileName(directory = sys.path[0], filter = '*.json')
         if validation == '*.json':
+            print(chemin)
             self.openClicked.emit(chemin)
 
     def save(self):
