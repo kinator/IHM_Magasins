@@ -1,3 +1,4 @@
+# Import des modules nécessaires
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QLabel
 from PyQt6.QtGui import QColor, QPainter
@@ -5,10 +6,6 @@ from PyQt6.QtCore import Qt
 
 import map
 import parcours
-
-#################################################################################
-# Programme graphique permettant de visualiser les graphes dans un but de DEBUG
-#################################################################################
 
 class CaseWidget(QWidget):
     def __init__(self, x, y):
@@ -19,7 +16,7 @@ class CaseWidget(QWidget):
         self.is_in_path = False
         self.is_start = False
         self.is_end = False
-        self.order_label = QLabel(self)  # qlabel pour indiquer l'ordre de apssage
+        self.order_label = QLabel(self) 
         self.order_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.order_label.hide()  
 
@@ -47,17 +44,18 @@ class CaseWidget(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
         if self.is_start:
-            painter.setBrush(QColor(255, 165, 0))  # point de départ orange
+            painter.setBrush(QColor(255, 165, 0))  # Point de départ orange
         elif self.is_end:
-            painter.setBrush(QColor(0, 0, 255))  # bleu pour la fin
+            painter.setBrush(QColor(0, 0, 255))  # Bleu pour l'arrivée
         elif self.is_in_path:
             painter.setBrush(QColor(0, 255, 0)) 
         elif self.has_article:
-            painter.setBrush(QColor(255, 0, 0))  # rouge pour les articles
+            painter.setBrush(QColor(255, 0, 0))  # Rouge pour les articles
         else:
-            painter.setBrush(QColor(255, 255, 255))
+            painter.setBrush(QColor(255, 255, 255))  
         painter.drawRect(0, 0, self.width(), self.height())
 
+# Définition de la classe MainWindow
 class MainWindow(QMainWindow):
     def __init__(self, supermarche, chemin_optimal):
         super().__init__()
@@ -102,16 +100,15 @@ class MainWindow(QMainWindow):
 def main():
     app = QApplication(sys.argv)
 
-    supermarche = map.mapping("supermarche.json", "articles.json", "panier.json")
+    supermarche = map.mapping("supermarche.json", "produits.json", "panier.json")
 
-    points_interet = supermarche.get_panier()
+    points_interet = supermarche.coordonnees_par_article()
     depart = supermarche.get_depart()
     arrivee = supermarche.get_arrivee()
-
-    print(parcours.parcours_opti(supermarche.get_parcours(), depart, arrivee, points_interet))
     chemin_optimal = parcours.parcours_opti(supermarche.get_parcours(), depart, arrivee, points_interet)
 
     main_window = MainWindow(supermarche, chemin_optimal)
+
     sys.exit(app.exec())
 
 if __name__ == '__main__':
