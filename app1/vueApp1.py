@@ -133,7 +133,7 @@ class PopupFichier(QWidget):
         self.setStyleSheet(style)
         
         self.setWindowTitle("Création d'un nouveau projet")
-        self.setWindowIcon(QIcon(self.__images + 'Alteur_Table.JPG'))
+        self.setWindowIcon(QIcon(self.__images + 'logo_but.png'))
         
         vLayout: QVBoxLayout = QVBoxLayout()
         layoutLabel1: QHBoxLayout = QHBoxLayout()
@@ -249,7 +249,7 @@ class VueMain(QMainWindow):
         self.setWindowTitle("Exemple_Main")
         self.setMinimumWidth(900)
         self.setMinimumHeight(700)
-        self.setWindowIcon(QIcon(self.__images + 'horse.png'))  
+        self.setWindowIcon(QIcon(self.__images + 'logo_but.png'))  
 
 
         # barre d'état
@@ -287,7 +287,7 @@ class VueMain(QMainWindow):
         action_produit : QAction = QAction('&Produits', self)
         action_produit.setShortcuts(["CTRL+P"])
 
-        action_afficher_grillage : QAction = QAction('&Afficher cadrillage', self)
+        action_afficher_grillage : QAction = QAction(QIcon(self.__images + 'cmd_paste.png'), '&Afficher cadrillage', self)
         action_afficher_grillage.setShortcuts(["CTRL+C"])
 
         
