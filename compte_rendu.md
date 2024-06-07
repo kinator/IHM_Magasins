@@ -121,19 +121,19 @@
 
 **Behani Julien** : <br>
 **Fournier Enzo** : Finition du fichier de cadrillage et création des méthode de créatiojn et suppression de fichier json + demande de merge de la branche à julien<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : avancée sur l'affichage<br>
 **Seys Anthonny** : Résolution de quelques bugs
 
 ## Compte rendu du 06/06/2024 de 8h30 à 11h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : réglage de différent bug qui étaient présent dans le fichier de cadrillage pour la création de cadrillage et la sauvegarde de json<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : correction d'un bug qui faisait tout buguer<br>
 **Seys Anthonny** : Avancement sur le reaload du JSON
 
 ## Compte rendu du 06/06/2024 de 13h00 à 14h30
 
 **Behani Julien** : <br>
 **Fournier Enzo** : correction de bug dans la classe de création de magasin<br>
-**Hugo Ablers** : <br>
+**Hugo Ablers** : compatibilité avec tous les json<br>
 **Seys Anthonny** : 
