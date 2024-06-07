@@ -484,10 +484,10 @@ class VueMain(QMainWindow):
             self.prodWidget.setVisible(True)
             
     def toggleGrillage(self) -> None:
-        if self.plan.getToggle() == False:
+        if self.plan.getToggle() == False and self.currentImage != "":
             self.plan.setToggle(True)
             print("It's true")
-        elif self.plan.getToggle() == True:
+        elif self.plan.getToggle() == True and self.currentImage != "":
                 self.plan.setToggle(False)
                 print("It's false")
                 
