@@ -21,6 +21,7 @@ class Controleur:
         self.vue.nouveauClicked.connect(self.nouveauProjet)
         self.vue.openClicked.connect(self.ouvrirFichier)
         self.vue.caseCliquee.connect(self.setFocusPlan)
+        self.vue.ajoutProduit.connect(self.ajouterProduit)
 
     
     def nouveauProjet(self, dico) -> None:
@@ -65,7 +66,9 @@ class Controleur:
     def setFocusPlan(self, t: tuple) -> None:
         self.vue.plan.setFocus(self.modele.getCase(t))
         
-        
+    def ajouterProduit(self, produit: str, case: tuple) -> None:
+        self.modele.setContenu(case, produit)
+        self.vue.updateListProduits(self.modele.getCase(case).getContenu())
         
 # --- main --------------------------------------------------------------------
 if __name__ == "__main__":

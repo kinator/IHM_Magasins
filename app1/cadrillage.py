@@ -1,5 +1,4 @@
 import json, os
-from produit import Produit
 
 class Case(object) :
     '''Classe définissant une case à partir de sa position : x, y.
@@ -74,19 +73,18 @@ class Case(object) :
         '''Méthode publique, renvoie la liste des murs.'''
         return self.__murs
     
-    def estDansStock(self, cakechose: Produit) -> bool:
+    def estDansStock(self, cakechose: str) -> bool:
         '''Méthode publique, renvoie le contenu de l'objet.'''
         return cakechose in self.__contenu
     
-    def addContenu(self, produit: Produit, quantite: int) -> None:
+    def addContenu(self, produit: str) -> None:
         '''Méthode publique, ajoute un produit au contenu de l'objet.'''
-        if produit in self.__contenu:
-            self.__contenu[produit] += quantite
-        else:
-            self.__contenu[produit] = quantite
+        if produit not in self.__contenu:
+            self.__contenu[produit] = 1
+        else: self.__contenu.pop(produit)
 
 
-    def removeContenu(self, produit: Produit) -> None:
+    def removeContenu(self, produit: str) -> None:
         '''Méthode publique, retire un produit du contenu de l'objet.'''
         if produit in self.__contenu:
             del self.__contenu[produit]
@@ -166,9 +164,9 @@ class Magasin(object) :
         return self.__cases[position].est_vide()
 
 
-    def setContenu(self, position: tuple, contenu: dict) -> None:
+    def setContenu(self, position: tuple, contenu: str) -> None:
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
-        self.__cases[position].setContenu(contenu)
+        self.__cases[position].addContenu(contenu)
 
 
     def setEntree(self, x : int, y : int):
@@ -278,8 +276,8 @@ class Fichier:
 
 
     
-    def addProduit(self,emplacement : tuple, p: Produit) -> None:
-        self.data_produits[emplacement] = Produit
+    def addProduit(self,emplacement : tuple, p: str) -> None:
+        self.data_produits[emplacement] = p
     
 
     # les différents setter permmetant de mettre à jour les fichier

@@ -111,9 +111,12 @@ class Image(QLabel):
                 
             self.caseClicked.emit((j,i))
         else: self.focusCase = None
-            
+                     
     def setFocus(self, case) -> None:
-        self.focusCase = case
+        self.focusCase = case.getPosition()
+        
+    def getFocus(self) -> tuple:
+        return self.focusCase
         
     def isFocused(self) -> bool:
         return self.focusCase != None
@@ -233,9 +236,9 @@ class VueMain(QMainWindow):
     deleteClicked : pyqtSignal = pyqtSignal()
     annulerClicked : pyqtSignal = pyqtSignal()
     retablirClicked : pyqtSignal = pyqtSignal()
-    ajoutProduit : pyqtSignal = pyqtSignal(QPushButton)
+    ajoutProduit : pyqtSignal = pyqtSignal(str, tuple)
     caseCliquee : pyqtSignal = pyqtSignal(tuple)
-
+  
     def __init__(self):
         '''Constructeur de la classe'''
 
@@ -459,7 +462,8 @@ class VueMain(QMainWindow):
         self.retablirClicked.emit()
         
     def ajouterProduit(self, button) -> None:
-        self.ajoutProduit.emit(button)
+        if self.plan.isFocused() and self.plan.getFocus() != ():
+            self.ajoutProduit.emit(button.text(), self.plan.getFocus())
 
     def changeStyle(self) -> None:
         with open(self.__styles + self.sender().text() + ".qss", "r") as f:
@@ -501,6 +505,9 @@ class VueMain(QMainWindow):
     
     def caseClick(self, t: tuple) -> None:
         self.caseCliquee.emit(t)
+        
+    def updateListProduits(self, dico: dict) -> None:
+        pass
 
     def changerTailleGrille(self) -> None:
         self.plan.setCaseHeight(self.lineY.value())

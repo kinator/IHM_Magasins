@@ -9,13 +9,12 @@ class Produit:
     def __init__(self):
         self.nom : str = None
 
-    def __init__(self,nom_prod : str, price : float):
+    def __init__(self,nom_prod : str):
         self.nom : str = nom_prod
-        self.prix : float = price
 
     @staticmethod
     def buildFromJSon(data: dict):
-        return Produit(nom=data['nom'], prix=data['prix'])
+        return Produit(nom=data['nom'])
     
     def getNom(self):
         return self.nom
