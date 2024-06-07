@@ -115,6 +115,8 @@ class Image(QLabel):
     def setFocus(self, case) -> None:
         self.focusCase = case
         
+    def isFocused(self) -> bool:
+        return self.focusCase != None
         
 ##############################################################################
 ##############################################################################
