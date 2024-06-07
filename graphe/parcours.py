@@ -19,7 +19,7 @@ def dijkstra(graphe: dict, depart: str, bk_liste: list = []) -> dict:
                     
     return distance
 
-def parcours(graphe, depart, arrivee):
+def parcours(graphe: dict, depart: str, arrivee: str) -> list:
     distances = dijkstra(graphe, depart)
     if arrivee not in distances:
         return "Pas de chemin trouvé"
@@ -27,7 +27,7 @@ def parcours(graphe, depart, arrivee):
     chemin = distances[arrivee][1]
     return chemin
 
-def parcours_opti(graphe, depart, arrivee, points_interet):
+def parcours_opti(graphe: dict, depart: str, arrivee: str, points_interet: list) -> list:
     chemin_complet = []
     point_courant = depart
 
@@ -35,9 +35,8 @@ def parcours_opti(graphe, depart, arrivee, points_interet):
         segment_chemin = parcours(graphe, point_courant, point)
         if segment_chemin == "Pas de chemin trouvé":
             return "Pas de chemin trouvé"
-        chemin_complet.extend(segment_chemin[:-1]) # -1 permet de ne pas prendre le dernier élément de la liste sinon il serait ajouté en double
+        chemin_complet.extend(segment_chemin[:-1])
         point_courant = point
-        print("test "+ str(point))
 
     segment_chemin = parcours(graphe, point_courant, arrivee)
     if segment_chemin == "Pas de chemin trouvé":
@@ -45,3 +44,4 @@ def parcours_opti(graphe, depart, arrivee, points_interet):
     chemin_complet.extend(segment_chemin)
 
     return chemin_complet
+

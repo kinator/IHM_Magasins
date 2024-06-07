@@ -2,16 +2,12 @@ import map
 import parcours
 
 if __name__ == "__main__":
-    # Charger le supermarché en utilisant les fichiers JSON
     supermarche = map.mapping("supermarche.json", "produits.json", "panier.json")
 
-    # Obtenir les données nécessaires pour le parcours
-    panier = supermarche.get_panier()
+    points_interet = supermarche.coordonnees_par_article()
     depart = supermarche.get_depart()
     arrivee = supermarche.get_arrivee()
 
-    # Effectuer le parcours optimal
-    chemin_plus_court = parcours.parcours_opti(supermarche.get_parcours(), depart, arrivee, panier)
-    
-    # Afficher le chemin le plus court
+    print(points_interet)
+    chemin_plus_court = parcours.parcours_opti(supermarche.get_parcours(), depart, arrivee, points_interet)
     print(f"Chemin le plus court entre {depart} et {arrivee}: {chemin_plus_court}")

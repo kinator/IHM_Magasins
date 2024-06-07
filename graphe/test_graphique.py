@@ -49,13 +49,13 @@ class CaseWidget(QWidget):
         if self.is_start:
             painter.setBrush(QColor(255, 165, 0))  # point de départ orange
         elif self.is_end:
-            painter.setBrush(QColor(0, 0, 255))  # point d'arrivé bleu
+            painter.setBrush(QColor(0, 0, 255))  # bleu pour la fin
         elif self.is_in_path:
-            painter.setBrush(QColor(0, 255, 0))  # vert pour le chemin
+            painter.setBrush(QColor(0, 255, 0)) 
         elif self.has_article:
             painter.setBrush(QColor(255, 0, 0))  # rouge pour les articles
         else:
-            painter.setBrush(QColor(255, 255, 255)) 
+            painter.setBrush(QColor(255, 255, 255))
         painter.drawRect(0, 0, self.width(), self.height())
 
 class MainWindow(QMainWindow):
@@ -102,9 +102,9 @@ class MainWindow(QMainWindow):
 def main():
     app = QApplication(sys.argv)
 
-    supermarche = map.mapping("supermarche.json", "articles.json", "produits.json")
+    supermarche = map.mapping("supermarche.json", "articles.json", "panier.json")
 
-    points_interet = [(0, 5), (3, 2)]
+    points_interet = supermarche.get_panier()
     depart = supermarche.get_depart()
     arrivee = supermarche.get_arrivee()
 
