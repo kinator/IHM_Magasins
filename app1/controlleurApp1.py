@@ -20,6 +20,7 @@ class Controleur:
                 
         self.vue.nouveauClicked.connect(self.nouveauProjet)
         self.vue.openClicked.connect(self.ouvrirFichier)
+        self.vue.deleteClicked.connect(self.deleteFichier)
         self.vue.caseCliquee.connect(self.setFocusPlan)
         self.vue.ajoutProduit.connect(self.ajouterProduit)
 
@@ -56,15 +57,16 @@ class Controleur:
             self.fichier.setCasesMagasin(self.modele.getCases())
             self.fichier.save(self.__projet_path)
             
-    def delete(self) -> None:
+    def deleteFichier(self) -> None:
         self.fichier.delete(self.__projet_path)
         self.__check_projet = False
 
     def updateVue(self) -> None:
         self.vue.updatePlan(self.fichier.getImagePlan())
         
-    def setFocusPlan(self, t: tuple) -> None:
-        self.vue.plan.setFocus(self.modele.getCase(t))
+    def setFocusPlan(self, case: tuple) -> None:
+        self.vue.plan.setFocus(self.modele.getCase(case))
+        self.vue.updateListProduits(self.modele.getCase(case).getContenu())
         
     def ajouterProduit(self, produit: str, case: tuple) -> None:
         self.modele.setContenu(case, produit)
