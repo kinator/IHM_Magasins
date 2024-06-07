@@ -343,7 +343,7 @@ class VueMain(QMainWindow):
         filepath = self.__path + "\\data.json"
         data = {}
         try:
-            with open(filepath, 'r') as file:
+            with open(filepath, 'r', encoding="utf-8") as file:
                 data = json.load(file)
         except FileNotFoundError:
             print(f"Fichier {filepath} introuvable.")
