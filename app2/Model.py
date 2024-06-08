@@ -108,7 +108,7 @@ class Model:
             widget = self.right_layouts.itemAt(i).widget()
             if isinstance(widget, QPushButton):
                 item_name = widget.text()
-                panier[item_name] = 1  # Vous pouvez ajuster la valeur selon vos besoins
+                panier[item_name] = 1 
 
         data_to_save = {"panier": panier}
 

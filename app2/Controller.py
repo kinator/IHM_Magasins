@@ -18,11 +18,9 @@ class Controller:
 
     def save_right_dock(self):
         self.model.save_right_dock_to_json('panier.json')
-        
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     controller = Controller()
-    controller.view.show()
+    controller.view.showMaximized()
     sys.exit(app.exec())

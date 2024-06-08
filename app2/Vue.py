@@ -12,8 +12,6 @@ class Vue(QMainWindow):
         
         # Configuration de la fenêtre principale
         self.setWindowTitle("Gestion magasin")
-        self.setFixedHeight(800)
-        self.setFixedWidth(1200)
 
         # Création de la barre de menu
         self.bar = self.menuBar()
@@ -38,7 +36,7 @@ class Vue(QMainWindow):
         self.DockG = QDockWidget('Articles : ')
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.DockG)
         self.DockG.setWidget(self.WidgetDockGauche)
-        self.DockG.setFixedHeight(700)
+        self.DockG.setFixedHeight(890)
         self.DockG.setFixedWidth(230)
 
         self.WidgetDockDroit = QWidget()
@@ -51,7 +49,7 @@ class Vue(QMainWindow):
         self.DockD = QDockWidget('Panier : ')
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.DockD)
         self.DockD.setWidget(self.WidgetDockDroit)
-        self.DockD.setFixedHeight(700)
+        self.DockD.setFixedHeight(890)
         self.DockD.setFixedWidth(230)
         
         # Création du widget central

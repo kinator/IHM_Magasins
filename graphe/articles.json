@@ -1,5 +1,5 @@
 {
     "(1, 0)": {"Pommes": 1, "Oranges": 1},
-    "(0, 2)": {"Poires": 1, "Bananes": 1},
-    "(2, 5)": {"Bananes": 1, "Cerises": 1}
+    "(20, 11)": {"Poires": 1, "Bananes": 1},
+    "(20, 10)": {"Bananes": 1, "Cerises": 1}
 }

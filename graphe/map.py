@@ -19,6 +19,8 @@ class Supermarche:
         self.arrivee = arrivee
         self.cellules = {sommet: Case() for sommet in graphe}
         self.panier = panier_en_liste(panier)
+        self.height = max(sommet[1] for sommet in graphe) + 1
+        self.width = max(sommet[0] for sommet in graphe) + 1
 
     def ajouter_article(self, sommet, article):
         if sommet in self.cellules:
@@ -50,6 +52,13 @@ class Supermarche:
     
     def get_panier(self):
         return self.panier
+    
+    def get_height(self):
+        return self.height
+
+    def get_width(self):
+        return self.width
+
 
 def ajout_article(supermarche, fichier_json):
     with open(fichier_json, 'r', encoding='utf-8') as f:
