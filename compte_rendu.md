@@ -136,4 +136,4 @@
 **Behani Julien** : <br>
 **Fournier Enzo** : correction de bug dans la classe de création de magasin<br>
 **Hugo Ablers** : compatibilité avec tous les json<br>
-**Seys Anthonny** : 
+**Seys Anthonny** : Amélioration de la vue (ajout des thèmes) + aération du code
