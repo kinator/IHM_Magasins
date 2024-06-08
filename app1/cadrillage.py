@@ -112,13 +112,13 @@ class Magasin(object) :
     def __init__(self, nom_enseigne : str = '', largeur: int = 75, hauteur: int = 75, entree : tuple = (0, 0), sortie : tuple = (0, 0)):
         self.__largeur: int = largeur
         self.__hauteur: int = hauteur
-        self.__cases: dict = self.__creationMagasin()
+        self.__cases: dict = self.creationMagasin()
         self.__entree : tuple = (entree)
         self.__sortie : tuple = (sortie)
         self.__nom : str = nom_enseigne
 
     
-    def __creationMagasin(self) -> dict:
+    def creationMagasin(self) -> dict:
         '''Méthode privée, crée et renvoie la liste des cases'''
         cases = {}
         for y in range(self.__hauteur):
@@ -147,7 +147,6 @@ class Magasin(object) :
 
     def getContenu(self, position: tuple) -> any:
         '''Méthode publique, renvoie le contenu de la case à la position prévue.'''
-        
         return self.__cases[position].getContenu()
     
     def getEntree(self):
@@ -168,6 +167,12 @@ class Magasin(object) :
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
         self.__cases[position].addContenu(contenu)
 
+    def setDict(self, dico: dict) -> None:
+        '''Méthode publique, affecte le contenu de la case à la position prévue.'''
+        for y in range(self.__hauteur):
+            for x in range(self.__largeur):
+                if f"({x},{y})" in dico:
+                    self.__cases[(x, y)] = dico[f"({x},{y})"]
 
     def setEntree(self, x : int, y : int):
         self.__entree = (x, y)
@@ -183,6 +188,12 @@ class Magasin(object) :
 
     def setNomEnseigne(self, nom : str):
         self.__nom = nom
+        
+    def setHeight(self, x: int) -> None:
+        self.__hauteur = x
+        
+    def setWidth(self, y: int) -> None:
+        self.__largeur = y
 
     def effaceContenu(self) -> None:
         '''Méthode publique, efface le contenu de toutes les cases.'''

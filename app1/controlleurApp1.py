@@ -23,6 +23,9 @@ class Controleur:
         self.vue.deleteClicked.connect(self.deleteFichier)
         self.vue.caseCliquee.connect(self.setFocusPlan)
         self.vue.ajoutProduit.connect(self.ajouterProduit)
+        self.vue.choixEntree.connect(self.setEntree)
+        self.vue.choixSortie.connect(self.setSortie)
+        self.vue.tailleChanger.connect(self.modifTaille)
 
     
     def nouveauProjet(self, dico) -> None:
@@ -30,16 +33,16 @@ class Controleur:
         print(dico)
         self.modele = Magasin(dico["nom_magasin"], self.vue.getX(), self.vue.getY(), (0,0), (0,0) )
         
-        self.__current_projet = dico["Projet"]
+        self.__current_projet = dico["projet"]
         
         self.fichier.setAdresse(dico["adresse_magasin"])
-        self.fichier.setAuteur(dico["Auteur"])
-        self.fichier.setDate(dico["Date"])
+        self.fichier.setAuteur(dico["auteur"])
+        self.fichier.setDate(dico["date"])
         self.fichier.setImagePlan(dico["fichier_plan"])
         self.fichier.setNomMagasin(dico["nom_magasin"])
-        self.fichier.setNomProjet(dico["Projet"])
-        self.fichier.setFichierGraphe(dico["Projet"] + "_graphe")
-        self.fichier.setFichierProduits(dico["Projet"] + "_produits")
+        self.fichier.setNomProjet(dico["projet"])
+        self.fichier.setFichierGraphe(dico["projet"] + "_graphe")
+        self.fichier.setFichierProduits(dico["projet"] + "_produits")
         
         self.updateVue()
                 
@@ -47,14 +50,19 @@ class Controleur:
         self.fichier.open(chemin)
         self.__projet_path = chemin
         self.modele.construireAvecGraphe(self.fichier.getMagasin())
+        self.modele.setDict(self.fichier.getProduits())
         self.modele.setEntree(self.fichier.getEntree())
         self.modele.setSortie(self.fichier.getSortie())
+        self.vue.setEntree(self.fichier.getEntree())
+        self.vue.setSortie(self.fichier.getSortie())
         
         self.updateVue()
     
     def enregistrerFichier(self) -> None:
         if self.__check_projet:
             self.fichier.setCasesMagasin(self.modele.getCases())
+            self.fichier.setEntree(self.modele.getEntree())
+            self.fichier.setSortie(self.modele.getSortie())
             self.fichier.save(self.__projet_path)
             
     def deleteFichier(self) -> None:
@@ -72,6 +80,20 @@ class Controleur:
         self.modele.setContenu(case, produit)
         self.vue.updateListProduits(self.modele.getCase(case).getContenu())
         
+    def setEntree(self, case : tuple) -> None:
+        self.modele.setEntree(case)
+        self.vue.setEntree(case)
+
+    def setSortie(self, case : tuple) -> None:
+        self.modele.setSortie(case)
+        self.vue.setSortie(case)
+        
+    def modifTaille(self, height: int, width: int) -> None:
+        self.modele.setHeight(height)
+        self.modele.setWidth(width)
+        self.modele.creationMagasin()
+
+
 # --- main --------------------------------------------------------------------
 if __name__ == "__main__":
 

@@ -19,6 +19,9 @@ class Image(QLabel):
         self.toggleGrillage = False
         
         self.__chemin = chemin
+        self.__entree = (0,0)
+        self.__sortie = (0,0)
+        
         self.cubeList = {}
         self.focusCase = ()
 
@@ -53,7 +56,7 @@ class Image(QLabel):
         
     #recrée le grillage *pas fini*
     def updateCadrillage(self) -> None:
-        if self.toggleGrillage  == True:
+        if self.toggleGrillage == True:
             i, j = 1, 1
             self.cubeList = {}
             
@@ -79,15 +82,17 @@ class Image(QLabel):
         if self.toggleGrillage == True:
             for i in range(self.limHeight):
                 for j in range(self.limWidth):
+                    if (i, j) == self.__entree:
+                        self.qp.setBrush(QColor("blue"))
+                    elif (i, j) == self.__sortie:
+                        self.qp.setBrush(QColor("red"))
+                    else:
+                        self.qp.setBrush(Qt.BrushStyle.NoBrush)
                     self.qp.drawRect(self.cubeList[f"({i},{j})"]["rect"])
 
     #Fonction qui supprime le grillage
     def supprimerGrille(self) -> None:
         self.cubeList = []
-    
-    #Change la couleur du grillage *pas fini*
-    def setCouleurCase(self) -> None:
-        pass
     
     #Change la longueur du grillage
     def setCaseWidth(self, num: int = 75) -> None:
@@ -129,6 +134,14 @@ class Image(QLabel):
     def setFocus(self, case) -> None:
         self.focusCase = case.getPosition()
     
+    def setEntree(self, t: tuple) -> None:
+        self.__entree = t
+        self.update()
+        
+    def setSortie(self, t: tuple) -> None:
+        self.__sortie = t
+        self.update()
+
     #Renvoie la position de la case sélectionnée
     def getFocus(self) -> tuple:
         return self.focusCase
@@ -230,7 +243,7 @@ class PopupFichier(QWidget):
 
     def ClickConfirm(self):
         if self.nomProjet.text() != "" and self.nomAuteur.text() != "" and self.dateMagasin.date().getDate() != (2000,1,1) and self.nomMagasin.text() != "" and self.adresseMagasin.text() != "" and self.adresseFile.text() != "":
-            dico: dict = {"Projet" : self.nomProjet.text(), "Auteur" : self.nomAuteur.text(), "Date" : self.dateMagasin.date().getDate(), "nom_magasin" : self.nomMagasin.text(), "adresse_magasin" : self.adresseMagasin.text(), "fichier_plan" : self.adresseFile.text()}
+            dico: dict = {"projet" : self.nomProjet.text(), "auteur" : self.nomAuteur.text(), "date" : self.dateMagasin.date().getDate(), "nom_magasin" : self.nomMagasin.text(), "adresse_magasin" : self.adresseMagasin.text(), "fichier_plan" : self.adresseFile.text()}
             self.newProject.emit(dico)
             self.close()
 
@@ -254,6 +267,9 @@ class VueMain(QMainWindow):
     retablirClicked : pyqtSignal = pyqtSignal()
     ajoutProduit : pyqtSignal = pyqtSignal(str, tuple)
     caseCliquee : pyqtSignal = pyqtSignal(tuple)
+    choixEntree : pyqtSignal = pyqtSignal(tuple)
+    choixSortie : pyqtSignal = pyqtSignal(tuple)
+    tailleChanger : pyqtSignal = pyqtSignal(int, int)
   
     def __init__(self):
         '''Constructeur de la classe'''
@@ -311,7 +327,6 @@ class VueMain(QMainWindow):
         action_afficher_grillage : QAction = QAction(QIcon(self.__images + 'cmd_paste.png'), '&Afficher cadrillage', self)
         action_afficher_grillage.setShortcuts(["CTRL+C"])
 
-        
 
         # Widget dock Quadrillage
         self.quadWidget: QWidget = QWidget(self)
@@ -339,9 +354,26 @@ class VueMain(QMainWindow):
         quadLayout.addWidget(self.lineX)
         quadLayout.addSpacing(12)
 
-        quadSizeLabel2: QLabel = QLabel("Taille du quadrillage :")
-        quadLayout.addWidget(quadSizeLabel2)
+        warningLabel: QLabel = QLabel("Si la taille du quadrillage est modifiée,\ntout changements sera effacé.\n\nEffectuez votre inventaire après avoir\n choisi la taille définitive du quadrillage")
+        quadLayout.addWidget(warningLabel)
+        quadLayout.addSpacing(12)
+
+        self.quadSetEntree: QPushButton = QPushButton("Définir la case comme l'entrée du magasin")
+        quadLayout.addWidget(self.quadSetEntree)
+        quadLayout.addSpacing(4)
         
+        self.labelEntree: QLabel = QLabel("Case : (0, 0)")
+        quadLayout.addWidget(self.labelEntree)
+        quadLayout.addSpacing(8)
+
+        self.quadSetSortie: QPushButton = QPushButton("Définir la case comme l'entrée du magasin")
+        quadLayout.addWidget(self.quadSetSortie)
+        quadLayout.addSpacing(4)
+
+        self.labelSortie: QLabel = QLabel("Case : (0, 0)")
+        quadLayout.addWidget(self.labelSortie)
+        quadLayout.addSpacing(8)
+
         quadLayout.insertStretch(-1, 1)
 
         
@@ -428,6 +460,8 @@ class VueMain(QMainWindow):
         action_afficher_grillage.triggered.connect(self.toggleGrillage)
         self.lineX.valueChanged.connect(self.changerTailleGrille)
         self.lineY.valueChanged.connect(self.changerTailleGrille)
+        self.quadSetEntree.clicked.connect(self.choisirEntree)
+        self.quadSetSortie.clicked.connect(self.choisirSortie)
         self.plan.caseClicked.connect(self.caseClick)
 
         self.show()
@@ -513,6 +547,24 @@ class VueMain(QMainWindow):
                 self.plan.setToggle(False)
                 print("It's false")
                 
+    def setEntree(self, t: tuple) -> None:
+        self.labelEntree.setText("Case :" + str(t))
+        self.plan.setEntree(t)
+        
+    def setSortie(self, t: tuple) -> None:
+        self.labelSortie.setText("Case: " + str(t))
+        self.plan.setSortie(t)
+
+    def choisirEntree(self) -> None:
+        if self.plan.isFocused():
+            self.choixEntree.emit(self.plan.getFocus())
+            self.labelEntree.setText(str(self.plan.getFocus()))
+            
+    def choisirSortie(self) -> None:
+        if self.plan.isFocused():
+            self.choixSortie.emit(self.plan.getFocus())
+            self.labelSortie.setText(str(self.plan.getFocus()))
+                
     def getX(self) -> int:
         return self.lineX.value()
     
@@ -528,6 +580,9 @@ class VueMain(QMainWindow):
     def changerTailleGrille(self) -> None:
         self.plan.setCaseHeight(self.lineY.value())
         self.plan.setCaseWidth(self.lineX.value())
+        self.plan.setEntree((0,0))
+        self.plan.setSortie((0,0))
+        self.tailleChanger.emit(self.lineX.value(), self.lineY.value())
             
     def updatePlan(self, path: str) -> None:
         self.plan.updateAll(path)
