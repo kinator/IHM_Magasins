@@ -401,7 +401,7 @@ class VueMain(QMainWindow):
         except FileNotFoundError:
             print(f"Fichier {filepath} introuvable.")
             
-            # Ajout des éléments du fichier data.JSON au dock gauche
+            # Ajout des éléments du fichier data.JSON au dock produit
         for category, items in data.items():  # Utilisez self.data.items() pour itérer sur les éléments du fichier JSON
             tempLayout.addWidget(QLabel(f"{category} :"))
             for item in items:  # Utilisez item pour référencer chaque élément dans les sous-listes
@@ -414,6 +414,8 @@ class VueMain(QMainWindow):
 
         prodLayout.addWidget(scroll_area_left)
         
+        self.listeProduits: QLabel = QLabel("")
+        prodLayout.addWidget(self.listeProduits)
 
         # Création de la barre de menus
         menu_bar = self.menuBar()
@@ -575,7 +577,11 @@ class VueMain(QMainWindow):
         self.caseCliquee.emit(t)
         
     def updateListProduits(self, dico: dict) -> None:
-        pass
+        result: str = ""
+        if dico != {}:
+            for key in dico.keys
+                result += f"{key}\n"
+        self.listeProduits.setText(result)
 
     def changerTailleGrille(self) -> None:
         self.plan.setCaseHeight(self.lineY.value())
