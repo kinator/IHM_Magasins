@@ -3,11 +3,11 @@ from os import listdir
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel, QSizePolicy, QScrollBar, QScrollArea
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction
-from graphe import widget
+import widget
+import map
+import parcours
 
 class Vue(QMainWindow):
-    
-    
     def __init__(self):
         super().__init__()
         
@@ -53,10 +53,18 @@ class Vue(QMainWindow):
         self.DockD.setFixedHeight(890)
         self.DockD.setFixedWidth(230)
         
+        # Load data for the widget
+        self.supermarche = map.mapping("supermarche.json", "produits.json", "panier.json")
+        points_interet = self.supermarche.coordonnees_par_article()
+        depart = self.supermarche.get_depart()
+        arrivee = self.supermarche.get_arrivee()
+        self.chemin_optimal = parcours.parcours_opti(self.supermarche.get_parcours(), depart, arrivee, points_interet)
+        
         # Création du widget central
-        self.centralWidget = widget.Image()
-        self.centralLayout = QVBoxLayout()
-        self.centralWidget.setLayout(self.centralLayout)
+        self.centralWidget = QWidget()
+        self.centralLayout = QVBoxLayout(self.centralWidget)
+        self.image_widget = widget.Image("./plan/plan4.png", self.height(), self.width(), self.supermarche, self.chemin_optimal)
+        self.centralLayout.addWidget(self.image_widget)
         self.setCentralWidget(self.centralWidget)
         
         # Changement de style
@@ -80,7 +88,6 @@ class Vue(QMainWindow):
     def set_controller(self, controller):
         self.controller = controller
 
-
     def save_right_dock(self):
         if hasattr(self, 'controller'):
             self.controller.save_right_dock()
@@ -90,7 +97,15 @@ class Vue(QMainWindow):
         self.DockG.widget().update()
         self.DockD.widget().update()
 
-   
-    
-    
-    
+    def update_path(self, chemin_optimal):
+        self.chemin_optimal = chemin_optimal
+        self.image_widget.chemin_optimal = chemin_optimal
+        self.image_widget.update()  # Redraw the widget with the new path
+
+def main():
+    app = QApplication(sys.argv)
+    vue = Vue()
+    sys.exit(app.exec())
+
+if __name__ == '__main__':
+    main()
