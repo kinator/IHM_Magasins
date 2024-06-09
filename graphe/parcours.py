@@ -27,69 +27,43 @@ def parcours(graphe: dict, depart: str, arrivee: str) -> list:
     chemin = distances[arrivee][1]
     return chemin
 
-def parcours_opti(graphe: dict, depart: str, arrivee: str, points_interet: list) -> list:
-    chemin_complet = []
-    point_courant = depart
+def permuter(points):
+    if len(points) == 0:
+        return [[]]
+    permutations = []
+    for i in range(len(points)):
+        rest = points[:i] + points[i+1:]
+        for p in permuter(rest):
+            permutations.append([points[i]] + p)
+    return permutations
 
-    for point in points_interet:
-        segment_chemin = parcours(graphe, point_courant, point)
+def parcours_opti(graphe: dict, depart: tuple, arrivee: tuple, points_interet: list) -> list:
+    def calculer_chemin_total(ordre_points: list) -> list:
+        chemin_complet = []
+        point_courant = depart
+        for point in ordre_points:
+            segment_chemin = parcours(graphe, point_courant, point)
+            if segment_chemin == "Pas de chemin trouvé":
+                return "Pas de chemin trouvé"
+            chemin_complet.extend(segment_chemin[:-1])
+            point_courant = point
+        segment_chemin = parcours(graphe, point_courant, arrivee)
         if segment_chemin == "Pas de chemin trouvé":
             return "Pas de chemin trouvé"
-        chemin_complet.extend(segment_chemin[:-1]) # -1 permet de ne pas prendre le dernier élément de la liste sinon il serait ajouté en double
-        point_courant = point
-        print("test "+ str(point))
+        chemin_complet.extend(segment_chemin)
+        return chemin_complet
 
-    segment_chemin = parcours(graphe, point_courant, arrivee)
-    if segment_chemin == "Pas de chemin trouvé":
-        return "Pas de chemin trouvé"
-    chemin_complet.extend(segment_chemin)
+    permutations_points = permuter(points_interet)
 
-    return chemin_complet
+    meilleur_chemin = None
+    meilleure_distance = float('inf')
 
+    for perm in permutations_points:
+        chemin = calculer_chemin_total(perm)
+        if chemin != "Pas de chemin trouvé":
+            distance_chemin = sum(graphe[chemin[i]][chemin[i + 1]] for i in range(len(chemin) - 1))
+            if distance_chemin < meilleure_distance:
+                meilleure_distance = distance_chemin
+                meilleur_chemin = chemin
 
-if __name__ == "__main__":
-    graphe_exemple = {
-    (0, 0): {(0, 1): 1, (1, 0): 1},
-    (0, 1): {(0, 0): 1, (0, 2): 1, (1, 1): 1},
-    (0, 2): {(0, 1): 1, (0, 3): 1, (1, 2): 1},
-    (0, 3): {(0, 2): 1, (0, 4): 1, (1, 3): 1},
-    (0, 4): {(0, 3): 1, (0, 5): 1, (1, 4): 1},
-    (0, 5): {(0, 4): 1, (1, 5): 1},
-    (1, 0): {(0, 0): 1, (1, 1): 1, (2, 0): 1},
-    (1, 1): {(0, 1): 1, (1, 0): 1, (1, 2): 1, (2, 1): 1},
-    (1, 2): {(0, 2): 1, (1, 1): 1, (1, 3): 1, (2, 2): 1},
-    (1, 3): {(0, 3): 1, (1, 2): 1, (1, 4): 1, (2, 3): 1},
-    (1, 4): {(0, 4): 1, (1, 3): 1, (1, 5): 1, (2, 4): 1},
-    (1, 5): {(0, 5): 1, (1, 4): 1, (2, 5): 1},
-    (2, 0): {(1, 0): 1, (2, 1): 1, (3, 0): 1},
-    (2, 1): {(1, 1): 1, (2, 0): 1, (2, 2): 1, (3, 1): 1},
-    (2, 2): {(1, 2): 1, (2, 1): 1, (2, 3): 1, (3, 2): 1},
-    (2, 3): {(1, 3): 1, (2, 2): 1, (2, 4): 1, (3, 3): 1},
-    (2, 4): {(1, 4): 1, (2, 3): 1, (2, 5): 1, (3, 4): 1},
-    (2, 5): {(1, 5): 1, (2, 4): 1, (3, 5): 1},
-    (3, 0): {(2, 0): 1, (3, 1): 1, (4, 0): 1},
-    (3, 1): {(2, 1): 1, (3, 0): 1, (3, 2): 1, (4, 1): 1},
-    (3, 2): {(2, 2): 1, (3, 1): 1, (3, 3): 1, (4, 2): 1},
-    (3, 3): {(2, 3): 1, (3, 2): 1, (3, 4): 1, (4, 3): 1},
-    (3, 4): {(2, 4): 1, (3, 3): 1, (3, 5): 1, (4, 4): 1},
-    (3, 5): {(2, 5): 1, (3, 4): 1, (4, 5): 1},
-    (4, 0): {(3, 0): 1, (4, 1): 1, (5, 0): 1},
-    (4, 1): {(3, 1): 1, (4, 0): 1, (4, 2): 1, (5, 1): 1},
-    (4, 2): {(3, 2): 1, (4, 1): 1, (4, 3): 1, (5, 2): 1},
-    (4, 3): {(3, 3): 1, (4, 2): 1, (4, 4): 1, (5, 3): 1},
-    (4, 4): {(3, 4): 1, (4, 3): 1, (4, 5): 1, (5, 4): 1},
-    (4, 5): {(3, 5): 1, (4, 4): 1, (5, 5): 1},
-    (5, 0): {(4, 0): 1, (5, 1): 1},
-    (5, 1): {(4, 1): 1, (5, 0): 1, (5, 2): 1},
-    (5, 2): {(4, 2): 1, (5, 1): 1, (5, 3): 1},
-    (5, 3): {(4, 3): 1, (5, 2): 1, (5, 4): 1},
-    (5, 4): {(4, 4): 1, (5, 3): 1, (5, 5): 1},
-    (5, 5): {(4, 5): 1, (5, 4): 1}
-    }
-    
-
-    points_interet : list = [(0, 5), (3, 2)]
-    depart = (0, 0)
-    arrivee = (5, 5)
-    chemin_plus_court = parcours_opti(graphe_exemple, depart, arrivee, points_interet)
-    print(f"Chemin le plus court entre {depart} et {arrivee}: {chemin_plus_court}")
+    return meilleur_chemin if meilleur_chemin is not None else "Pas de chemin trouvé"

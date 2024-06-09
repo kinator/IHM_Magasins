@@ -1,0 +1,61 @@
+/* Couleurs principales */
+QWidget {
+    background-color: #333333; /* Couleur de fond globale */
+    color: #ffffff; /* Couleur du texte */
+}
+
+QDockWidget {
+    background-color: #444444; /* Couleur de fond pour les docks */
+}
+
+/* Barre d'outils */
+QToolBar {
+    background-color: #222222; /* Couleur de fond */
+    border: 1px solid #333333; /* Bordure */
+    spacing: 3px; /* Espacement entre les éléments */
+}
+
+QToolBar::handle {
+    background-color: #555555; /* Couleur de la poignée de redimensionnement */
+}
+
+QToolButton {
+    background-color: #222222; /* Couleur de fond */
+    border: none; /* Pas de bordure */
+    padding: 5px; /* Espacement interne */
+}
+
+QToolButton:hover {
+    background-color: #333333; /* Couleur de fond au survol */
+}
+
+/* Menu */
+QMenuBar {
+    background-color: #222222; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+}
+
+QMenu {
+    background-color: #333333; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+}
+
+QMenu::item {
+    background-color: transparent; /* Fond transparent */
+}
+
+QMenu::item:selected {
+    background-color: #555555; /* Fond au survol */
+}
+
+/* Bouton */
+QPushButton {
+    background-color: #555555; /* Couleur de fond */
+    color: #ffffff; /* Couleur du texte */
+    border: none; /* Pas de bordure */
+    padding: 5px 10px; /* Espacement interne */
+}
+
+QPushButton:hover {
+    background-color: #777777; /* Couleur de fond au survol */
+}
