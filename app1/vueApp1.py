@@ -22,9 +22,10 @@ class Image(QLabel):
         self.__entree = (0,0)
         self.__sortie = (0,0)
         
+        self.__listeCaseProduits = []
         self.cubeList = {}
         self.focusCase = ()
-
+        
         #Initialisation de l'image
         self.image = QPixmap(self.__chemin)
         self.image = self.image.scaled(int(width*0.8), int(height*0.7),transformMode= Qt.TransformationMode.FastTransformation)
@@ -86,6 +87,8 @@ class Image(QLabel):
                         self.qp.setBrush(QColor("blue"))
                     elif (i, j) == self.__sortie:
                         self.qp.setBrush(QColor("red"))
+                    elif (i, j) in self.__listeCaseProduits:
+                        self.qp.setBrush(QColor("green"))
                     else:
                         self.qp.setBrush(Qt.BrushStyle.NoBrush)
                     self.qp.drawRect(self.cubeList[f"({i},{j})"]["rect"])
@@ -117,17 +120,20 @@ class Image(QLabel):
     #Activer lors du clique sur une case, renvoie la position de la case
     def clickCase(self, event):
         if self.toggleGrillage:
-            pos = event.pos()
-            i = 0
-            j = 0
+            try:
+                pos = event.pos()
+                i = 0
+                j = 0
 
-            while i + j < self.limWidth + (self.limHeight-1) and not self.cubeList[f"({j},{i})"]["poly"].containsPoint(pos, Qt.FillRule.OddEvenFill):
-                i += 1
-                if i % self.limWidth == 0:
-                    i = 0
-                    j += 1
-                
-            self.caseClicked.emit((j,i))
+                while i + j < self.limWidth + (self.limHeight-1) and not self.cubeList[f"({j},{i})"]["poly"].containsPoint(pos, Qt.FillRule.OddEvenFill):
+                    i += 1
+                    if i % self.limWidth == 0:
+                        i = 0
+                        j += 1
+                    
+                self.caseClicked.emit((j,i))
+            except:
+                pass
         else: self.focusCase = None
       
     #Défini la case qui a été sélectionnée
@@ -149,6 +155,23 @@ class Image(QLabel):
     #Renvoie si une case est sélectionnée
     def isFocused(self) -> bool:
         return self.focusCase != None
+    
+    def addCaseListeProduits(self) -> None:
+        if self.focusCase not in self.__listeCaseProduits:
+            self.__listeCaseProduits.append(self.focusCase)
+            self.update()
+        
+    def removeCaseListeProduits(self) -> None:
+        i = 0
+        while i < len(self.__listeCaseProduits) and self.__listeCaseProduits[i] != self.focusCase:
+            i+=1
+            
+        if i == len(self.__listeCaseProduits):
+            pass
+        else:
+            self.__listeCaseProduits.pop(i)
+            print(self.__listeCaseProduits)
+        self.update()
         
 ##############################################################################
 ##############################################################################
@@ -249,7 +272,6 @@ class PopupFichier(QWidget):
 
 
     def clickCancel(self):
-        print('False')
         self.close()
 
 ##############################################################################
@@ -278,8 +300,8 @@ class VueMain(QMainWindow):
         super().__init__()
         
         self.__path: str = sys.path[0]
-        self.__styles: str = self.__path + '\\fichiers_qss\\'
-        self.__images: str = self.__path + '\\images\\'
+        self.__styles: str = self.__path + './fichiers_qss/'
+        self.__images: str = self.__path + './images/'
         self.currentstyle: str = ""
         self.currentImage: str = ""
         
@@ -333,7 +355,7 @@ class VueMain(QMainWindow):
         quadLayout: QVBoxLayout = QVBoxLayout()
         self.quadWidget.setLayout(quadLayout)
         self.quadWidget.setObjectName("dockingquad")
-        self.quadWidget.setStyleSheet("QWidget#dockingquad {border: 1px solid black; background-color:white}")
+        self.quadWidget.setStyleSheet("QWidget#dockingquad {border: 1px solid black}")
         self.quadWidget.setVisible(False)
 
         quadSizeLabel: QLabel = QLabel("Hauteur du quadrillage :")
@@ -382,7 +404,7 @@ class VueMain(QMainWindow):
         prodLayout: QVBoxLayout = QVBoxLayout()
         self.prodWidget.setLayout(prodLayout)
         self.prodWidget.setObjectName("dockingproduit")
-        self.prodWidget.setStyleSheet("QWidget#dockingproduit {border: 1px solid black; background-color:white}")
+        self.prodWidget.setStyleSheet("QWidget#dockingproduit {border: 1px solid black}")
         self.prodWidget.setVisible(False)
         
         scroll_area_left = QScrollArea()
@@ -393,7 +415,7 @@ class VueMain(QMainWindow):
         tempWidget.setLayout(tempLayout)
         scroll_area_left.setWidgetResizable(True)
 
-        filepath = self.__path + "\\data.json"
+        filepath = self.__path + "./data.json"
         data = {}
         try:
             with open(filepath, 'r', encoding="utf-8") as file:
@@ -405,17 +427,25 @@ class VueMain(QMainWindow):
         for category, items in data.items():  # Utilisez self.data.items() pour itérer sur les éléments du fichier JSON
             tempLayout.addWidget(QLabel(f"{category} :"))
             for item in items:  # Utilisez item pour référencer chaque élément dans les sous-listes
-                print(item)
                 button = QPushButton(f"{item}")
                 button.setMinimumSize(130, 30)
                 button.clicked.connect(lambda _, btn=button: self.ajouterProduit(btn))
                 tempLayout.addWidget(button)
             tempLayout.addSpacing(15)
-
+            
         prodLayout.addWidget(scroll_area_left)
+
         
-        self.listeProduits: QLabel = QLabel("")
-        prodLayout.addWidget(self.listeProduits)
+        scroll_liste = QScrollArea()
+        scroll_liste.setMaximumHeight(200)
+        
+        self.listeProduits: QTextEdit = QTextEdit("")
+        self.listeProduits.setMaximumHeight(200)
+        scroll_liste.setWidget(self.listeProduits)
+        scroll_liste.setWidgetResizable(True)
+
+        prodLayout.addWidget(scroll_liste)
+
 
         # Création de la barre de menus
         menu_bar = self.menuBar()
@@ -484,7 +514,6 @@ class VueMain(QMainWindow):
         self.boite = QFileDialog()
         chemin, validation = self.boite.getOpenFileName(directory = sys.path[0], filter = '*.json')
         if validation == '*.json':
-            print(chemin)
             self.openClicked.emit(chemin)
 
     def save(self) -> None:
@@ -544,17 +573,15 @@ class VueMain(QMainWindow):
     def toggleGrillage(self) -> None:
         if self.plan.getToggle() == False and self.currentImage != "":
             self.plan.setToggle(True)
-            print("It's true")
         elif self.plan.getToggle() == True and self.currentImage != "":
                 self.plan.setToggle(False)
-                print("It's false")
                 
     def setEntree(self, t: tuple) -> None:
-        self.labelEntree.setText("Case :" + str(t))
+        self.labelEntree.setText(f"Case: {t}")
         self.plan.setEntree(t)
         
     def setSortie(self, t: tuple) -> None:
-        self.labelSortie.setText("Case: " + str(t))
+        self.labelSortie.setText(f"Case: {t}")
         self.plan.setSortie(t)
 
     def choisirEntree(self) -> None:
@@ -579,9 +606,14 @@ class VueMain(QMainWindow):
     def updateListProduits(self, dico: dict) -> None:
         result: str = ""
         if dico != {}:
-            for key in dico.keys
+            for key in dico.keys():
                 result += f"{key}\n"
         self.listeProduits.setText(result)
+        
+        if dico == {}:
+            self.plan.removeCaseListeProduits()
+        else:
+            self.plan.addCaseListeProduits()
 
     def changerTailleGrille(self) -> None:
         self.plan.setCaseHeight(self.lineY.value())

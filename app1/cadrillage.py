@@ -162,7 +162,6 @@ class Magasin(object) :
         '''Méthode publique, renvoie True si la case est vide, False sinon.'''
         return self.__cases[position].est_vide()
 
-
     def setContenu(self, position: tuple, contenu: str) -> None:
         '''Méthode publique, affecte le contenu de la case à la position prévue.'''
         self.__cases[position].addContenu(contenu)

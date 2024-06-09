@@ -6,10 +6,6 @@ from PyQt6.QtWidgets import QApplication
 class Controleur:
     
     def __init__(self):
-            
-        self.__path: str = sys.path[0]
-        self.__images: str = self.__path + '\\images\\'
-        self.__plans: str = self.__path[:-5] + '\\models\\'
         
         self.__projet_path: str = ""
         self.__check_projet: bool = False
@@ -30,7 +26,6 @@ class Controleur:
     
     def nouveauProjet(self, dico) -> None:
         self.__check_projet = True
-        print(dico)
         self.modele = Magasin(dico["nom_magasin"], self.vue.getX(), self.vue.getY(), (0,0), (0,0) )
         
         self.__current_projet = dico["projet"]
