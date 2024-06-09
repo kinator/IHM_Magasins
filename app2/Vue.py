@@ -1,12 +1,12 @@
 import sys
 from os import listdir
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel, QSizePolicy, QScrollBar, QScrollArea
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QDockWidget, QPushButton, QLabel, QSizePolicy, QScrollBar, QScrollArea, QFileDialog
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction
 from graphe import widget
 
 class Vue(QMainWindow):
-    
+    openClicked: pyqtSignal = pyqtSignal(str)
     
     def __init__(self):
         super().__init__()
@@ -26,15 +26,9 @@ class Vue(QMainWindow):
         self.open = QAction('&Ouvrir', self)
         self.open.setShortcut("CTRL+O")
 
-        # Création des actions de menu
-        self.white_theme = QAction('&Thème Clair', self)
-        self.black_theme = QAction('&Thème Sombre', self)
-
         # Ajout des actions aux menus
         self.folder.addAction(self.open)
-        self.theme.addAction(self.white_theme)
-        self.theme.addAction(self.black_theme)
-        
+                
         # Création des docks et des layouts
         self.WidgetDockGauche = QWidget()
         self.layoutGDock = QVBoxLayout()
@@ -78,6 +72,8 @@ class Vue(QMainWindow):
         
         # Connecter le bouton "Mettre à jour" à la méthode save_right_dock du contrôleur
         self.VerifBtn.clicked.connect(self.save_right_dock)
+        self.open.triggered.connect(self.ouvrirFichier)
+
         
     def changeStyle(self):
         with open("./fichiers_qss/" + self.sender().text() + ".qss", "r") as f:
@@ -90,7 +86,13 @@ class Vue(QMainWindow):
     def save_right_dock(self):
         if hasattr(self, 'controller'):
             self.controller.save_right_dock()
-
+            
+    def ouvrirFichier(self):
+        self.boite = QFileDialog()
+        chemin, validation = self.boite.getOpenFileName(directory = sys.path[0], filter = '*.json')
+        if validation == '*.json':
+            self.openClicked.emit(chemin)
+            
     def update_docks(self):
         # Mettre à jour les contenus des docks sans recréer les docks eux-mêmes
         self.DockG.widget().update()

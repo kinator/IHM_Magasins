@@ -11,6 +11,8 @@ class Controller:
         self.model.set_controller(self)
         self.view.set_controller(self)  # Passer une référence du contrôleur à la vue
         self.load_data('data.json')  # Charger les données lors de l'initialisation
+    
+        self.view.openClicked.connect(self.load_data)
 
     def load_data(self, filepath):
         self.model.load_data(filepath)
